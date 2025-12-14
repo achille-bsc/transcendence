@@ -27,7 +27,7 @@ Planned: 🕒
 
 
 |Status|Grade|Title|Brief desc|Owner| 
-|:----:|:----:|:----:|:----:|:----:|
+|:----:|:----:|:----:|:----|:----:|
 |🕒| Major | Front and back Frameworks | <ul><li>Use a frontend framework (React, Vue, Angular, Svelte, etc.).  </li><li>Use a backend framework (Express, NestJS, Django, Flask, Ruby on Rails, etc.). </li> <li>Full-stack frameworks (Next.js, Nuxt.js, SvelteKit) count as both if you use both their frontend and backend capabilities. </li> </ul>| |
 |🕒| Major | Real-time features | Real-time features using WebSockets or similar technology: <ul><li>Real-time updates across clients.</li> <li>Handle connection/disconnection gracefully. </li> <li>Efficient message broadcasting. </li></ul>| |
 |🕒| Major| User interactions | Minimum requirements: <ul><li> A basic chat system (send/receive messages between users).</li> <li> A profile system (view user information).</li> <li> A friends system (add/remove friends, see friends list).</li></ul> | | 
