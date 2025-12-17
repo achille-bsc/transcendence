@@ -11,8 +11,8 @@ async function newGlobalMessage(user_id: number, content: string)
 	await prisma.user.update({
     where: { id : user_id },
     data: {
-      friends: {
-        connect: { id: new_message.id_message },
+      message_history: {
+        connect: { id_message: new_message.id_message },
       },
     },
   });

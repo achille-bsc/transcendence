@@ -9,11 +9,11 @@ async function newMessage(user_id: number, content: string)
 		}
 	});
 	await prisma.user.update({
-    where: { id : user_id },
-    data: {
-      friends: {
-        connect: { id: new_message.id_message },
-      },
-    },
+	where: { id : user_id },
+	data: {
+	  friend: {
+		connect: { id: new_message.id_message },
+	  },
+	},
   });
 }
