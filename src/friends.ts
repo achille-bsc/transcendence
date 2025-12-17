@@ -56,7 +56,7 @@ export async function createFriendship(userID: number, friendID: number)
   await prisma.user.update({
     where: { id : userID },
     data: {
-      friends: {
+      friend: {
         connect: { id: sentfriendship.id },
       },
     },
@@ -64,7 +64,7 @@ export async function createFriendship(userID: number, friendID: number)
   await prisma.user.update({
     where: { id : friendID },
     data: {
-      friends: {
+      friend: {
         connect: { id: receptfriendship.id },
       },
     },
