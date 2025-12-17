@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  pseudo  String @unique
+  email String  @unique
+  blocked Block[]
+  message_history GlobalChat[]
+  direct_messages DirectMessage[]
+  friend Friend[]
+}
+
+model Block {
+  id    Int     @id @default(autoincrement())
+  user     User @relation(fields: [userId], references: [id])
+  userId   Int
+  blockedId  Int
+}
+
+model Friend {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  friendId  Int
+  status    String
+}
+
+model GlobalChat {
+  id_message        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model DirectMessage {
+  id    Int     @id @default(autoincrement())
+  user     User @relation(fields: [userId], references: [id])
+  userId   Int
+  blockedId  Int
+}
