@@ -14,6 +14,7 @@ model User {
   id    Int     @id @default(autoincrement())
   pseudo  String @unique
   email String  @unique
+  token String?  @unique
   blocked Block[]
   message_history GlobalChat[]
   direct_messages DirectMessage[]

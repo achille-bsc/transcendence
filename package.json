@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "npx tsx watch src_serveur/serveur.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
