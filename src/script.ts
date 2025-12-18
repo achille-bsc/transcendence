@@ -1,7 +1,7 @@
 import { prisma } from '../prisma'
 import { createFriendship } from './friends'
 
-async function findProfile(input: string | number) {
+export async function findProfile(input: string | number) {
   let whereClause = {}
 
   if (typeof input === 'number')
@@ -24,6 +24,7 @@ async function createUser(pseudo: string, email: string) {
     data: {
       pseudo: pseudo,
       email: email,
+	  token: "test",
     },
   })
   return newUser
@@ -56,10 +57,10 @@ async function checkArgs() {
 async function main() {
 	await checkArgs()
 	const allUsers = await prisma.user.findMany()
-	await createFriendship(2,1)
+	//await createFriendship(2,1)
 	console.log(allUsers)
 	console.log(await prisma.friend.findMany())
-//  console.log(await findProfile(1))
+  console.log(await findProfile(1))
 }
 
 main()
