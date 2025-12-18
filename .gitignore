@@ -4,3 +4,5 @@ node_modules
 .vscode
 secrets
 db_data
+node_modules
+/generated/prisma

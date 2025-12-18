@@ -54,11 +54,11 @@ async function checkArgs() {
 
 
 async function main() {
-  await checkArgs()
-  const allUsers = await prisma.user.findMany()
- // await createFriendship(2,15)
-  console.log(allUsers)
-  console.log(await prisma.friend.findMany())
+	await checkArgs()
+	const allUsers = await prisma.user.findMany()
+	await createFriendship(2,1)
+	console.log(allUsers)
+	console.log(await prisma.friend.findMany())
 //  console.log(await findProfile(1))
 }
 
