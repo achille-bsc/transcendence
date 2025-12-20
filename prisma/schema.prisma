@@ -15,6 +15,7 @@ model User {
   pseudo  String @unique
   email String  @unique
   token String?  @unique
+  password String
   blocked Block[]
   message_history GlobalChat[]
   direct_messages DirectMessage[]
