@@ -1,23 +1,33 @@
 import { findProfile } from '../../src/script'
 import { prisma } from '../../prisma'
-import { generateToken } from '../utils'
+import { generateToken, comparePassword } from '../utils'
 
-export async function handleGetProfile(mail: string, reply: any) {
-    const user = await findProfile(mail)
-	if (!user) 
+export async function getProfile(log_name: string, password: string, reply: any) {
+	if (log_name.includes('@'))
 	{
-    	reply.code(404).send({ error: 'User not found' })
+		if (!log_name || log_name.length === 0 || log_name.includes(' ') ||
+			log_name.split('@').length !== 2 || !log_name.includes('.'))
+		{
+			reply.code(404).send({ error: 'bad mail' })
+			return
+		}
+	}
+	else
+	{
+		if (!log_name || log_name.length === 0 || log_name.includes(' '))
+		{
+			reply.code(404).send({ error: 'bad pseudo' })
+			return
+		}
+	}
+    const user = await findProfile(log_name)
+	if (!user || await comparePassword(password, user!.password) === false) 
+	{
+    	reply.code(404).send({ error: 'User not found, Check your password and your pseudo/mail' })
 		return
 	}
 	else
 	{
-		console.log('User found:', user);
-		user.token = await generateToken()
-		await prisma.user.update({
-			where: { id: user.id },
-			data: { token: user.token }
-		})
-		reply.code(200).send({ success: true, token: user.token })
 		return user
 	}
 }
