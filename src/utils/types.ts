@@ -15,12 +15,75 @@ export type GameType = 'kong' | 'aow'; // aow = Age Of War
  * ============================================================================
  */
 
-export type WSMessage = 
-  | { type: 'kong', payload: { type: 'gameAction' | 'globalAction', datas: string } }
-  | { type: 'aow',  payload: { type: 'gameAction' | 'globalAction', datas: string } }
-  | { type: 'auth',  payload: { datas: string } }
+export enum Difficults 
+{
+  easy        = 'easy',
+  normal      = 'normal',
+  difficulty  = 'difficult',
+  impossible  = 'impossible'
+}
 
+export type WSMessage = 
+  | {
+      type: 'kong',
+      userID: string
+      payload:
+      {
+        type:
+          | 'gameAction'
+          | 'globalAction',
+        datas: [
+          (
+            | 'createGame'
+            | 'joinGame'
+            | 'jump'
+            | 'goLeft'
+            | 'goRight'
+          ),
+          Difficults
+        ]
+      }
+    }
+  | {
+      type: 'aow',
+      userID: string
+      payload:
+      {
+        type:
+          | 'gameAction'
+          | 'globalAction',
+        datas: [
+          ('createGame' | 'joinGame'),
+          Difficults
+        ]
+      }
+    }
+  | {
+      type: 'auth',
+      userID: string
+      payload: { token: string }
+    }
+;
 export type ClientState = {
   isAuthenticated: boolean,
   lastPingAt: number,
+  gameId: string | null
+}
+
+export type PlayerDatas = {
+  is: string,
+  x: number,
+  y: number,
+  vSpeed: number,
+  hSpeed: number,
+  maxSpeed: number,
+}
+
+export type Game = {
+  host: string,
+  difficulty: Difficults,
+  players_count: number,
+  players: Map<string, PlayerDatas>,
+  isFinish: boolean
+  isStarted: boolean
 }
