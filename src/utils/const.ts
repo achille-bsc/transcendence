@@ -10,14 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-import { kongHandler }	from "../Kong/GamesManager";
+import { kongHandler }	from "../Kong/kongHandler";
 import { aowHandler }	from "../AgeOfWar/GamesManager";
+import { verifToken } from "../auth/auth";
+import { ClientState, Game } from "./types";
 
-export const playerConnections: Map<string, any>	= new Map();
-export const PORT: number							= process.env['PORT'] ? parseInt(process.env['PORT']) : 3000;
+import { WebSocket } from "@fastify/websocket";
 
+export const PORT: number       = process.env['PORT']       ? parseInt(process.env['PORT'])     : 3000;
+export const API_PORT: number   = process.env['API_PORT']   ? parseInt(process.env['API_PORT']) : 8080;
+export const API_IP: string     = process.env['API_IP'] ||  'localhost';
+
+export const clients:           Map<WebSocket, ClientState>
+                = new           Map<WebSocket, ClientState>();
+export const games:             Map<string, Game>
+                = new           Map<string, Game>();
+
+//////////
+// Kong //
+//////////
+export const persoKongHeight    = 10;
+export const persoKongWidth     = 5;
+export const kongPlayerMaxSpeed = 15;
+export const kongMaxHeight      = 900;
+export const kongMaxLength      = 1600;
+
+//////////////
+// HANDLERS //
+//////////////
 export const HANDLERS = {
     kong:	kongHandler,
     aow:	aowHandler,
-    auth:	auth,
+    auth:	verifToken,
 };
