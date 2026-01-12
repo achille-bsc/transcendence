@@ -17,7 +17,7 @@ function Log () {
 								id="name"
 								name="name"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-								placeholder="name"
+								placeholder="name or email"
 								required
 								/>
 						</label><br />
@@ -32,7 +32,7 @@ function Log () {
 								/>
 						</label><br />
 						<div className="flex justify-center items-center">
-							<a href="Home.tsx"><input
+							<a href="/"><input
 								type="submit"
 								value="Register"
 								className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
