@@ -50,43 +50,5 @@
 }
 
 body {
-	background-color: #1E1E1E;
 	color: #6E3CA3;
 }
-
-img {
-	width: 50px;
-}
-
-h1 {
-	font-size: 50px;
-	background-color: #141414;
-}
-
-p {
-	font-size: 50px;
-	color: white;
-	margin-top: 41.5vh;
-}
-
-button {
-	padding-left: 45px;
-	padding-right: 45px;
-	padding-bottom: 10px;
-	padding-top: 10px;
-	font-size: 17.5px;
-	background: linear-gradient(90deg, #6E3CA3, #A82828);
-	color: white;
-}
-
-/*
-h1 {
-	align-content: center;
-	}
-	
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	button {}*/
