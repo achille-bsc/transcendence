@@ -6,3 +6,4 @@ secrets
 db_data
 .sw*
 my-react-app
+dist
