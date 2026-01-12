@@ -7,9 +7,9 @@ function Register () {
 				  action="URL" 
 				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 					<div className="flex">
-						<div className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe"><a href="Log.tsx">Login</a></div>
+						<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe" href="log"><div >Login</div></a>
 						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Register</div>
-					</div>r
+					</div>
 					<div className="p-4 sm:p-5 md:p-6">
 						<label className="flex justify-center"><br />
 							<input

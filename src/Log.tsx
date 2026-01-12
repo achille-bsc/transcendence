@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 function Log () {
 
 	return (
@@ -10,7 +8,7 @@ function Log () {
 				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 					<div className="flex">
 						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Login</div>
-						<div className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer"><Link to="Register.tsx">Register</a></div>
+						<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >Register</div></a>
 					</div>
 					<div className="p-4 sm:p-5 md:p-6">
 						<label className="flex justify-center"><br />
