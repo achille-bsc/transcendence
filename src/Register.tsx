@@ -21,6 +21,16 @@ function Register () {
 								required
 								/>
 						</label><br />
+						<label className="flex justify-center"><br />
+							<input
+								type="email"
+								id="name"
+								name="name"
+								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
+								placeholder="email"
+								required
+								/>
+						</label><br />
 						<label className="flex justify-center">
 							<input
 								type="password"
@@ -28,6 +38,16 @@ function Register () {
 								name="password"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="password"
+								required
+								/>
+						</label><br />
+						<label className="flex justify-center">
+							<input
+								type="password"
+								id="password"
+								name="password"
+								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
+								placeholder="confirm password"
 								required
 								/>
 						</label><br />
@@ -46,3 +66,5 @@ function Register () {
 }
 
 export default Register
+
+/// username password email 

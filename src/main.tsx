@@ -18,7 +18,7 @@ import Log from './Log.tsx'
 ReactDOM.createRoot(root!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Log />} />
+      <Route path="/" element={<Home />} />
       <Route path="/log" element={<Log />} />
       <Route path="/register" element={<Register />} />
     </Routes>
