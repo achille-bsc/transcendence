@@ -1,17 +1,15 @@
-import { Link } from 'react-router-dom';
-
-function Log () {
-
+function Register () {
+	
 	return (
 		<>
 			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center">
 				<form 
-				  action="URL"
+				  action="URL" 
 				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 					<div className="flex">
-						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Login</div>
-						<div className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer"><Link to="Register.tsx">Register</a></div>
-					</div>
+						<div className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe"><a href="Log.tsx">Login</a></div>
+						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Register</div>
+					</div>r
 					<div className="p-4 sm:p-5 md:p-6">
 						<label className="flex justify-center"><br />
 							<input
@@ -47,4 +45,4 @@ function Log () {
 	)
 }
 
-export default Log
+export default Register
