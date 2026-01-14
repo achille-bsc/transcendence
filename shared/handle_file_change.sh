@@ -5,7 +5,7 @@ CHANGED_FILE = $1
 EXT = ${CHANGED_FILE##*.}
 
 case "$EXT" in
-	tsx )
+	tsx | ts )
 		npx tsx $CHANGED_FILE;;
 	* )
 		echo "handle_file_change: unexpected file type"
