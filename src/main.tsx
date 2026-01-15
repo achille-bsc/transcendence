@@ -12,7 +12,7 @@ const root = document.getElementById("root");
 import Home from './Home.tsx'
 import Register from './Register.tsx'
 import Log from './Log.tsx'
-
+import Chat from './Chat.tsx'
 
 
 ReactDOM.createRoot(root!).render(
@@ -21,12 +21,7 @@ ReactDOM.createRoot(root!).render(
       <Route path="/" element={<Home />} />
       <Route path="/log" element={<Log />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/chat" element={<Chat />} />
     </Routes>
   </BrowserRouter>,
 );
-
-// createRoot(document.getElementById('root')!).render(
-// 	<StrictMode>
-// 		<Log />
-// 	</StrictMode>
-// )

@@ -2,7 +2,7 @@ function Log () {
 
 	return (
 		<>
-			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center">
+			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center text-[#6E3CA3]">
 				<form 
 				  action="URL"
 				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
