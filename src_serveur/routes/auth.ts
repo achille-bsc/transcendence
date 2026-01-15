@@ -1,6 +1,6 @@
 import { findProfile } from '../../src/script'
 import { prisma } from '../../prisma'
-import { generateToken, comparePassword } from '../utils'
+import { comparePassword } from '../utils/hashing'
 
 export async function getProfile(log_name: string, password: string, reply: any) {
 	if (log_name.includes('@'))

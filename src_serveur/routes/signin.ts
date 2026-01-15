@@ -1,6 +1,6 @@
 import { findProfile } from '../../src/script'
 import { prisma } from '../../prisma'
-import { generateToken, hashPassword, comparePassword } from '../utils'
+import { hashPassword, comparePassword } from '../utils/hashing'
 
 export async function signinValidations(pseudo: string, mail: string, password: string, reply: any)
 {
@@ -28,7 +28,6 @@ export async function createUser(pseudo: string, mail: string, password: string,
 	data: {
 		pseudo: pseudo,
 		email: mail,
-		token: await generateToken(),
 		password: await hashPassword(password),
 	},
 	})
