@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Rochester&display=swap');
-@import '../node_modules/tailwindcss/index.css';
 
 .coral-pixels-regular {
 	font-family: 'Coral Pixels', serif;
@@ -47,8 +46,4 @@
   font-family: "Quantico", sans-serif;
   font-weight: 700;
   font-style: italic;
-}
-
-body {
-	color: #6E3CA3;
 }
