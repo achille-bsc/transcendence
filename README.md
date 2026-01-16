@@ -20,7 +20,7 @@
 - Containerization technology: Docker
 
 **Used technologies**:
- - Backend: Fastify
+- Backend: Fastify
 - Programming languages: TypeScript
 - Frontend: ReactJs
 - DataBase: SQLite3
@@ -52,7 +52,7 @@ Planned: 🕒
 | ❔❔  |  Minor | Multi-browser support | Support for additional browsers: <ul> <li> Full compatibility with at least 2 additional browsers (Firefox, Safari, Edge, etc.).</li> <li> Test and fix all features in each browser.</li> <li> Document any browser-specific limitations.</li> <li> Consistent UI/UX across all supported browsers</li> </ul>| |
 |🕒| Major | User management | Standard user management and authentication: <ul> <li> Users can update their profile information.</li> <li> Users can upload an avatar (with a default avatar if none provided).</li> <li> Users can add other users as friends and see their online status.</li> <li> Users have a profile page displaying their information</li> </ul>| alegrix |
 |🕒| Minor | Game stats | Game statistics and match history (requires a game module): <ul> <li> Track user game statistics (wins, losses, ranking, level, etc.).</li> <li> Display match history (1v1 games, dates, results, opponents).</li> <li> Show achievements and progression.</li> <li> Leaderboard integration.</li> </ul> | |
-|🕒| Minor | OAuth | Implement remote authentication with OAuth 2.0 (Google, GitHub, 42, etc.) | |
+|🕒| Minor | OAuth | Implement remote authentication with OAuth 2.0 (Google, GitHub, 42, etc.) | bfiquet |
 |🕒| Minor | 2FA | Implement a complete 2FA (Two-Factor Authentication) system for the users | bfiquet |
 | ❔❔ |   Minor | User analytics | User activity analytics and insights dashboard. | |
 | ❔ | Major | AI opponent |  <ul> <li> The AI must be challenging and able to win occasionally.</li> <li> The AI should simulate human-like behavior (not perfect play).</li> <li> If you implement game customization options, the AI must be able to use them.</li> <li> You must be able to explain your AI implementation during evaluation.</li> </ul>| |

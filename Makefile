@@ -5,10 +5,18 @@ PROD = docker-compose.yml
 all: up
 
 dev: #deps to determine correctly
-	$(DC) up --build -d -f $(DEV)
+	@if [ -f ".env" ]; then \
+		$(DC) --env-file .env -f $(DEV) up -d ; \
+	else \
+		echo "No .env file found"; \
+	fi
 
 up: #deps to determine correctly
-	$(DC) up --build -d -f $(PROD)
+	@if [ -f ".env" ]; then \
+		$(DC) --file $(PROD) up -d ; \
+	else \
+		echo "No .env file found"; \
+	fi
 
 down:
 	$(DC) down
@@ -23,9 +31,17 @@ fclean: clean
 	$(DC) down -v
 	docker system prune -a -f
 
-red: clean dev
+cleand:
+	$(DC) --file $(DEV) down --rmi all
 
-refd: fclean dev
+fcleand: cleand
+	$(DC) --file $(DEV) down -v
+	docker system prune -a -f
+
+
+red: cleand dev
+
+refd: fcleand dev
 
 re: clean all
 
