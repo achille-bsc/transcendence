@@ -3,8 +3,15 @@ import fastifyJwt from '@fastify/jwt';
 import { prisma } from '../prisma'
 import { getProfile } from './routes/auth'
 import { hashPassword } from './utils/hashing'
+import cors from "@fastify/cors";
+import { createUser, signinValidations } from './routes/signin';
 
 const server = fastify({ logger: true })
+
+await server.register(cors, {
+  origin: true,
+});
+
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -56,73 +63,27 @@ server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyRe
 
 server.post<{ Body: ISignin }>('/signin', async (request, reply) => {
   const { pseudo, email, password } = request.body;
-  
-  if (!pseudo || !email || !password) {
-    return reply.code(400).send({ error: 'Tous les champs sont requis' });
-  }
-  
-  if (password.length < 8) {
-    return reply.code(400).send({ error: 'Le mot de passe doit faire au moins 8 caractères' });
-  }
-  
-  const existing = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { pseudo },
-        { email }
-      ]
-    }
-  });
-  
-  if (existing) {
-    return reply.code(409).send({ error: 'Pseudo ou email déjà utilisé' });
-  }
-  
+  if (!await signinValidations(pseudo, email, password, reply))
+    return;
   const hashedPassword = await hashPassword(password);
-  
-  const user = await prisma.user.create({
-    data: {
-      pseudo,
-      email,
-      password: hashedPassword
-    },
-    select: {
-      id: true,
-      pseudo: true,
-      email: true
-    }
-  });
-  
-  // Générer le token
+  const user = await createUser(pseudo, email, password, reply);
   const token = server.jwt.sign({
     id: user.id,
     email: user.email
   });
-  
-  return {
-    success: true,
-    user,
-    token
-  };
+  return { success: true, user, token };
 });
 
-// POST /login - Connexion
-server.post<{ Body: ILogin }>('/login', async (request, reply) => {
+
+server.get<{ Body: ILogin }>('/login', async (request, reply) => {
   const { log_name, password } = request.body;
-  
-  // Vérifier les identifiants
   const user = await getProfile(log_name, password, reply);
-  
-  if (!user) {
-    return; // getProfile a déjà envoyé la réponse d'erreur
-  }
-  
-  // Générer le token
+  if (!user)
+    return; 
   const token = server.jwt.sign({
     id: user.id,
     email: user.email
   });
-  
   return {
     success: true,
     user: {
@@ -142,24 +103,23 @@ server.get('/checktoken', {
   return ;
 });
 
+
 server.get('/profile', {
   onRequest: [server.authenticate]
 }, async (request, reply) => {
   const userId = request.user.id;
-  
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
       id: true,
       pseudo: true,
-      email: true
+      email: true,
+      createdAt: true,
+      lastLoginAt: true,
     }
   });
-  
-  if (!user) {
+  if (!user)
     return reply.code(404).send({ error: 'Utilisateur non trouvé' });
-  }
-  
   return { user };
 });
 
@@ -176,7 +136,8 @@ server.post('/logout', {
 // ========== START SERVER ==========
 server.listen({ port: 7979 }, (err, address) => {
   console.log("Starting server...");
-  if (err) {
+  if (err)
+  {
     console.error(err);
     process.exit(1);
   }
