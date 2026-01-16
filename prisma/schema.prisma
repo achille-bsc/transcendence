@@ -24,7 +24,6 @@ model User {
   message_history GlobalChat[]
   direct_messages DirectMessage[]
   friend          Friend[]
-  
 }
 
 model Block {
