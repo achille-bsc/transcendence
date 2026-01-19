@@ -5,6 +5,8 @@ import { getProfile } from './routes/auth'
 import { hashPassword } from './utils/hashing'
 import cors from "@fastify/cors";
 import { createUser, signinValidations } from './routes/signin';
+import { newMessage } from '../src/direct_message';
+import test from 'node:test';
 
 const server = fastify({ logger: true })
 
@@ -74,7 +76,7 @@ server.post<{ Body: ISignin }>('/signin', async (request, reply) => {
 });
 
 
-server.get<{ Body: ILogin }>('/login', async (request, reply) => {
+server.post<{ Body: ILogin }>('/login', async (request, reply) => {
   const { log_name, password } = request.body;
   const user = await getProfile(log_name, password, reply);
   if (!user)
@@ -102,6 +104,75 @@ server.get('/checktoken', {
   return ;
 });
 
+server.post("/dm", async (req, reply) =>{
+  try {
+      const { sender_id, receiver_id, content } = req.body as {
+          sender_id: number;
+          receiver_id: number;
+          content: string
+      };
+      if (sender_id === receiver_id)
+        return reply.status(400).send({ status: "success",
+                message: "sender and receiver id shouldn't be the same"});
+      await newMessage(sender_id, receiver_id, content);
+      
+      const blockedRows = await db.all(
+                "SELECT blocker_id FROM blocked WHERE blocked_id = ?", sender_id)
+            const blockedBy = blockedRows.map((row) => String(row.blocker_id));
+            for (const [ws, id] of clients)
+            {
+                if (!blockedBy.includes(String(receiver_id)) && id === receiver_id)
+                    ws.send(JSON.stringify({type: "message", sender: sender_id, content: content}));
+                if (id === sender_id)
+                    ws.send(JSON.stringify({type: "message", sender: sender_id, content: content}));
+            }
+            return reply.status(200).send({
+                status: "success",
+                message: "message successfully sent"});
+        }
+        catch (err)
+        {
+            console.error(err);
+            return reply.status(500).send({
+                status: "failure",
+                message: "Internal server error."});
+        }
+    });
+
+server.post("/invite", async (req, reply) =>{
+  const { sender_id, user_id } = req.body as {
+      sender_id: number;
+      user_id: number;
+      };
+      if (sender_id === user_id)
+      {
+        console.log("User cannot invite itself");
+        return {
+          status: "failure",
+          message: "You cannot invite yourself."};
+      }
+        //handle invite properly here
+      return { status: "success", message: "User unblocked." };   
+    });
+
+server.get('/health', async () => {
+  const tester = await prisma.user.create({
+    data: {
+      pseudo: 'healthcheck',
+      email: '<EMAIL>',
+      password: await hashPassword('healthcheckpassword'),
+    },
+  });
+  if (!tester)
+    return { status: 'error' };
+  const test = await prisma.user.findFirst( { where: { id: tester.id } } );
+  if (test!.pseudo !== 'healthcheck')
+    return { status: 'error' };
+  if (test!.id !== tester.id)
+    return { status: 'error' };
+  await prisma.user.deleteMany({ where: { id: tester.id } });
+  return { status: 'ok' };
+});
 
 server.get('/profile', {
   onRequest: [server.authenticate]
