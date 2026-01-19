@@ -3,22 +3,23 @@ import corsPlugin from './plugins/cors';
 import authPlugin from './plugins/tokens';
 import authRoutes from './routes/register';
 import userRoutes from './routes/user';
+import inviteRoutes from './routes/invite';
 import healthRoutes from './routes/health';
-//import messageRoutes from './routes/messages';
+import messageRoutes from './routes/messages';
+import websocketPlugin from './plugins/websocket';
 
 const server = fastify({ logger: true });
 
-// Plugins
 await server.register(corsPlugin);
 await server.register(authPlugin);
+await server.register(websocketPlugin);
 
-// Routes
 await server.register(authRoutes);
 await server.register(userRoutes);
 await server.register(healthRoutes);
-//await server.register(messageRoutes);
+await server.register(messageRoutes);
+await server.register(inviteRoutes);
 
-// Start server
 server.listen({ port: 7979 }, (err, address) => {
   console.log("Starting server...");
   if (err) {
