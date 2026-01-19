@@ -14,14 +14,3 @@ declare module '@fastify/jwt' {
     }
   }
 }
-
-export interface ISignin {
-  pseudo: string;
-  email: string;
-  password: string;
-}
-
-export interface ILogin {
-  log_name: string;
-  password: string;
-}
