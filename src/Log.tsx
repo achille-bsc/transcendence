@@ -1,10 +1,70 @@
+import { useState } from "react";
+
 function Log () {
+
+	const [pseudo, setPseudo] = useState("");
+	const [password, setPassword] = useState("");
+
+	async function handleLogin(e :React.FormEvent) {
+		e.preventDefault();
+
+		// const body = JSON.stringify({
+		// 	pseudo,
+		// 	password,
+		// });
+
+		// const req: ClientRequest  = http.request({
+		// 	path: 'http://localhost:7979/login',
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'content': 'application/json',
+		// 	},
+		// }, (res: any) => {
+		// 	if (res.statusCode === 200) {
+		// 		// reussite de l'envoie
+		// 		
+		// 	} else {
+		// 		// echec de l'envoie
+		// 	}
+		// })
+
+		// req.on('error', () => {
+		// 	// a faire en cas d'erreur
+		// });
+		// req.write(body);
+		// req.end();
+
+
+
+
+		const res = await fetch("http://localhost:7979/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				log_name: pseudo,
+				password: password,
+			}),
+		});
+		
+		const data = await res.json();
+
+		if (!res.ok) {
+			alert(data.error || "Registration failed");
+			return;
+		}
+		const token = data.token;
+		localStorage.setItem("token", token);
+		console.log("coucouuuu");
+		window.location.href = "/";
+	}
 
 	return (
 		<>
 			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center text-[#6E3CA3]">
-				<form 
-				  action="URL"
+				<form
+				  onSubmit={handleLogin}
 				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 					<div className="flex">
 						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Login</div>
@@ -18,9 +78,11 @@ function Log () {
 								name="name"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="name or email"
+								onChange={e => setPseudo(e.target.value)}
 								required
 								/>
 						</label><br />
+
 						<label className="flex justify-center">
 							<input
 								type="password"
@@ -28,9 +90,11 @@ function Log () {
 								name="password"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="password"
+								onChange={e => setPassword(e.target.value)}
 								required
 								/>
 						</label><br />
+
 						<div className="flex justify-center items-center">
 							<a href="/"><input
 								type="submit"
@@ -46,3 +110,5 @@ function Log () {
 }
 
 export default Log
+
+//return de l'ID pseudo email et token
