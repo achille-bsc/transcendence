@@ -44,4 +44,16 @@ server.post('/logout', {
 });
 */
 
+// Petite info supplémentaire
+/*
+Voici le module que j'ai dans mon serveur.ts, donc il me permet de récupérer l'id et l'email dans chaque requête où traine le token
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+    user: {
+      id: number
+      email: string
+    }
+  }
+}*/
+
 export default fp(authPlugin); // exporte le plugin
