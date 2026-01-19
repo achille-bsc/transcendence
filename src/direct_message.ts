@@ -1,18 +1,19 @@
 import { prisma } from '../prisma'
 
-async function newMessage(user_id: number, content: string)
+export async function newMessage(senderId: number, receiverId: number, content: string)
 {
-	const new_message = await prisma.globalChat.create({
+	const new_message = await prisma.directMessage.create({
 		data: {
-			userId: user_id,
+			senderId: senderId,
+			receiverId: receiverId,
 			message: content
 		}
 	});
 	await prisma.user.update({
-	where: { id : user_id },
+	where: { id : senderId },
 	data: {
-	  friend: {
-		connect: { id: new_message.id_message },
+	  direct_messages: {
+		connect: { id: new_message.id },
 	  },
 	},
   });
