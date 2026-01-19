@@ -1,10 +1,10 @@
 import fastify, { FastifyRequest, FastifyReply } from 'fastify'
 import fastifyJwt from '@fastify/jwt';
 import { prisma } from '../prisma'
-import { getProfile } from './routes/auth'
+import { getProfile } from './routes/login'
 import { hashPassword } from './utils/hashing'
 import cors from "@fastify/cors";
-import { createUser, signinValidations } from './routes/signin';
+import { createUser, signinValidations } from './routes/authentifications';
 import { newMessage } from '../src/direct_message';
 import test from 'node:test';
 
