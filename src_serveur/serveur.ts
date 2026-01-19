@@ -65,7 +65,6 @@ server.post<{ Body: ISignin }>('/signin', async (request, reply) => {
   const { pseudo, email, password } = request.body;
   if (!await signinValidations(pseudo, email, password, reply))
     return;
-  const hashedPassword = await hashPassword(password);
   const user = await createUser(pseudo, email, password, reply);
   const token = server.jwt.sign({
     id: user.id,
