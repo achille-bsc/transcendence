@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
 
 export default async function inviteRoutes(server: FastifyInstance) {
-    server.post("/invite", async (req, reply) =>{
-    const { sender_id, user_id } = req.body as {
+    server.post("/invite", async (request, reply) =>{
+    const { sender_id, user_id } = request.body as {
         sender_id: number;
         user_id: number;
         };
