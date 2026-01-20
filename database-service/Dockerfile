@@ -6,12 +6,9 @@ ADD package*.json ./
 
 RUN npm install
 
+COPY --from=shared_ressources ./scripts ./scripts
 COPY . .
-
-ENV DATABASE_URL="file:./data/dev.db"
-
-RUN npx prisma generate dev && npx prisma migrate dev
 
 EXPOSE 5000
 
-ENTRYPOINT [ "npm", "run", "start" ]
+ENTRYPOINT [ "sh", "-c", "npx prisma generate dev && npx prisma migrate dev && npm run start" ]

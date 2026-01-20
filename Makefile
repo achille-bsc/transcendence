@@ -6,7 +6,7 @@ all: up
 
 dev: #deps to determine correctly
 	@if [ -f ".env" ]; then \
-		$(DC) --env-file .env -f $(DEV) up -d ; \
+		$(DC) -f $(DEV) up --watch; \
 	else \
 		echo "No .env file found"; \
 	fi
@@ -20,6 +20,9 @@ up: #deps to determine correctly
 
 down:
 	$(DC) down
+
+ddown:
+	$(DC) -f $(DEV) down
 
 logs:
 	$(DC) logs -f
@@ -37,6 +40,7 @@ cleand:
 fcleand: cleand
 	$(DC) --file $(DEV) down -v
 	docker system prune -a -f
+	rm -f db_data/dev.db
 
 
 red: cleand dev

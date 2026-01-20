@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-CHANGED_FILE = $1
+CHANGED_FILE=$1
 
-EXT = ${CHANGED_FILE##*.}
+EXT=${CHANGED_FILE##*.}
 
 case "$EXT" in
 	tsx | ts )

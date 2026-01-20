@@ -9,7 +9,10 @@ export default defineConfig({
     react()
   ],
   server: {
-    host: true,
+    host: '0.0.0.0',
     port: 80,
+    watch: {
+      usePolling: true,
+    },
   }
 })
