@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { prisma } from '../../prisma';
+import { findUserByPseudo } from '../utils/utils_user';
 
 export default async function userRoutes(server: FastifyInstance) {
   server.get('/checktoken', {
@@ -26,4 +27,14 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(404).send({ error: 'User not found' });
     return { user };
   });
+
+  server.get('/finduserid', async (request, reply) =>{
+    const { pseudo } = request.body as {
+        pseudo: string;
+    };
+    const user = await findUserByPseudo(pseudo);
+    if (!user)
+      return reply.code(404).send({ error: 'User not found' });
+    return { id: user.id };
+});
 }
