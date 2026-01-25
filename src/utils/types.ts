@@ -40,7 +40,8 @@ export type WSMessage =
             | 'goLeft'
             | 'goRight'
           ),
-          Difficults
+          Difficults,
+          string,
         ]
       }
     }
@@ -65,18 +66,20 @@ export type WSMessage =
     }
 ;
 export type ClientState = {
+  id?: string,
   isAuthenticated: boolean,
   lastPingAt: number,
   gameId: string | null
 }
 
 export type PlayerDatas = {
-  is: string,
+  id: string,
   x: number,
   y: number,
   vSpeed: number,
   hSpeed: number,
   maxSpeed: number,
+  socket: WebSocket
 }
 
 export type Game = {
