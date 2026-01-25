@@ -3,27 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   index.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2025/12/22 15:01:25 by abosc            ###   ########.fr       */
+/*   Updated: 2026/01/16 14:55:19 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import Fastify from 'fastify';
+import WebSocket from '@fastify/websocket';
 
 import { PORT, HANDLERS, clients } from './utils/const';
 import { ClientState, WSMessage } from './utils/types';
 import { parseMessage } from './utils/utils';
 
 const fastify = Fastify({
-  logger: true,
+  logger: false,
 });
+fastify.register(WebSocket);
 
-
-
-
-// Charge le plugin WebSocket
 fastify.register(async function (fastify) {
   fastify.get('/ws', { websocket: true }, (socket, _req) => {
     const state: ClientState = {
@@ -31,16 +29,26 @@ fastify.register(async function (fastify) {
       lastPingAt: Date.now(),
       gameId: null
     };
+    console.log('New client connected')
 
     clients.set(socket, state);
 
-    // For each Package
-    socket.on('message', (raw: string| Buffer)  => {
+    socket.on('message', (raw: string | Buffer)  => {
+      console.log(`Received message: ${raw}`);
       const msg: WSMessage | null = parseMessage(raw);
-      if (!msg) return;
+      if (!msg) {
+        socket.send(JSON.stringify({ type: 'error', error: 'Invalid message format' }));
+        return;
+      }
       
-      if (!state.isAuthenticated && msg.type !== 'auth')
+      if (!state.isAuthenticated && msg.type !== 'auth') {
+        socket.send(JSON.stringify({ type: 'error', error: 'Unauthorized' }));
         socket.close(1008, 'Unauthorized');
+        return;
+      }
+      
+      // Send acknowledgement back to client
+      // socket.send(JSON.stringify({ type: 'ack', receivedType: msg.type }));
       
       HANDLERS[msg.type]?.(socket, msg, state, clients);
     });
@@ -52,9 +60,9 @@ fastify.register(async function (fastify) {
   });
 });
 
-fastify.listen({ port: PORT as number, host: '0.0.0.0' }, (err, address) => {
+fastify.listen({ port: PORT as number }, (err) => {
   if (err) throw err;
-  console.log(`Server listening at ${address}`);
+  console.log(`Server listening at port ${PORT}`);
 });
 
 
