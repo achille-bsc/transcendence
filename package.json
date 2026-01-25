@@ -4,7 +4,8 @@
   "description": "Multiplayer game server for Kong and Age of War",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc && node dist/index.js",
+    "dev:build": "tsc -w",
+    "dev": "tsc -w & node --watch dist/index.js",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
