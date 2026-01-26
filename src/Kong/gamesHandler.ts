@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/01/25 16:12:49 by abosc            ###   ########.fr       */
+/*   Updated: 2026/01/26 08:19:22 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ export function handleGame(state: ClientState, datas:
 		
 		case 'goRight':
 			goRight(game, state.id!);
+			console.log(`Handled goRight for player ${state.id} in game ${state.gameId}`);
 			break;
 		default:
 			break;
@@ -60,6 +61,8 @@ function goRight(game: Game, playerId: string): void
 	player.x += 10;
 	game.players.delete(playerId);
 	game.players.set(playerId, player);
+	games.delete(game.host);
+	games.set(game.host, game);
 }
 
 
@@ -87,6 +90,7 @@ async function gameLoop(game: Game)
 {
 	let oldPlayersData;
 	while (!game.isFinish && game.isStarted) {
+		game = games.get(game.host)!;
 		// Players Movements => on verifie seulement que le perso sort pas de l'ecran
 		// On rajmovementoutera les collisions une fois le concept de map etablis
 		game.players.forEach((player) => {
