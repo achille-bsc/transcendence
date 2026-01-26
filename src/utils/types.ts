@@ -79,7 +79,8 @@ export type PlayerDatas = {
   vSpeed: number,
   hSpeed: number,
   maxSpeed: number,
-  socket: WebSocket
+  socket: WebSocket,
+  isJumping?: boolean
 }
 
 export type Game = {

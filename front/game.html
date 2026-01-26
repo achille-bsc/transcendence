@@ -394,6 +394,17 @@
           createGameBtn.disabled = false;
           break;
         
+        case 'gameJoined':
+          log('info', `[gameJoined] Partie rejointe avec succès (ID: ${data.gameId})`);
+          startGame();
+          break;
+        
+        case 'gameNotJoined':
+          log('error', `[gameNotJoined] Erreur : Impossible de rejoindre la partie (ID: ${data.gameId})`);
+          createGameBtn.disabled = false;
+          joinGameBtn.disabled = false;
+          break;
+        
         case 'gameUpdate':
           log('info', `[gameUpdate] Reçu ${data.players ? data.players.length : 0} joueur(s)`);
           updateGameState(data);
