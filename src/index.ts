@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/01/16 14:55:19 by abosc            ###   ########.fr       */
+/*   Updated: 2026/01/26 13:43:33 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ fastify.register(async function (fastify) {
     clients.set(socket, state);
 
     socket.on('message', (raw: string | Buffer)  => {
-      console.log(`Received message: ${raw}`);
       const msg: WSMessage | null = parseMessage(raw);
       if (!msg) {
         socket.send(JSON.stringify({ type: 'error', error: 'Invalid message format' }));

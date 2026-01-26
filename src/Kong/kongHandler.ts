@@ -6,14 +6,14 @@
 /*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/01/23 14:04:07 by abosc            ###   ########.fr       */
+/*   Updated: 2026/01/26 12:55:18 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { ClientState, Game, WSMessage, PlayerDatas }					from "../utils/types";
 import { WebSocket }													from "@fastify/websocket";
 import { error }														from "../utils/utils";
-import { games, kongPlayerMaxSpeed, persoKongHeight, persoKongWidth }	from "../utils/const";
+import { games, kongPlayerSpeed, persoKongHeight, persoKongWidth }	from "../utils/const";
 import { handleGame, startGame }													from "./gamesHandler";
 
 export function kongHandler(
@@ -34,7 +34,7 @@ export function kongHandler(
 		if (msg.payload.datas[0] === 'createGame')
 			createGame(clients, webSocket, msg, state);
 		if (msg.payload.datas[0] === 'joinGame')
-			joinGame(msg, webSocket); // I will le faire plus tard because I have la flemme
+			joinGame(msg, webSocket, state);
 
 	}
 	else if (msg.payload.type === 'gameAction')
@@ -43,17 +43,17 @@ export function kongHandler(
 	}
 }
 
-function joinGame(msg: WSMessage, webSocket: WebSocket): void
+function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): void
 {
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
-		const owner: PlayerDatas = {
+		const player: PlayerDatas = {
 			id: msg.userID,
 			x: persoKongWidth	/ 2,
 			y: persoKongHeight	/ 2,
 			vSpeed: 0.0,
 			hSpeed: 0.0,
-			maxSpeed: kongPlayerMaxSpeed,
+			maxSpeed: kongPlayerSpeed,
 			socket: webSocket
 		}
 		const game = games.get(msg.payload.datas[1]);
@@ -62,7 +62,8 @@ function joinGame(msg: WSMessage, webSocket: WebSocket): void
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
 		}
-		game.players.set(owner.id, owner);
+		game.players.set(player.id, player);
+		state.gameId = game.host;
 		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: game.host }))
 	}
 }
@@ -94,7 +95,7 @@ function createGame(
 		y: persoKongHeight	/ 2,
 		vSpeed: 0.0,
 		hSpeed: 0.0,
-		maxSpeed: kongPlayerMaxSpeed,
+		maxSpeed: kongPlayerSpeed,
 		socket: webSocket
 	}
 	game.players.set(owner.id, owner);
