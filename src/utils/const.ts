@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   const.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:46:01 by abosc             #+#    #+#             */
-/*   Updated: 2025/12/22 14:46:01 by abosc            ###   ########.fr       */
+/*   Updated: 2026/01/26 13:01:02 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ export const games:             Map<string, Game>
 //////////
 // Kong //
 //////////
-export const persoKongHeight    = 10;
-export const persoKongWidth     = 5;
-export const kongPlayerMaxSpeed = 15;
-export const kongMaxHeight      = 900;
-export const kongMaxLength      = 1600;
+export const persoKongHeight	= 10;
+export const persoKongWidth		= 5;
+export const kongPlayerSpeed	= 25;
+export const kongMaxHeight		= 900;
+export const kongMaxLength		= 1600;
 
 //////////////
 // HANDLERS //
