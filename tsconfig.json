@@ -29,6 +29,7 @@
     
     /* Emit */
     "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true,
     "removeComments": true,
     "declaration": true,
