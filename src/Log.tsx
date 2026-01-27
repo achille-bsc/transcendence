@@ -8,35 +8,6 @@ function Log () {
 	async function handleLogin(e :React.FormEvent) {
 		e.preventDefault();
 
-		// const body = JSON.stringify({
-		// 	pseudo,
-		// 	password,
-		// });
-
-		// const req: ClientRequest  = http.request({
-		// 	path: 'http://localhost:7979/login',
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'content': 'application/json',
-		// 	},
-		// }, (res: any) => {
-		// 	if (res.statusCode === 200) {
-		// 		// reussite de l'envoie
-		// 		
-		// 	} else {
-		// 		// echec de l'envoie
-		// 	}
-		// })
-
-		// req.on('error', () => {
-		// 	// a faire en cas d'erreur
-		// });
-		// req.write(body);
-		// req.end();
-
-
-
-
 		const res = await fetch("http://localhost:7979/login", {
 			method: "POST",
 			headers: {
@@ -54,6 +25,9 @@ function Log () {
 			alert(data.error || "Registration failed");
 			return;
 		}
+
+		const id = data.user.id;
+		localStorage.setItem("ID", id.toString());
 		const token = data.token;
 		localStorage.setItem("token", token);
 		console.log("coucouuuu");
@@ -79,6 +53,7 @@ function Log () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="name or email"
 								onChange={e => setPseudo(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />
@@ -91,6 +66,7 @@ function Log () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="password"
 								onChange={e => setPassword(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />

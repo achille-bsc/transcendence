@@ -58,6 +58,7 @@ function Register () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="name"
 								onChange={e => setPseudo(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />
@@ -69,6 +70,7 @@ function Register () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="email"
 								onChange={e => setEmail(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />
@@ -80,6 +82,7 @@ function Register () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="password"
 								onChange={e => setPassword(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />
@@ -91,6 +94,7 @@ function Register () {
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 								placeholder="confirm password"
 								onChange={e => setConfirmPassword(e.target.value)}
+								autoComplete="false"
 								required
 								/>
 						</label><br />
