@@ -21,7 +21,7 @@ ReactDOM.createRoot(root!).render(
       <Route path="/" element={<Home />} />
       <Route path="/log" element={<Log />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/chat" element={<Chat />} />
+      <Route path="/chat/:" element={<Chat />} />
     </Routes>
   </BrowserRouter>,
 );
