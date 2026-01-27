@@ -19,6 +19,7 @@ name: transcendence
 
 services:
     frontend:
+        container_name: frontend
         build:
             context: ./frontend
             dockerfile: Dockerfile
@@ -70,6 +71,7 @@ services:
     #             restart: true
     #     restart: unless-stopped
     database-service:
+        container_name: database-service
         env_file: .env
         build:
             context: ./database-service

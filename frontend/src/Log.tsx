@@ -17,7 +17,7 @@ function Log () {
 								id="name"
 								name="name"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-								placeholder="name or email"
+							placeholder="name or email"
 								required
 								/>
 						</label><br />
