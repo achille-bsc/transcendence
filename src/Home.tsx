@@ -1,7 +1,13 @@
 import '../node_modules/tailwindcss/index.css';
+// import { verifToken } from './script/utils';
 
-function Home () {
+async function Home () {
 	
+	// if (!(await verifToken(localStorage.getItem('token'))))
+	// {
+	// 	window.location.href = "/";
+	// }
+
 	return (
 		<>
 			<div className="bg-[#1E1E1E] text-[#6E3CA3]">

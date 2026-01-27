@@ -1,19 +1,29 @@
-export async function verifToken(token: string): Promise<boolean>
-{
-	const res = await fetch("http://localhost:7979/login", {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			token: token
-		}),
-	});
-	
-	const data = await res.json();
+import http, { ClientRequest } from "http";
 
-	if (!res.ok) {
-		return (data.success as boolean);
-	}
-	return false;
+
+export async function verifToken(token: string | null): Promise<boolean>
+{
+	if (!token)
+		return (false);
+	const req: ClientRequest  = http.request({
+		hostname: 'localhost',
+		port: '7979',
+		path: '/checktoken',
+		method: 'GET',
+		headers: {
+			'content': 'application/json',
+			'content-length': token.length
+		},
+	}, (res: any) => {
+		if (res.statusCode === 200)
+			return (true);
+		else
+			return (false);
+	})
+
+	req.on('error', () => console.log("T'as fais de la merde ! cheh"));
+	req.write(JSON.stringify(token));
+	req.end();
+
+	return (false);
 }
