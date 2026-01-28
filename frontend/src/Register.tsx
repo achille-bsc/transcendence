@@ -16,7 +16,7 @@ function Register () {
 			return ;
 		}
 
-		const res = await fetch("http://localhost:7979/signin", {
+		const res = await fetch("http://database-service:5000/signin", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

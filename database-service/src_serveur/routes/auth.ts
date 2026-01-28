@@ -8,7 +8,7 @@ export async function getProfile(log_name: string, password: string, reply: any)
 		if (!log_name || log_name.length === 0 || log_name.includes(' ') ||
 			log_name.split('@').length !== 2 || !log_name.includes('.'))
 		{
-			reply.code(404).send({ error: 'bad mail' })
+			reply.code(404).send({ error: 'Bad email' })
 			return
 		}
 	}
@@ -16,7 +16,7 @@ export async function getProfile(log_name: string, password: string, reply: any)
 	{
 		if (!log_name || log_name.length === 0 || log_name.includes(' '))
 		{
-			reply.code(404).send({ error: 'bad pseudo' })
+			reply.code(404).send({ error: 'Bad pseudo' })
 			return
 		}
 	}
