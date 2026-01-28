@@ -33,7 +33,11 @@ function Chat () {
 				content: msg,
 			})
 			try {
+<<<<<<< HEAD
 				const response = await fetch('https://caddy:443/db/signin', {
+=======
+				const response = await fetch('http://database-service:5000/dm', {
+>>>>>>> 8d792c5 (Frontend(post rebase, unstable):)
 					method: 'POST',
 					headers: {
 					'Content-Type': 'application/json'
