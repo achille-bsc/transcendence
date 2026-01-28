@@ -7,7 +7,7 @@ export async function checkLogin(log_name: string, password: string, reply: any)
 		if (!log_name || log_name.length === 0 || log_name.includes(' ') ||
 			log_name.split('@').length !== 2 || !log_name.includes('.'))
 		{
-			reply.code(404).send({ error: 'bad mail' })
+			reply.code(404).send({ error: 'Bad email' })
 			return 
 		}
 	}
@@ -15,14 +15,14 @@ export async function checkLogin(log_name: string, password: string, reply: any)
 	{
 		if (!log_name || log_name.length === 0 || log_name.includes(' '))
 		{
-			reply.code(404).send({ error: 'bad pseudo' })
+			reply.code(404).send({ error: 'Bad pseudo' })
 			return
 		}
 	}
     const user = await findProfile(log_name)
 	if (!user || await comparePassword(password, user!.password) === false) 
 	{
-    	reply.code(404).send({ error: 'User not found, Check your password and your pseudo/mail' })
+    	reply.code(404).send({ error: 'User not found, check your password and your pseudo/email' })
 		return
 	}
 	else
@@ -51,12 +51,12 @@ export async function checkSignin(pseudo: string, email: string, password: strin
 {
     if (!pseudo || !email || !password)
     {
-        reply.code(404).send({ error: 'All field are required' })
+        reply.code(404).send({ error: 'All fields are required' })
         return false
     }
     else if (password.length < 8)
     {
-        reply.code(404).send({ error: 'Password need more than 8 charactere' })
+        reply.code(404).send({ error: 'Password needs more than 8 characters' })
         return false
     }
     else if (!email || email.length === 0 || email.includes(' ') ||
@@ -67,7 +67,7 @@ export async function checkSignin(pseudo: string, email: string, password: strin
     }
     else if (!pseudo || pseudo.length === 0 || pseudo.includes(' ') || pseudo.includes('@'))
     {
-        reply.code(404).send({ error: 'bad pseudo' })
+        reply.code(404).send({ error: 'Bad pseudo' })
         return false
     }
     const existing = await prisma.user.findFirst({

@@ -60,7 +60,7 @@ function Chat () {
 						id="dialogue"
 						name="text"
 						className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] text-[#969696]"
-						placeholder="tape your text"
+						placeholder="type your text"
 						onChange={e => setMsg(e.target.value)}
 						required
 						autoComplete="false"

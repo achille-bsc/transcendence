@@ -6,8 +6,8 @@ export async function verifToken(token: string | null): Promise<boolean>
 	if (!token)
 		return (false);
 	const req: ClientRequest  = http.request({
-		hostname: 'localhost',
-		port: '7979',
+		hostname: 'database-service',
+		port: '5000',
 		path: '/checktoken',
 		method: 'GET',
 		headers: {

@@ -6,7 +6,7 @@ export async function signinValidations(pseudo: string, mail: string, password: 
 {
 	if (password.length < 8)
 	{
-		reply.code(404).send({ error: 'Password need more than 8 charactere' })
+		reply.code(404).send({ error: 'Password needs more than 8 characters' })
 		return
 	}
 	if (!mail || mail.length === 0 || mail.includes(' ') ||

@@ -8,7 +8,7 @@ export default async function inviteRoutes(server: FastifyInstance) {
         };
         if (sender_id === user_id)
         {
-            console.log("User cannot invite itself");
+            console.log("Users cannot invite themselves");
             return {
             status: "failure",
             message: "You cannot invite yourself."};

@@ -8,7 +8,7 @@ function Log () {
 	async function handleLogin(e :React.FormEvent) {
 		e.preventDefault();
 
-		const res = await fetch("http://localhost:7979/login", {
+		const res = await fetch("http://database-service:5000/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
