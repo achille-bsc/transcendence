@@ -10,10 +10,11 @@ export default async function messageRoutes(server: FastifyInstance) {
         receiverId: number;
         content: string;
       };
-      const senderId = request.user.id;
+    const senderId = request.user.id;
     const conv = createDmConversation(senderId, receiverId);
     if (!conv)
       return reply.code(400).send({ error: 'Cannot create DM conversation' });
+    server.sendToUser(receiverId, content);
     const message = await newDirectMessage(senderId, receiverId, content);
     return { status: "success", message: "DM sent successfully." };
     });

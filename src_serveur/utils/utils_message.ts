@@ -1,6 +1,5 @@
 import { prisma } from '../../prisma'
 import { findUserById } from './utils_user';
-import { websocketRoutes } from '../routes/websocket';
 
 export async function newDirectMessage(senderId: number, conversationId: number, content: string)
 {
@@ -30,44 +29,27 @@ export async function newDirectMessage(senderId: number, conversationId: number,
 		include: {
       		sender: { select: { id: true, pseudo: true } },
     },
-	});
-	const messageData = JSON.stringify({
-    type: 'new_message',
-    conversationId,
-    data: new_message,
   });
-
-  participant.conversation.participants.forEach(({ userId }) => {
-    const socket = clients.get(userId);
-    if (socket?.readyState === 1) {
-      socket.send(messageData);
-    }
-  });
-
-  return { success: true, message };
+  return { success: true, new_message };
 }
 
 export async function createDmConversation(user1id: number, user2id: number)
 {
 	const user1 = await findUserById(user1id);
 	const user2 = await findUserById(user2id);
-	if (!user1 || !user2)
-		return null;
-	if (user1 === user2)
+	if (!user1 || !user2 || user1 === user2)
 		return null;
 	const convExists = await prisma.conversation.findFirst({
 		where : {
 			isGroup: false,
-			//AND:{
 			participants: {
 				every: {
-					OR: [
+					AND: [
 						{ userId: user1.id },
 						{ userId: user2.id }
 					]
 				}
-		//	}
-		}
+			}
 		},
 		include: {
 			participants: {
