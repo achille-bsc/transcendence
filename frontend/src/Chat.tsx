@@ -1,20 +1,20 @@
 import { useState } from "react";
-// import { verifToken } from "./script/utils";
+import { verifToken } from "./script/utils";
 
 function Chat () {
 
-	// let isAuth = false;
+	let isAuth = false;
 	const token = localStorage.getItem('token')
 	if (token)
 	{
-		// if (!verifToken(token))
-		// {
-		// 	window.location.href = "/log";
-		// }
-		// else
-		// {
-		// 		isAuth = true;
-		// }
+		if (!verifToken(token))
+		{
+			window.location.href = "/log";
+		}
+		else
+		{
+				isAuth = true;
+		}
 	}
 	else
 		window.location.href = "/log";
@@ -71,5 +71,6 @@ function Chat () {
 		</>
 	)
 }
+
 
 export default Chat
