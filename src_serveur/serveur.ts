@@ -20,12 +20,12 @@ await server.register(healthRoutes);
 await server.register(messageRoutes);
 await server.register(inviteRoutes);
 
-server.listen({ port: 5000 }, (err, adress) => {
+server.listen({ port: 5000 }, (err, address) => {
   console.log("Starting server...");
   if (err) {
     console.error(err);
     process.exit(1);
   }
-  console.log(`Server listening at ${adress}`);
+  console.log(`Server listening at ${address}`);
 });
 
