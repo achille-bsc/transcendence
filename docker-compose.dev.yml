@@ -40,6 +40,8 @@ services:
                 # - path: shared/scripts
                 #   target: /app/scripts
                 #   action: sync
+        networks:
+            - transcendence-network
         restart: unless-stopped
     # auth-service:
     #     build:
@@ -100,13 +102,15 @@ services:
                   action: sync
         volumes:
             - ./db_data:/app/data # bind mount for now so that the db can be checked outside
+        networks:
+            - transcendence-network
         restart: unless-stopped
-        # healthcheck:
-        #     test: ["CMD-SHELL", "curl -f https://localhost:5000/health || exit 1"] #endpoint /health to expose
-        #     interval: 30s
-        #     timeout: 10s
-        #     retries: 5
-        #     start_period: 10s
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"] #Probably need to put https in future
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 10s
     # age-of-war-service:
     #     build:
     #         context: ./age-of-war-service
@@ -234,6 +238,9 @@ services:
     #             restart: true
     #     restart: unless-stopped
 
+networks:
+    transcendence-network:
+        driver: bridge
 secrets:
     github_oauth_id:
         file: secrets/github_oauth_id
