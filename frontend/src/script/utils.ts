@@ -1,6 +1,6 @@
 export async function verifToken(token: string): Promise<boolean>
 {
-	const res = await fetch("http://localhost:7979/login", {
+	const res = await fetch("http://database-service:5000/login", {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",

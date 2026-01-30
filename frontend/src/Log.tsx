@@ -1,9 +1,30 @@
 import { useState } from "react";
+import MyButton from "./Button"
 
 function Log () {
 
 	const [pseudo, setPseudo] = useState("");
 	const [password, setPassword] = useState("");
+
+	async function handleGithubLogin() {
+		const git_res = await fetch("", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		
+		const data = await git_res.json();
+
+		if (!git_res.ok) {
+			alert(data.error || "Registration failed");
+			return;
+		}
+		const token = data.token;
+		localStorage.setItem("token", token);
+		console.log("salutttttt");
+		window.location.href = "/";
+	}
 
 	async function handleLogin(e :React.FormEvent) {
 		e.preventDefault();
@@ -25,9 +46,6 @@ function Log () {
 			alert(data.error || "Registration failed");
 			return;
 		}
-
-		const id = data.user.id;
-		localStorage.setItem("ID", id.toString());
 		const token = data.token;
 		localStorage.setItem("token", token);
 		console.log("coucouuuu");
@@ -35,11 +53,10 @@ function Log () {
 	}
 
 	return (
-		<>
-			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center text-[#6E3CA3]">
+		<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center text-[#6E3CA3]">
+			<div className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 				<form
-				  onSubmit={handleLogin}
-				  className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+					onSubmit={handleLogin}>
 					<div className="flex">
 						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Login</div>
 						<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >Register</div></a>
@@ -54,7 +71,6 @@ function Log () {
 								placeholder="name or email"
 								onChange={e => setPseudo(e.target.value)}
 								autoComplete="false"
-								required
 								/>
 						</label><br />
 
@@ -67,7 +83,6 @@ function Log () {
 								placeholder="password"
 								onChange={e => setPassword(e.target.value)}
 								autoComplete="false"
-								required
 								/>
 						</label><br />
 
@@ -80,11 +95,17 @@ function Log () {
 						</div>
 					</div>
 				</form>
+				<div className="place-items-center">
+					<img src="../icons/ligne.png" alt="separator"/>
+					<MyButton onClick={() => {handleGithubLogin}}>
+						<img src="../icons/github.png" alt="logo github pour connexion"/>
+					</MyButton>
+				</div>
 			</div>
-		</>
+		</div>
 	)
 }
-
+// w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]
 export default Log
 
 //return de l'ID pseudo email et token
