@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MyButton from "./Button"
+import  RegisterButton  from "./RegisterButton";
 
 function Register () {
 
@@ -98,15 +99,10 @@ function Register () {
 							required
 							/>
 					</label><br />
-					<div className="flex justify-center items-center">
-						<input
-							type="submit"
-							value="Register"
-							className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
-							/>
-					</div>
+					<RegisterButton label="Coucou" className=""/>
 				</div>
 			</form>
+			
 			{/* <div className="flex justify-center items-center h-10 scale-300 scale-y-30">
 				<img src="../icons/ligne.png"/>
 			</div>
