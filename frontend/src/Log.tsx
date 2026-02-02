@@ -13,9 +13,7 @@ function Log () {
 				"Content-Type": "application/json",
 			},
 		});
-		
-		const data = await git_res.json();
-
+		//ne redirige nul part
 		if (!git_res.ok) {
 			alert(data.error || "Registration failed");
 			return;
@@ -96,10 +94,12 @@ function Log () {
 					</div>
 				</form>
 				<div className="place-items-center">
-					<img src="../icons/ligne.png" alt="separator"/>
-					<MyButton onClick={() => {handleGithubLogin}}>
-						<img src="../icons/github.png" alt="logo github pour connexion"/>
-					</MyButton>
+					<img className="h-15 w-[90%]" src="../icons/ligne.png" alt="separator"/>
+					<div className="m-5 mt-0 flex items-center justify-center">
+						<MyButton onClick={() => {handleGithubLogin}}>
+							<img className="cursor-pointer" src="../icons/github.png" alt="logo github pour connexion"/>
+						</MyButton>
+					</div>
 				</div>
 			</div>
 		</div>
