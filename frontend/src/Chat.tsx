@@ -4,20 +4,20 @@ import { verifToken } from "./script/utils";
 function Chat () {
 
 	let isAuth = false;
-	const token = localStorage.getItem('token')
-	if (token)
-	{
-		if (!verifToken(token))
-		{
-			window.location.href = "/log";
-		}
-		else
-		{
-				isAuth = true;
-		}
-	}
-	else
-		window.location.href = "/log";
+	// const token = localStorage.getItem('token')
+	// if (token)
+	// {
+	// 	if (!verifToken(token))
+	// 	{
+	// 		window.location.href = "/log";
+	// 	}
+	// 	else
+	// 	{
+	// 			isAuth = true;
+	// 	}
+	// }
+	// else
+	// 	window.location.href = "/log";
 
 	const [msg, setMsg] = useState("");
 
