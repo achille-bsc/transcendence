@@ -1,6 +1,6 @@
 import { useState } from "react";
-import MyButton from "./Button"
-import  RegisterButton  from "./RegisterButton";
+import  RegisterInput  from "./RegisterInput";
+import RegisterButton from "./RegisterButton";
 
 function Register () {
 
@@ -10,6 +10,7 @@ function Register () {
 	const [confirmPassword, setConfirmPassword] = useState("");
 
 	async function handleRegister(e: React.FormEvent) {
+		console.log("P = ", pseudo, " E = ", email, " PASS = ", password, " CPASS = ", confirmPassword);
 		e.preventDefault();
 
 		if (password != confirmPassword)
@@ -52,65 +53,62 @@ function Register () {
 				</div>
 				<div className="p-4 sm:p-5 md:p-6">
 					<label className="flex justify-center"><br />
-						<input
+						<RegisterInput
 							type="text"
 							id="name"
 							name="name"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 							placeholder="name"
-							onChange={e => setPseudo(e.target.value)}
+							onChange={() => setPseudo(pseudo)}
 							autoComplete="false"
 							required
 							/>
 					</label><br />
 					<label className="flex justify-center"><br />
-						<input
+						<RegisterInput
 							type="email"
 							id="name"
 							name="name"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 							placeholder="email"
-							onChange={e => setEmail(e.target.value)}
+							onChange={() => setEmail(email)}
 							autoComplete="false"
 							required
 							/>
 					</label><br />
 					<label className="flex justify-center">
-						<input
+						<RegisterInput
 							type="password"
 							id="password"
 							name="password"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 							placeholder="password"
-							onChange={e => setPassword(e.target.value)}
+							onChange={() => setPassword(password)}
 							autoComplete="false"
 							required
 							/>
 					</label><br />
 					<label className="flex justify-center">
-						<input
+						<RegisterInput 
 							type="password"
 							id="password"
 							name="password"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
 							placeholder="confirm password"
-							onChange={e => setConfirmPassword(e.target.value)}
+							onChange={() => setConfirmPassword(confirmPassword)} //envoie valeur async
 							autoComplete="false"
 							required
 							/>
 					</label><br />
-					<RegisterButton label="Coucou" className=""/>
+					<div className="flex justify-center items-center transition-all duration-200 ">
+						<RegisterButton
+							label="Register"
+							icon=""
+							className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
+							/>
+					</div>
 				</div>
 			</form>
-			
-			{/* <div className="flex justify-center items-center h-10 scale-300 scale-y-30">
-				<img src="../icons/ligne.png"/>
-			</div>
-			<div className="flex justify-center items-center">
-				<MyButton onClick={() => 42}>
-					<img src="../icons/github.png" href="https://github.com/achille-bsc/transcendence"/>
-				</MyButton>
-			</div> */}
 		</div>
 	)
 }

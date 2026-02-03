@@ -1,5 +1,7 @@
 import { useState } from "react";
 import MyButton from "./Button"
+import  RegisterInput  from "./RegisterInput";
+import RegisterButton from "./RegisterButton";
 
 function Log () {
 
@@ -61,7 +63,7 @@ function Log () {
 					</div>
 					<div className="p-4 sm:p-5 md:p-6">
 						<label className="flex justify-center"><br />
-							<input
+							<RegisterInput
 								type="text"
 								id="name"
 								name="name"
@@ -73,7 +75,7 @@ function Log () {
 						</label><br />
 
 						<label className="flex justify-center">
-							<input
+							<RegisterInput
 								type="password"
 								id="password"
 								name="password"
@@ -84,20 +86,20 @@ function Log () {
 								/>
 						</label><br />
 
-						<div className="flex justify-center items-center">
-							<a href="/"><input
-								type="submit"
-								value="Register"
+						<div className="flex justify-center items-center transition-all duration-200 ">
+							<RegisterButton
+								label="Register"
+								icon=""
 								className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
-								/></a>
+								/>
 						</div>
 					</div>
 				</form>
-				<div className="place-items-center">
+				<div className="flex flex-col items-center">
 					<img className="h-15 w-[90%]" src="../icons/ligne.png" alt="separator"/>
 					<div className="m-5 mt-0 flex items-center justify-center">
 						<MyButton onClick={() => {handleGithubLogin}}>
-							<img className="cursor-pointer" src="../icons/github.png" alt="logo github pour connexion"/>
+							<img className="cursor-pointer" src="../icons/github.png" alt="logo github pour connexion" href="https://github.com/achille-bsc/transcendence"/>
 						</MyButton>
 					</div>
 				</div>
