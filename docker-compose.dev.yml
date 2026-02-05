@@ -18,6 +18,73 @@
 name: transcendence
 
 services:
+# ========================= CADDY ========================
+    caddy:
+        container_name: caddy
+        build:
+            context: ./caddy-service
+            dockerfile: Dockerfile
+        ports:
+            - "8443:443"
+            - "8080:80"
+        networks:
+            - transcendence-network
+        environment:
+            - XDG_CONFIG_HOME="/app/data"
+        depends_on:
+            frontend:
+                condition: service_started
+            database-service:
+                condition: service_healthy
+            # auth-service:
+            #     condition: service_started
+            # chat-service:
+            #     condition: service_started
+            # age-of-war-service:
+            #     condition: service_started
+            # file-management-service:
+            #     condition: service_started
+            # kong-service:
+            #     condition: service_started
+            # user-analytics-service:
+            #     condition: service_started
+            # user-management-service:
+            #     condition: service_started
+        restart: always
+# ======================== CHAT ========================
+    # chat-service:
+    #     container_name: chat-service
+    #     build:
+    #         context: ./chat-service
+    #         dockerfile: Dockerfile
+    #         additional_contexts:
+    #             shared_ressources: ./shared
+    #     expose:
+    #         - "3000" # arbitrary
+    #     develop:
+    #         watch:
+    #             - path: ./chat-service
+    #               action: sync
+    #               target: /app
+    #               ignore:
+    #                 - .git
+    #     networks:
+    #         - transcendence-network
+    #     depends_on:
+    #         database-service:
+    #             condition: service_healthy
+    #             restart: true
+    #         # user-management-service:
+    #         #     condition: service_started
+    #         #     restart: true
+    #         # tournament-service:
+    #         #     condition: service_started
+    #         #     restart: true
+    #         # file-managment-service:
+    #         #     condition: service_started
+    #         #     restart: true
+    #     restart: unless-stopped
+# ======================== FRONT ========================
     frontend:
         container_name: frontend
         build:
@@ -25,9 +92,8 @@ services:
             dockerfile: Dockerfile
             additional_contexts: 
                 shared_ressources: ./shared
-        ports:
-            - "8443:443"
-            - "8080:80"
+        expose:
+            - "3000"
         develop:
             watch:
                 - path: ./frontend
@@ -35,6 +101,7 @@ services:
                   target: /app
                   ignore:
                     - .git
+                    - .dockerignore
                 #   exec:
                 #     command: "./scripts/handle_file_change.sh {{ .Path }}"
                 # - path: shared/scripts
@@ -43,12 +110,13 @@ services:
         networks:
             - transcendence-network
         restart: unless-stopped
+# # ======================== AUTHENTICATION ========================
     # auth-service:
     #     build:
     #         context: ./auth-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - #  ""
+    #         - 3001
     #     secrets:
     #         - api_pass
     #         - jwt_secret
@@ -56,7 +124,7 @@ services:
     #         - github_oauth_secret
     #     develop:
     #         watch:
-    #             - path: ./**/*.tsx
+    #             - path: ./auth-service
     #               action: sync+exec
     #               target: /app
     #               exec:
@@ -65,13 +133,14 @@ services:
     #               target: /app/scripts
     #               action: sync
     #     depends_on:
-    #         user-management-service: # Do I really need user-management here specifically?
+    #         user-management-service:
     #             condition: service-started
     #             restart: true
     #         database-service:
     #             condition: service_healthy
     #             restart: true
     #     restart: unless-stopped
+# ======================== DB ========================
     database-service:
         container_name: database-service
         env_file: .env
@@ -107,10 +176,11 @@ services:
         restart: unless-stopped
         healthcheck:
             test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"] #Probably need to put https in future
-            interval: 30s
-            timeout: 10s
+            interval: 10s
+            timeout: 30s
             retries: 5
-            start_period: 10s
+            start_period: 5s
+# # ======================== AGE OF WAR ========================
     # age-of-war-service:
     #     build:
     #         context: ./age-of-war-service
@@ -128,6 +198,7 @@ services:
     #               target: /app/scripts
     #               action: sync
     #     restart: unless-stopped
+# # ======================== FILE MANAGEMENT ========================
     # file-management-service:
     #     build:
     #         context: ./file-management-service
@@ -151,6 +222,7 @@ services:
     #             condition: service_healthy
     #             restart: true
     #     restart: unless-stopped
+# # ======================== KONG ========================
     # kong-service:
     #     build:
     #         context: ./kong-service
@@ -168,6 +240,7 @@ services:
     #               target: /app/scripts
     #               action: sync
     #     restart: unless-stopped
+# # ======================== TOURNAMENT ========================
     # tournament-service:
     #     build:
     #         context: ./tournament-service
@@ -190,7 +263,12 @@ services:
     #         database-service:
     #             condition: service_healthy
     #             restart: true
+    #         kong-service:
+    #             condition: service_started
+    #         age-of-war-service:
+    #             condition: service_started
     #     restart: unless-stopped
+# # ======================== USER ANALYTICS ========================
     # user-analytics-service:
     #     build:
     #         context: ./user-analytics-service
@@ -214,12 +292,13 @@ services:
     #             condition: service_healthy
     #             restart: true
     #     restart: unless-stopped
+# # ======================== USER MANAGEMENT ========================
     # user-management-service:
     #     build:
     #         context: ./user-management-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - #
+    #         - 3002
     #     secrets:
     #         - api_pass
     #     develop:

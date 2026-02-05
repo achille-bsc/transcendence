@@ -7,7 +7,7 @@ function Chat () {
 			
 			input.value = "";
 			try {
-				const response = await fetch('193.1.7.8:7979/signin', {
+				const response = await fetch('https://caddy:443/db/signin', {
 					method: 'POST',
 					headers: {
 					'Content-Type': 'application/json'
