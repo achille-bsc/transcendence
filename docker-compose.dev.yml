@@ -31,6 +31,14 @@ services:
             - transcendence-network
         environment:
             - XDG_CONFIG_HOME="/app/data"
+        develop:
+            watch:
+              - action: sync
+                path: ./caddy-service/
+                target: /app
+                ignore:
+                    - .dockerfile
+                    - Dockerfile
         depends_on:
             frontend:
                 condition: service_started
