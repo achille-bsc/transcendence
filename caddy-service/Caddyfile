@@ -5,18 +5,18 @@
 	}
 	debug
 	log default {
-		# output stdout
-		output file /var/caddy/log
+		output stdout
+		# output file /var/caddy/log
 		format console
 		#format json
 	}
 }
 
 :80 {
-	redir https://{host}{uri} permanent
+	redir https://{host}:443{uri} permanent
 }
 
-:443 {
+localhost {
 	tls internal
 	handle /* {
 		reverse_proxy frontend:3000
