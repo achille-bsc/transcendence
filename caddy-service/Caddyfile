@@ -16,11 +16,8 @@
 	redir https://{host}:443{uri} permanent
 }
 
-localhost {
+localhost:443 {
 	tls internal
-	handle /* {
-		reverse_proxy frontend:3000
-	}
 	handle /api/auth/* {
 		uri strip_prefix /api/auth
 		reverse_proxy auth-service:3001
@@ -32,6 +29,9 @@ localhost {
 	handle /api/db/* {
 		uri strip_prefix /api/db
 		reverse_proxy database-service:5000
+	}
+	handle {
+		reverse_proxy frontend:3000
 	}
 }
 

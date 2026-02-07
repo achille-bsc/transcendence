@@ -31,14 +31,18 @@ services:
             - transcendence-network
         environment:
             - XDG_CONFIG_HOME="/app/data"
+        volumes:
+            - caddy-volume:/data/caddy/
         develop:
             watch:
-              - action: sync
+              - action: sync+exec
                 path: ./caddy-service/
                 target: /app
                 ignore:
                     - .dockerfile
                     - Dockerfile
+                exec:
+                    command: "caddy reload"
         depends_on:
             frontend:
                 condition: service_started
@@ -325,9 +329,13 @@ services:
     #             restart: true
     #     restart: unless-stopped
 
+volumes:
+    caddy-volume: 
+
 networks:
     transcendence-network:
         driver: bridge
+
 secrets:
     github_oauth_id:
         file: secrets/github_oauth_id
@@ -339,5 +347,5 @@ secrets:
         file: secrets/db_password
     jwt_secret:
         file: secrets/jwt_secret
-    db_url:
-        environment: "DATABASE_URL" 
+    # db_url:
+    #     environment: "DATABASE_URL" 
