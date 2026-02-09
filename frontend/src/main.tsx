@@ -4,6 +4,7 @@
 // import { BrowserRouter as Router, Routes, Route } from "react-router";
 //import './index.css'
 import React from "react";
+import '../node_modules/tailwindcss/index.css';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 

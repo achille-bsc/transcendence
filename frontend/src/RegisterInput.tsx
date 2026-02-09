@@ -5,7 +5,7 @@ interface InputProps {
 	value?: string;
 	className?: string;
 	placeholder?: string;
-	onChange?: () => void;
+	onChange?: () => void | undefined;
 	autoComplete?:string;
 	required?:boolean;
 }

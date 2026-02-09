@@ -1,6 +1,7 @@
 import { useState } from "react";
 import  RegisterInput  from "./RegisterInput";
 import RegisterButton from "./RegisterButton";
+import Langue from "./language/en.json";
 
 function Register () {
 
@@ -48,8 +49,8 @@ function Register () {
 				onSubmit={handleRegister}
 				className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 				<div className="flex">
-					<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe" href="log"><div >Login</div></a>
-					<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">Register</div>
+					<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe" href="log"><div >{Langue.en.home.Login.login_button}</div></a>
+					<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{Langue.en.home.Login.register_button}</div>
 				</div>
 				<div className="p-4 sm:p-5 md:p-6">
 					<label className="flex justify-center"><br />
@@ -57,9 +58,9 @@ function Register () {
 							type="text"
 							id="name"
 							name="name"
-							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-							placeholder="name"
-							onChange={() => setPseudo(pseudo)}
+							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+							placeholder={Langue.en.home.Login.name}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
 							autoComplete="false"
 							required
 							/>
@@ -69,9 +70,9 @@ function Register () {
 							type="email"
 							id="name"
 							name="name"
-							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-							placeholder="email"
-							onChange={() => setEmail(email)}
+							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+							placeholder={Langue.en.home.Login.email}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
 							autoComplete="false"
 							required
 							/>
@@ -81,9 +82,9 @@ function Register () {
 							type="password"
 							id="password"
 							name="password"
-							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-							placeholder="password"
-							onChange={() => setPassword(password)}
+							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+							placeholder={Langue.en.home.Login.password}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 							autoComplete="false"
 							required
 							/>
@@ -93,16 +94,16 @@ function Register () {
 							type="password"
 							id="password"
 							name="password"
-							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]"
-							placeholder="confirm password"
-							onChange={() => setConfirmPassword(confirmPassword)} //envoie valeur async
+							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+							placeholder={Langue.en.home.Login.confirm_password}
+                    	    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
 							autoComplete="false"
 							required
 							/>
 					</label><br />
 					<div className="flex justify-center items-center transition-all duration-200 ">
 						<RegisterButton
-							label="Register"
+							label={Langue.en.home.Login.register_button}
 							icon=""
 							className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
 							/>
