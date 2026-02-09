@@ -19,15 +19,15 @@ function Main (){
 	const [showFriends, setShowFriends] = useState(false);
 	return (
 		<>
-			<div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-black" : "bg-gray-800 text-white"}`} >
+			{/* <div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-black" : "bg-gray-800 text-white"}`} > */}
 				<div className="h-20 bg-black flex items-center justify-between px-2 md:px-10">
 					<div className="flex items-center space-x-4">
 						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={menu} alt="Menu" className="w-[2vw] h-[4vw]" />
+							<Img src={menu} alt="Menu" className="w-[3vw] h-auto" />
 						</MyButton>
 						<div className = "relative">
 							<MyButton onClick={() => setShowFriends(!showFriends)}>
-								<Img src={friends} alt="Friends" className="w-[2vw] h-[4vw]"/>
+								<Img src={friends} alt="Friends" className="w-[3vw] h-auto"/>
 							</MyButton>
 							{showFriends && (
 								<div className="absolute top-full mt-2 w-[20vw] bg-black text-white p-4 ">
@@ -44,11 +44,6 @@ function Main (){
 							  	</div>
 							)}
 						</div>
-						<div
-    					  className={`min-h-screen transition-colors duration-300 ${
-    					    isOn ? "bg-purple-900 text-white" : "bg-black text-white"
-    					  }`}
-    					/>
 						<SwitchButton  checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
 					<span className="text-purple-900 text-[30px] md:text-[50px] font-bold">
@@ -56,17 +51,17 @@ function Main (){
 					</span>
 					<div className="flex items-center space-x-4">
 						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={game} alt="Game" className="w-[2vw] h-[4vw]"/>
+							<Img src={game} alt="Game" className="w-[3vw] h-auto"/>
 						</MyButton>
 						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={notifications} alt="Notifications" className="w-[2vw] h-[4vw]"/>
+							<Img src={notifications} alt="Notifications" className="w-[3vw] h-auto"/>
 						</MyButton>
-						<MyButton onClick={() => Profile()}>
-							<Img src={user} alt="User" className="w-[2vw] h-[4vw]"/>
+						<MyButton onClick={() => DisplayMenu()}>
+							<Img src={user} alt="User" className="w-[3vw] h-auto"/>
 						</MyButton>
 					</div>
 				</div>
-			</div>
+			{/* </div> */}
 		</>
 	)
 }

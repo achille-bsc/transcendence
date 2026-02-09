@@ -16,12 +16,12 @@ export function Friend({ children }) {
 		<span className="text-purple-900 text-sm md:text-lg font-bold">
 			{children}
 		</span>
-	  	<div className="flex items-center space-x-3">
+	  	<div className="flex items-center space-x-10">
 			<MyButton onClick={() => sendRequest()}>
 				<Img
 					src={accept}
 					alt="accept"
-					className="w-4 h-4 md:w-5 md:h-5"
+					className="w-5 h-5 md:w-6 md:h-6"
 				/>
 			</MyButton>
 			<MyButton onClick={() => Jsp()}>
