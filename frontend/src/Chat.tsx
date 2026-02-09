@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { verifToken } from "./script/utils";
+import ChatInput from "./ChatInput";
+import SendMsg from "./SendMsg";
 
 function Chat () {
 
-	let isAuth = false;
+	// let isAuth = false;
 	// const token = localStorage.getItem('token')
 	// if (token)
 	// {
@@ -23,10 +25,11 @@ function Chat () {
 
 	async function keyPressFunction(event: any) { // See it with API
 
-		if (event.key == 'Enter')
+		if (event.key == 'Enter'  && msg.trim() !== '')
 		{
+			console.log(msg);
 			const data = JSON.stringify({
-				user_id: token,
+				// user_id: token,
 				content: msg,
 			})
 			try {
@@ -49,20 +52,21 @@ function Chat () {
 
 			console.log(msg);
 		};
+		// event.preventDefault();
 	}
 
 	return (
 		<div className="bg-[#1E1E1E] min-h-screen flex items-end justify-center text-[#6E3CA3]">
 			<label className="flex justify-center p-5">
-				<input
+				<ChatInput
 					type="text"
 					id="dialogue"
 					name="text"
-					className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] text-[#969696]"
+					className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]  border-[#6E3CA3] text-[#ffffff]"
 					placeholder="type your text"
-					onChange={e => setMsg(e.target.value)}
+					autoComplete="off"
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}
 					required
-					autoComplete="false"
 					onKeyDown={keyPressFunction}
 					/>
 			</label>

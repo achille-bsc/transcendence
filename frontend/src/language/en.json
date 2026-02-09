@@ -1,0 +1,18 @@
+{
+	"en": {
+		"all": {
+			"home": {
+				"game_button": "PLAY"
+			},
+			"Login": {
+				"login_button": "Login",
+				"register_button": "Register",
+				"password": "Password",
+				"confirm_password": "Confirm Password",
+				"name_email": "Name or Email",
+				"name": "Name",
+				"email": "Email"
+			}
+		}
+	}
+}
