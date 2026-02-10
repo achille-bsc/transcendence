@@ -28,7 +28,7 @@ function Profile({ children = "username" }) {
 					</div>
 				</div>
 			</div>
-		</div>  
+		</div>
 		<div className="ml-[35vw] w-[40vw] flex flex-col space-y-4 mt-18 p-4">
 			<div className="text-center text-purple-900 text-[20px] md:text-[30px] font-bold">
 				<p>STATS</p>
