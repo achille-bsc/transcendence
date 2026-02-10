@@ -1,4 +1,3 @@
-import Profile from "../Profile.tsx"
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
 import { menu, user, friends, game, notifications } from "../../icons/Icons.tsx"
@@ -14,13 +13,13 @@ function DisplayMenu(){
 	return
 }
 
-function Main() {
+function Main({children = ""}) {
 	const [isOn, setIsOn] = useState(false);
 	const [openMenu, setOpenMenu] = useState(null);
 	const [activeTab, setActiveTab] = useState("add");
 	return (
 		<>
-			{/* <div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-black" : "bg-gray-800 text-white"}`} > */}
+			<div className={` relative min-h-screen transition-colors duration-300 z-10 ${!isOn ? "bg-white text-black" : "bg-gray-800 text-white"}`} >
     			<div className="h-20 bg-black flex items-center justify-between px-2 md:px-10">
     				<div className="flex items-center space-x-4">
         				<MyButton onClick={() => DisplayMenu()}>
@@ -72,9 +71,11 @@ function Main() {
 						</MyButton>
 					</div>
 				</div>
-			{/* </div> */}
+				{children}
+			</div>
 		</>
 	)
 }
 
 export default Main
+//essayer getelembyid pour inclure la page dnas main sinon ff ca marche
