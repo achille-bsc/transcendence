@@ -13,16 +13,11 @@ type LangContextType = {
 export const LangProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 	const [tr, setTr] = useState(useTranslations());
-	const t = (tr as Translations);
+	const t = tr;
 
 	function setLang(Lang : string) {
 		console.log(Lang);
-		if (Lang === "en") 
-			localStorage.setItem("language", "en");
-		if (Lang === "fr")
-			localStorage.setItem("language", "fr");
-		if (Lang === "de")
-			localStorage.setItem("language", "de");
+		localStorage.setItem("language", Lang);
 		setTr(useTranslations())
 	}
 

@@ -1,10 +1,7 @@
 import '../node_modules/tailwindcss/index.css';
 import Button from "./TryButton.tsx";
 import Help from "./Help.tsx";
-import en from "./language/en.json";
-import fr from "./language/fr.json";
 import { useState } from "react";
-import choose_language from './Help.tsx';
 import { useLang } from './script/langProvider.tsx';
 // import { verifToken } from './script/utils';
 
