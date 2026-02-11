@@ -1,33 +1,25 @@
-import en from "./language/en.json"
-import fr from "./language/fr.json"
-import { useState } from "react";
+import RegisterButton from "./RegisterButton";
+import { useLang } from "./script/langProvider";
 
-export default function choose_language() {
-	const [speak, setSpeak] = useState(en)
-
-	function ChangeLang(Lang) {
-		console.log(Lang);
-		if (Lang === "english") 
-		{
-			setSpeak(en);
-			localStorage.setItem("language", JSON.stringify('en'));
-		}
-		if (Lang === "french")
-		{
-			setSpeak(fr);
-			localStorage.setItem("language", JSON.stringify('fr'));
-		}
-		
-	}
+export default function ChooseLanguage() {
+	const { getLang, setLang } = useLang();
+	
 	return (
 		<div className="justify-center">
-			<button onClick={() => ChangeLang("english")}>
-				anglais
-			</button>
-			<br />
-			<button onClick={() => ChangeLang("french")}>
-				français
-			</button>
+			<RegisterButton
+				label="Anglais"
+				onClick={() => setLang("en")}
+			/>
+			<br/>
+			<RegisterButton
+				label="Français"
+				onClick={() => setLang("fr")}
+			/>
+			<br/>
+			<RegisterButton
+				label="Deutsch"
+				onClick={() => setLang("de")}
+			/>
 		</div>
-	)
+	);
 }

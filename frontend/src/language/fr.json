@@ -1,9 +1,15 @@
 {
-	"fr": {
-		"all": {
-			"home": {
-				"game_button": "JOUER"
-			}
+	"language": "fr-FR",
+	"appName": "Transcendence",
+	"translations": {
+		"navigation": {
+			"home": "Accueil",
+			"game": "Jouer",
+			"chat": "Chat",
+			"leaderboard": "Classement",
+			"friends": "Amis",
+			"profile": "Profil",
+			"settings": "Paramètres"
 		}
 	}
 }

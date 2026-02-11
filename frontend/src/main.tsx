@@ -16,15 +16,18 @@ import Log from './Log.tsx'
 import Chat from './Chat.tsx'
 // import Button from './Button.tsx'
 import Try from './Try.tsx'
+import { LangProvider } from "./script/langProvider.tsx";
 
 ReactDOM.createRoot(root!).render(
 	<BrowserRouter>
-		<Routes>
-			<Route path="/try" element={<Try />} />
-			<Route path="/" element={<Home />} />
-			<Route path="/log" element={<Log />} />
-			<Route path="/register" element={<Register />} />
-			<Route path="/chat" element={<Chat />} />
-		</Routes>
+		<LangProvider>
+			<Routes>
+				<Route path="/try" element={<Try />} />
+				<Route path="/" element={<Home />} />
+				<Route path="/log" element={<Log />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/chat" element={<Chat />} />
+			</Routes>
+		</LangProvider>
 	</BrowserRouter>,
 );
