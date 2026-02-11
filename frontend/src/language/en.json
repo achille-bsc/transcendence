@@ -1,18 +1,15 @@
 {
-	"en": {
-		"all": {
-			"home": {
-				"game_button": "PLAY"
-			},
-			"Login": {
-				"login_button": "Login",
-				"register_button": "Register",
-				"password": "Password",
-				"confirm_password": "Confirm Password",
-				"name_email": "Name or Email",
-				"name": "Name",
-				"email": "Email"
-			}
+	"language": "en-US",
+	"appName": "Transcendence",
+	"translations": {
+		"navigation": {
+			"home": "Home",
+			"game": "Play",
+			"chat": "Chat",
+			"leaderboard": "Leaderboard",
+			"friends": "Friends",
+			"profile": "Profile",
+			"settings": "Settings"
 		}
 	}
 }
