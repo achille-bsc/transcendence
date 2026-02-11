@@ -24,23 +24,20 @@ down:
 ddown:
 	$(DC) -f $(DEV) down
 
-logs:
-	$(DC) logs -f
-
 clean:
-	$(DC) down --rmi all
+	$(DC) down --rmi local
 
 fclean: clean
-	$(DC) down -v
-	docker system prune -a -f
+	$(DC) down -v --rmi all
+# 	docker system prune -a -f
 
 cleand:
-	$(DC) --file $(DEV) down --rmi all
+	$(DC) --file $(DEV) down --rmi local
 
-fcleand: cleand
-	$(DC) --file $(DEV) down -v
-	docker system prune -a -f
-	rm -f db_data/dev.db
+fcleand:
+	$(DC) --file $(DEV) down -v --rmi all
+# 	docker system prune -a -f
+	@rm -f db_data/dev.db
 
 
 red: cleand dev

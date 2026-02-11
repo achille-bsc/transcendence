@@ -10,9 +10,6 @@ RUN npm install --legacy-peer-deps
 COPY --from=shared_ressources ./scripts ./scripts
 COPY . .
 
-EXPOSE 443
-
-# this needs to remain TEMPORARY
-EXPOSE 80
+EXPOSE 3000
 
 ENTRYPOINT [ "npm", "run", "dev" ]
