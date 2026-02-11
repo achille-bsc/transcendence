@@ -1,0 +1,15 @@
+{
+	"name": "Default Sombre",
+	"colors": {
+		"violet-default": "#6E3CA3",
+		"background": "#1E1E1E",
+		"background-header": "#141414",
+		"select-header": "#1C1C1C",
+		"background-box": "#2D2D2D",
+		"background-select": "#282828",
+		"props": "#939393"
+	},
+	"gradient-linear": {
+		"button": "bg-linear-[90deg,#6E3CA3,#A82828]"
+	}
+}

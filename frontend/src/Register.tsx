@@ -52,8 +52,8 @@ function Register () {
 				onSubmit={handleRegister}
 				className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 				<div className="flex">
-					<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe" href="log"><div >{Langue.fr.all.Login.login_button}</div></a>
-					<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{Langue.fr.all.Login.register_button}</div>
+					<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointe" href="log"><div >{lang.navigation.game}</div></a>
+					<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.navigation.game}</div>
 				</div>
 				<div className="p-4 sm:p-5 md:p-6">
 					<label className="flex justify-center"><br />
@@ -62,7 +62,7 @@ function Register () {
 							id="name"
 							name="name"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
-							placeholder={lang.navigation.game}
+							placeholder={lang.navigation.friends}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
 							autoComplete="false"
 							required
@@ -74,7 +74,7 @@ function Register () {
 							id="name"
 							name="name"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
-							placeholder={lang.navigation.game}
+							placeholder={lang.navigation.leaderboard}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
 							autoComplete="false"
 							required
@@ -86,7 +86,7 @@ function Register () {
 							id="password"
 							name="password"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
-							placeholder={lang.navigation.game}
+							placeholder={lang.navigation.settings}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 							autoComplete="false"
 							required
@@ -98,7 +98,7 @@ function Register () {
 							id="password"
 							name="password"
 							className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
-							placeholder={lang.navigation.game}
+							placeholder={lang.navigation.chat}
                     	    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
 							autoComplete="false"
 							required

@@ -62,8 +62,8 @@ function Log () {
 				<form
 					onSubmit={handleLogin}>
 					<div className="flex">
-						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{Langue.en.all.Login.login_button}</div>
-						<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >{Langue.en.all.Login.register_button}</div></a>
+						<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.navigation.game}</div>
+						<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >{lang.navigation.game}</div></a>
 					</div>
 					<div className="p-4 sm:p-5 md:p-6">
 						<label className="flex justify-center"><br />
