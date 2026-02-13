@@ -5,7 +5,7 @@ import SwitchButton from "./SwitchButton.tsx"
 import { useState } from "react";
 import { Friend } from "./Friend.tsx"
 
-function SwitchLights(){
+function SwitchLanguage(){
 	return alert("test")
 }
 
@@ -15,19 +15,20 @@ function DisplayMenu(){
 
 function Main({children = ""}) {
 	const [isOn, setIsOn] = useState(false);
+	const [LanguagesClicked, setLanguages] = useState(false);
 	const [openMenu, setOpenMenu] = useState(null);
 	const [activeTab, setActiveTab] = useState("add");
 	return (
 		<>
-			<div className={` relative min-h-screen transition-colors duration-300 z-10 ${!isOn ? "bg-white text-black" : "bg-gray-800 text-white"}`} >
-    			<div className="h-20 bg-black flex items-center justify-between px-2 md:px-10">
+			<div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-black" : "bg-black text-white"}`} >
+    			<div className="min-h-20 bg-black flex items-center justify-between px-2 md:px-10 relative">
     				<div className="flex items-center space-x-4">
         				<MyButton onClick={() => DisplayMenu()}>
-        					<Img src={menu} alt="Menu" className="w-[3vw] h-auto" />
+        					<Img src={menu} alt="Menu" className="w-8 md:w-10 h-auto" />
         				</MyButton>
         				<div className="relative">
         			  		<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
-        			    		<Img src={friends} alt="Friends" className="w-[3vw] h-auto" />
+        			    		<Img src={friends} alt="Friends" className="w-8 md:w-10 h-auto" />
         					</MyButton>
         					{openMenu === "friends" && (
         						<div className="absolute top-full w-[20vw] bg-black text-white p-4">
@@ -56,18 +57,32 @@ function Main({children = ""}) {
         				</div>
 						<SwitchButton  checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
-					<span className="text-purple-900 text-[30px] md:text-[50px] font-bold">
+					<span className="text-purple-900 text-[25px] md:text-[50px] font-bold">
 						Transcendence
 					</span>
 					<div className="flex items-center space-x-4">
 						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={game} alt="Game" className="w-[3vw] h-auto"/>
+							<Img src={game} alt="Game" className="w-8 md:w-10 h-auto"/>
+						</MyButton>
+						<div className="relative shrink-0">
+							<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
+								<Img src={notifications} alt="Language ??" className="w-8 md:w-10 h-auto"/>
+							</MyButton>
+							{LanguagesClicked &&
+								<div className="absolute top-full w-20 h-auto bg-black">
+									<div className="grid grid-rows text-purple-900 text-[15px] md:text-[15px]">
+										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
+										<MyButton onClick={() => SwitchLanguage}>English</MyButton>
+										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
+									</div>
+								</div>
+							}
+						</div>
+						<MyButton onClick={() => DisplayMenu()}>
+							<Img src={notifications} alt="Notifications" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
 						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={notifications} alt="Notifications" className="w-[3vw] h-auto"/>
-						</MyButton>
-						<MyButton onClick={() => DisplayMenu()}>
-							<Img src={user} alt="User" className="w-[3vw] h-auto"/>
+							<Img src={user} alt="User" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
 					</div>
 				</div>
