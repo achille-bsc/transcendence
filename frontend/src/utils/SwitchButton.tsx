@@ -24,7 +24,7 @@
 
 export function SwitchButton({ checked, onChange }) {
   return (
-    <label className="inline-flex items-center cursor-pointer">
+    <label className="inline-flex items-center cursor-pointer rounded-full">
       <input
         type="checkbox"
         checked={checked}
@@ -37,7 +37,7 @@ export function SwitchButton({ checked, onChange }) {
         style={{
             width: "4vw",
             height: "2vw",
-            backgroundColor: checked ? "#6B21A8" : "#D1D5DB",
+            backgroundColor: checked ? "#6E3CA3" : "#D1D5DB",
         }}
       >
         <span

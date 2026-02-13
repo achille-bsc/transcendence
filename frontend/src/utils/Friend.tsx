@@ -12,8 +12,8 @@ function sendRequest(){
 
 export function Friend({ children }) {
   return (
-	<li className=" bg-gray-400 rounded p-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-		<span className="text-purple-900 text-sm md:text-lg font-bold">
+	<li className="p-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+		<span className="text-[#6E3CA3] text-sm md:text-lg font-bold">
 			{children}
 		</span>
 	  	<div className="flex items-center space-x-10">

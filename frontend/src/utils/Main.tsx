@@ -1,6 +1,6 @@
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
-import { menu, user, friends, game, notifications } from "../../icons/Icons.tsx"
+import { menu, user, friends, game, notifications, github } from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
 import { useState } from "react";
 import { Friend } from "./Friend.tsx"
@@ -20,24 +20,24 @@ function Main({children = ""}) {
 	const [activeTab, setActiveTab] = useState("add");
 	return (
 		<>
-			<div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-black" : "bg-black text-white"}`} >
-    			<div className="min-h-20 bg-black flex items-center justify-between px-2 md:px-10 relative">
+			<div className={` relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
+    			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative ${!isOn ? "bg-[#EFE0FF] text-[#6E3CA3]" : "bg-[#141414] text-[#6E3CA3]"}`}>
     				<div className="flex items-center space-x-4">
         				<MyButton onClick={() => DisplayMenu()}>
         					<Img src={menu} alt="Menu" className="w-8 md:w-10 h-auto" />
         				</MyButton>
-        				<div className="relative">
+        				<div >
         			  		<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
         			    		<Img src={friends} alt="Friends" className="w-8 md:w-10 h-auto" />
         					</MyButton>
         					{openMenu === "friends" && (
-        						<div className="absolute top-full w-[20vw] bg-black text-white p-4">
+        						<div className={`absolute top-full w-70 text-[#6E3CA3] ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
         							<div className="grid grid-cols-3 mb-3">
         								{["add", "demand", "blocked"].map((tab) => (
         					        	<button
         					        		key={tab}
         					        		onClick={() => setActiveTab(tab)}
-        					        		className={`px-2 py-1 rounded transition ${activeTab === tab ? "bg-zinc-700" : "text-zinc-400 hover:text-white"}`}
+        					        		className={`px-2 py-1 rounded transition ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
         					        	>
         					          		{tab.charAt(0).toUpperCase() + tab.slice(1)}
         					        	</button>
@@ -47,30 +47,32 @@ function Main({children = ""}) {
         								<Friend>Alice</Friend>
 					    				<Friend>Bob</Friend>
         							</ul>
-        							<input
-        							  type="text"
-        							  placeholder="Search someone..."
-        							  className="w-full bg-zinc-800 text-sm p-2"
-        							/>
+									<div className="flex justify-center p-2">
+  										<input
+  											type="text"
+  											placeholder="Search someone..."
+  											className={`border-2 border-solid border-[#6E3CA3] text-[#969696] text-sm p-2 ${!isOn ? "bg-[#EFE0FF]" : "bg-[#2D2D2D]"}`}
+  										/>
+  									</div>
         						</div>
         					)}
         				</div>
 						<SwitchButton  checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
-					<span className="text-purple-900 text-[25px] md:text-[50px] font-bold">
+					<span className="text-[#6E3CA3] text-[25px] md:text-[50px] font-bold">
 						Transcendence
 					</span>
 					<div className="flex items-center space-x-4">
 						<MyButton onClick={() => DisplayMenu()}>
 							<Img src={game} alt="Game" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
-						<div className="relative shrink-0">
+						<div className="shrink-0">
 							<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
-								<Img src={notifications} alt="Language ??" className="w-8 md:w-10 h-auto"/>
+								<Img src={github} alt="Language ??" className="w-8 md:w-10 h-auto"/>
 							</MyButton>
 							{LanguagesClicked &&
-								<div className="absolute top-full w-20 h-auto bg-black">
-									<div className="grid grid-rows text-purple-900 text-[15px] md:text-[15px]">
+								<div className={`absolute top-full w-20 h-auto border-2 border-solid ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
+									<div className="grid grid-rows text-[#6E3CA3] text-[15px] md:text-[15px]">
 										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
 										<MyButton onClick={() => SwitchLanguage}>English</MyButton>
 										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
@@ -93,4 +95,4 @@ function Main({children = ""}) {
 }
 
 export default Main
-//essayer getelembyid pour inclure la page dnas main sinon ff ca marche
+//essayer getelembyid pour inclure la page dans main sinon ff ca marche
