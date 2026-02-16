@@ -14,6 +14,7 @@ import Home from './Home.tsx'
 import Register from './Register.tsx'
 import Log from './Log.tsx'
 import Chat from './Chat.tsx'
+import Profile from './Profile.tsx'
 // import Button from './Button.tsx'
 import Try from './Try.tsx'
 import { LangProvider } from "./script/langProvider.tsx";
@@ -27,6 +28,7 @@ ReactDOM.createRoot(root!).render(
 				<Route path="/log" element={<Log />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/chat" element={<Chat />} />
+				<Route path="/profile" element={<Profile />} />
 			</Routes>
 		</LangProvider>
 	</BrowserRouter>,
