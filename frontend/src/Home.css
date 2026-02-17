@@ -1,28 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Rochester&display=swap');
-
-.coral-pixels-regular {
-	font-family: 'Coral Pixels', serif;
-	font-weight: 400;
-	font-style: normal;
-}
-
-.rubik-doodle-triangles-regular {
-  font-family: "Rubik Doodle Triangles", system-ui;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.electrolize-regular {
-  font-family: "Electrolize", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.rochester-regular {
-  font-family: "Rochester", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .quantico-regular {
   font-family: "Quantico", sans-serif;

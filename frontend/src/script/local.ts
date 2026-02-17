@@ -5,15 +5,38 @@ import deDEData from '../language/de.json';
 
 // Interface for translations
 export interface Translations {
-    navigation: {
-        home: string;
-        game: string;
-        chat: string;
-        leaderboard: string;
-        friends: string;
-        profile: string;
-        settings: string;
-    };
+	Log_register_page: {
+		login: string;
+		register: string;
+		pseudo: string;
+		password: string;
+		confirm_password: string;
+		submit: string;
+		email: string;
+		pseudo_email: string;
+	},
+	Home_page: {
+		play: string;
+		Friend_online: string;
+	};
+	navbar: {
+		search: string;
+		add: string;
+		pending: string;
+		block: string;
+	};
+	Chat_page: {
+		input: string;
+	};
+	Stat_page: {
+		invite: string;
+		message: string;
+		blocked: string;
+		stats: string;
+		nb_game: string;
+		win_rate: string;
+		lose_game: string;
+	}
 }
 // Load translations based on language
 export function getLanguageData(lang: string): Translations {

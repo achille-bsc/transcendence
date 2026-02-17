@@ -58,13 +58,13 @@ function Chat () {
 
 	return (
 		<Main>
-			<div className="bg-[#1E1E1E] min-h-screen flex items-end justify-center text-[#6E3CA3]">
+			<div className="bg-[var(--background)] min-h-screen flex items-end justify-center text-[var(--violet-default)]">
 				<label className="flex justify-center p-5">
 					<ChatInput
 						type="text"
 						id="dialogue"
 						name="text"
-						className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]  border-[#6E3CA3] text-[#ffffff]"
+						className="w-full border border-[var(--violet-default)] p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--violet-default)] text-[var(--props)]"
 						placeholder="type your text"
 						autoComplete="off"
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}

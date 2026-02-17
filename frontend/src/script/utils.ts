@@ -1,7 +1,7 @@
 export async function verifToken(token: string): Promise<boolean>
 {
-	const res = await fetch("http://database-service:5000/login", {
-		method: "GET",
+	const res = await fetch('/api/db/login', {
+		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -12,7 +12,7 @@ export async function verifToken(token: string): Promise<boolean>
 	
 	const data = await res.json();
 
-	if (!res.ok) {
+	if (res.ok) {
 		return (data.success as boolean);
 	}
 	return false;

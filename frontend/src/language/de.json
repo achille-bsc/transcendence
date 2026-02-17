@@ -2,14 +2,37 @@
 	"language": "de-DE",
 	"appName": "Transcendence",
 	"translations": {
-		"navigation": {
-			"home": "Startseite",
-			"game": "Spielen",
-			"chat": "Chat",
-			"leaderboard": "Bestenliste",
-			"friends": "Freunde",
-			"profile": "Profil",
-			"settings": "Einstellungen"
+		"Log_register_page": {
+			"login": "Anmelden",
+			"register": "Registrieren",
+			"pseudo": "Pseudo",
+			"password": "Passwort",
+			"confirm_password": "Passwort bestätigen",
+			"submit": "Absenden",
+			"email": "E-Mail",
+			"pseudo_email": "Pseudo oder E-Mail"
+		},
+		"Home_page": {
+			"play": "SPIELEN",
+			"Friend_online": "Freunde online :"
+		},
+		"navbar": {
+			"search": "Suche jemanden...",
+			"add": "Hinzufügen",
+			"pending": "Ausstehend",
+			"block": "Gesperrt"
+		},
+		"Chat_page": {
+			"input": "Geben Sie Ihre Nachricht hier ein..."
+		},
+		"Stat_page": {
+			"invite": "Einladen",
+			"message": "Nachricht",
+			"blocked": "Gesperrt",
+			"stats": "Statistiken",
+			"nb_game": "Anzahl der Spiele",
+			"win_rate": "Siegesrate",
+			"lose_game": "Verlorene Spiele"
 		}
 	}
 }

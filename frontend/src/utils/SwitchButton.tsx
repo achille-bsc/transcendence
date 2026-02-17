@@ -37,7 +37,7 @@ export function SwitchButton({ checked, onChange }) {
         style={{
             width: "4vw",
             height: "2vw",
-            backgroundColor: checked ? "#6E3CA3" : "#D1D5DB",
+            backgroundColor: checked ? "var(--violet-default)" : "var(--change-theme)",
         }}
       >
         <span
