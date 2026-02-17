@@ -66,7 +66,7 @@ function Main({children = ""}) {
 						<MyButton onClick={() => DisplayMenu()}>
 							<Img src={game} alt="Game" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
-						<div className="shrink-0">
+						<div className="w-8 md:w-10">
 							<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
 								<Img src={language} alt="Language ??" className="w-8 md:w-10 h-auto"/>
 							</MyButton>
