@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { verifToken } from "./script/utils";
 import ChatInput from "./ChatInput";
+import Main from "./utils/Main.tsx"
 import SendMsg from "./SendMsg";
 
 function Chat () {
@@ -56,21 +57,23 @@ function Chat () {
 	}
 
 	return (
-		<div className="bg-[#1E1E1E] min-h-screen flex items-end justify-center text-[#6E3CA3]">
-			<label className="flex justify-center p-5">
-				<ChatInput
-					type="text"
-					id="dialogue"
-					name="text"
-					className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]  border-[#6E3CA3] text-[#ffffff]"
-					placeholder="type your text"
-					autoComplete="off"
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}
-					required
-					onKeyDown={keyPressFunction}
-					/>
-			</label>
-		</div>
+		<Main>
+			<div className="bg-[#1E1E1E] min-h-screen flex items-end justify-center text-[#6E3CA3]">
+				<label className="flex justify-center p-5">
+					<ChatInput
+						type="text"
+						id="dialogue"
+						name="text"
+						className="w-full border border-[#6E3CA3] p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B]  border-[#6E3CA3] text-[#ffffff]"
+						placeholder="type your text"
+						autoComplete="off"
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}
+						required
+						onKeyDown={keyPressFunction}
+						/>
+				</label>
+			</div>
+		</Main>
 	)
 }
 

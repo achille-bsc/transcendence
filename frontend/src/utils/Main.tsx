@@ -1,6 +1,6 @@
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
-import { menu, user, friends, game, notifications, github } from "../../icons/Icons.tsx"
+import { menu, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
 import { useState } from "react";
 import { Friend } from "./Friend.tsx"
@@ -68,14 +68,14 @@ function Main({children = ""}) {
 						</MyButton>
 						<div className="shrink-0">
 							<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
-								<Img src={github} alt="Language ??" className="w-8 md:w-10 h-auto"/>
+								<Img src={language} alt="Language ??" className="w-8 md:w-10 h-auto"/>
 							</MyButton>
 							{LanguagesClicked &&
 								<div className={`absolute top-full w-20 h-auto border-2 border-solid ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
 									<div className="grid grid-rows text-[#6E3CA3] text-[15px] md:text-[15px]">
 										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
 										<MyButton onClick={() => SwitchLanguage}>English</MyButton>
-										<MyButton onClick={() => SwitchLanguage}>Francais</MyButton>
+										<MyButton onClick={() => SwitchLanguage}>Deutsch</MyButton>
 									</div>
 								</div>
 							}
@@ -83,7 +83,7 @@ function Main({children = ""}) {
 						<MyButton onClick={() => DisplayMenu()}>
 							<Img src={notifications} alt="Notifications" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
-						<MyButton onClick={() => DisplayMenu()}>
+						<MyButton onClick={() => window.location.href = "/profile"}>
 							<Img src={user} alt="User" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
 					</div>
