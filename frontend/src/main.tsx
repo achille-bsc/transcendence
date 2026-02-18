@@ -18,11 +18,13 @@ import Profile from './Profile.tsx'
 // import Button from './Button.tsx'
 import Try from './Try.tsx'
 import { LangProvider } from "./script/langProvider.tsx";
+import Conversation from "./Conversation.tsx";
 
 ReactDOM.createRoot(root!).render(
 	<BrowserRouter>
 		<LangProvider>
 			<Routes>
+				<Route path="/conversation/:conversationId" element={<Conversation />} />
 				<Route path="/try" element={<Try />} />
 				<Route path="/" element={<Home />} />
 				<Route path="/log" element={<Log />} />
