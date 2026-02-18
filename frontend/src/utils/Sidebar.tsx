@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
-<<<<<<< HEAD
-=======
 import { useNavigate } from "react-router-dom";
 import MyButton from "../Button";
->>>>>>> 697a30a (Frontend:)
 
 async function fetchFriends() {
 	return [
