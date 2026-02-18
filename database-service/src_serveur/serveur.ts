@@ -20,7 +20,8 @@ await server.register(healthRoutes);
 await server.register(messageRoutes);
 await server.register(inviteRoutes);
 
-server.listen({ port: 5000, host: '0.0.0.0' }, (err, address) => {
+server.listen({ port: 5000, 
+  host: '0.0.0.0', }, (err, address) => {
   console.log("Starting server...");
   if (err) {
     console.error(err);
