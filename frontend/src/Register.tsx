@@ -71,8 +71,8 @@ function Register () {
 						<label className="flex justify-center"><br />
 							<RegisterInput
 								type="email"
-								id="name"
-								name="name"
+								id="email"
+								name="email"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 								placeholder={lang.Log_register_page.email}
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -95,8 +95,8 @@ function Register () {
 						<label className="flex justify-center">
 							<RegisterInput 
 								type="password"
-								id="password"
-								name="password"
+								id="confirmpassword"
+								name="confirmpassword"
 								className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 								placeholder={lang.Log_register_page.confirm_password}
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}

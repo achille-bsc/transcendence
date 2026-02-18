@@ -3,7 +3,6 @@ import { verifToken } from "./script/utils";
 import ChatInput from "./ChatInput";
 import Main from "./utils/Main.tsx"
 import SendMsg from "./SendMsg";
-import Img from "./utils/Img.tsx";
 import { useLang } from "./script/langProvider.tsx";
 import RegisterButton from "./RegisterButton";
 
