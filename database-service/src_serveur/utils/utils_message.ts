@@ -40,31 +40,27 @@ export async function createDmConversation(user1id: number, user2id: number)
 	if (!user1 || !user2 || user1 === user2)
 		return null;
 	const convExists = await prisma.conversation.findFirst({
-		where : {
-			isGroup: false,
-			participants: {
-				every: {
-					AND: [
-						{ userId: user1.id },
-						{ userId: user2.id }
-					]
-				}
-			}
-		},
-		include: {
-			participants: {
-				include: {
-					user: { select: { id: true, pseudo: true } },
-				},
-			},
-			messages: {
-				orderBy: { createdAt: 'asc' },
-				include: {
-					sender: { select: { id: true, pseudo: true } },
-				},
-			},
-		},
-	});
+        where: {
+            isGroup: false,
+            AND: [
+                { participants: { some: { userId: user1id } } },
+                { participants: { some: { userId: user2id } } }
+            ]
+        },
+        include: {
+            participants: {
+                include: {
+                    user: { select: { id: true, pseudo: true } },
+                },
+            },
+            messages: {
+                orderBy: { createdAt: 'asc' },
+                include: {
+                    sender: { select: { id: true, pseudo: true } },
+                },
+            },
+        },
+    });
 	if (convExists)
 		return convExists;
 	const newConv = await prisma.conversation.create({

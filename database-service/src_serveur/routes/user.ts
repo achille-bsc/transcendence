@@ -3,13 +3,13 @@ import { prisma } from '../../prisma';
 import { findUserByPseudo } from '../utils/utils_user';
 
 export default async function userRoutes(server: FastifyInstance) {
-  server.get('/checktoken', {
+  server.post('/checktoken', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     reply.code(200).send({ success: true });
   });
 
-  server.get('/profile', {
+  server.post('/profile', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const userId = request.user.id;
@@ -28,7 +28,7 @@ export default async function userRoutes(server: FastifyInstance) {
     return { user };
   });
 
-  server.get('/finduserid', async (request, reply) =>{
+  server.post('/finduserid', async (request, reply) =>{
     const { pseudo } = request.body as {
         pseudo: string;
     };
