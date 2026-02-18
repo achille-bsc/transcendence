@@ -1,5 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
+<<<<<<< HEAD
+=======
+import { useNavigate } from "react-router-dom";
+import MyButton from "../Button";
+>>>>>>> 697a30a (Frontend:)
 
 async function fetchFriends() {
 	return [
@@ -57,18 +62,23 @@ function Sidebar({children})
             setFriends(data);
         });
     }, [children]);
-
+	const navigate = useNavigate();
+	const openConversation = (id) => {
+		navigate(`/conversation/${id}`);
+	};
     return (
         <div className="w-[30vw] min-h-screen border-r-2 border-solid overflow-y-auto text-[#6E3CA3]">
 	    	{friends.map((friend) => (
-	    		<div key={friend.id} className="p-3 border-b flex items-center gap-6 text-[#6E3CA3]">
-	    			<img
-	    				src={friend.picture}
-	    				alt="friend"
-	    				className="w-[5vw] aspect-square rounded-full"
-	    			/>
-	    			<p>{friend.author}: {friend.last_message}</p>
-	    		</div>
+				<MyButton className="w-full" onClick={() => openConversation(12)}>
+					<div key={friend.id} className="w-[30vw] p-3 border-b flex items-center gap-6 text-[#6E3CA3]">
+	    				<img
+	    					src={friend.picture}
+	    					alt="friend"
+	    					className="w-[5vw] aspect-square rounded-full"
+	    				/>
+	    				<p>{friend.author}: {friend.last_message}</p>
+	    			</div>
+				</MyButton>
 	    	))}
 	    </div>
     )
