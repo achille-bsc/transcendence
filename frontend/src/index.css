@@ -3,12 +3,13 @@
 @layer base{
 	:root {
 		--violet-default: #6E3CA3;
-		--background: #1E1E1E;
+		--background: #1A1A1A;
 		--background-header: #141414;
 		--select-header: #1C1C1C;
 		--background-box: #2D2D2D;
 		--background-select: #282828;
 		--props: #939393;
 		--change-theme: #D1D5DB;
+		--white: #FFFFFF;
 	}
 }

@@ -14,7 +14,6 @@ export default function ChatInput ({type, id, name, className, placeholder, onCh
 
 	return (
 		<div className="w-full">
-			{placeholder}
 			<input
 				type={type}
 				id={id}
