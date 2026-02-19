@@ -122,5 +122,3 @@ function Register () {
 }
 
 export default Register
-
-/// username password email et token

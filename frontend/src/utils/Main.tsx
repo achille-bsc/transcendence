@@ -18,6 +18,10 @@ function Main({children = ""}) {
 	const { getLang, setLang } = useLang();
 	const lang = useLang().getLang();
 
+	const tabAdd = lang.navbar.add;
+	const tabPending = lang.navbar.pending;
+	const tabBlocked = lang.navbar.block;
+	const tabs = [tabAdd, tabPending, tabBlocked];
 	return (
 		// <>
 			<div className={`quantico-regular relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
@@ -33,15 +37,15 @@ function Main({children = ""}) {
         					{openMenu === "friends" && (
         						<div className={`absolute top-full w-70 text-[var(--violet-default)] ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
         							<div className="grid grid-cols-3 mb-3">
-        								{["add", "demand", "blocked"].map((tab) => (
-        								<button
-        									key={tab}
-        									onClick={() => setActiveTab(tab)}
-        									className={`px-2 py-1 transition ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
-        									>
-        									{tab.charAt(0).toUpperCase() + tab.slice(1)}
-        								</button>
-        								))}
+        								{tabs.map((tab) => (
+        					        	<button
+        					        		key={tab}
+        					        		onClick={() => setActiveTab(tab)}
+        					        		className={`px-2 py-1 transition ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
+        					        	>
+        					          		{tab.charAt(0).toUpperCase() + tab.slice(1)}
+        					        	</button>
+        					    		))}
         							</div>
         							<ul className="space-y-2 mb-3">
         								<Friend>Alice</Friend>
