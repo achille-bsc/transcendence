@@ -5,6 +5,7 @@ import SwitchButton from "./SwitchButton.tsx"
 import { useState } from "react";
 import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
+import { useNavigate } from "react-router-dom";
 
 function DisplayMenu(){
 	return
@@ -21,18 +22,44 @@ function fetchPending(){
 	return ([{name: "David" }]);
 }
 
+function SearchBar() {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+
+    window.location.href = `/profile/${query}`
+    // navigate(`/profile/${query}`);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Search user..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="border p-2 rounded"
+      />
+    </form>
+  );
+}
+
 function Main({children = ""}) {
 	const [isOn, setIsOn] = useState(false);
 	const [LanguagesClicked, setLanguages] = useState(false);
 	const [openMenu, setOpenMenu] = useState(null);
-	const [activeTab, setActiveTab] = useState("add");
+	const [activeTab, setActiveTab] = useState("friends");
 	const { getLang, setLang } = useLang();
 	const lang = useLang().getLang();
 
-	const tabAdd = lang.navbar.add;
-	const tabPending = lang.navbar.pending;
-	const tabBlocked = lang.navbar.block;
-	const tabs = [tabAdd, tabPending, tabBlocked];
+	const tabs = [
+		{ key: "friends", label: lang.navbar.add },
+		{ key: "pending", label: lang.navbar.pending },
+		{ key: "blocked", label: lang.navbar.block }
+	];
 	const data = {
 	  friends: fetchFriends(),
 	  pending: fetchPending(),
@@ -55,25 +82,21 @@ function Main({children = ""}) {
         							<div className="grid grid-cols-3 mb-3">
         								{tabs.map((tab) => (
         					        	<button
-        					        		key={tab}
-        					        		onClick={() => setActiveTab(tab)}
-        					        		className={`px-2 py-1 ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
+        					        		key={tab.key}
+        					        		onClick={() => setActiveTab(tab.key)}
+        					        		className={`px-2 py-1 ${!isOn ? (activeTab === tab.key ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab.key ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
         					        	>
-        					          		{tab.charAt(0).toUpperCase() + tab.slice(1)}
+        					          		{tab.label}
         					        	</button>
         					    		))}
         							</div>
         							<ul className="space-y-2 mb-3">
-										{data[activeTab]?.map((name) => (
+										{data[activeTab]?.map(({name}) => (
 											<Friend>{name}</Friend>
 										))}
 									</ul>
 									<div className="flex justify-center p-2">
-  										<input
-  											type="text"
-  											placeholder={lang.navbar.search}
-  											className={`border-1 border-solid border-[var(--violet-default)] text-[#969696] text-sm p-2 ${!isOn ? "bg-[#EFE0FF]" : "bg-[#2D2D2D]"}`}
-  										/>
+  										<SearchBar/>
   									</div>
         						</div>
         					)}
@@ -83,11 +106,11 @@ function Main({children = ""}) {
 					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold">
 						Transcendence
 					</span>
-					<div className="flex items-center space-x-4">
+					<div className="flex items-center space-x-4 items-start">
 						<MyButton onClick={() => DisplayMenu()}>
 							<Img src={game} alt="Game" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
-						<div className="w-8 md:w-10">
+						<div className="w-8 md:w-10 h-auto">
 							<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
 								<Img src={language} alt="Language ??" className="w-8 md:w-10 h-auto"/>
 							</MyButton>

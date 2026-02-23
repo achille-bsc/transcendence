@@ -2,20 +2,20 @@ import MyButton from "./utils/Button.tsx"
 import Img from "./utils/Img.tsx"
 import Main from "./utils/Main.tsx"
 import Sidebar from "./utils/Sidebar.tsx"
+import { useParams } from "react-router-dom";
 
-// friends left = 30%vw 
-// profile = 70%vw
-
-function Profile({ children = "username" }) {
-	
+function Profile() {
+	const { username } = useParams();
+	const loggedUser = "You.";
+	const profileToDisplay = username || loggedUser;
 	return (
 		<Main> 
 			<div className="flex">
-				<Sidebar>{children}</Sidebar>
+				<Sidebar>{loggedUser}</Sidebar>
 				<div className="flex-1 flex flex-col items-center">
 					<div className="w-[40vw] flex flex-col items-center space-y-4 p-6">
 						<div className="text-[#6E3CA3] text-[20px] md:text-[30px] font-bold">
-							<p>{children}</p>
+							<p>{profileToDisplay}</p>
 						</div>
 						<div className="border-b-2 border-solid p-6">
 							<Img src="/src/img/img.webp" alt="User Profile Picture" className="w-[15vw] aspect-square rounded-full"/>	
