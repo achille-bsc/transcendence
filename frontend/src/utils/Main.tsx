@@ -10,6 +10,17 @@ function DisplayMenu(){
 	return
 }
 
+function fetchFriends() {
+  return [
+    {name: "Bob" },
+    {name: "Alice" }
+  ];
+}
+
+function fetchPending(){
+	return ([{name: "David" }]);
+}
+
 function Main({children = ""}) {
 	const [isOn, setIsOn] = useState(false);
 	const [LanguagesClicked, setLanguages] = useState(false);
@@ -22,10 +33,15 @@ function Main({children = ""}) {
 	const tabPending = lang.navbar.pending;
 	const tabBlocked = lang.navbar.block;
 	const tabs = [tabAdd, tabPending, tabBlocked];
+	const data = {
+	  friends: fetchFriends(),
+	  pending: fetchPending(),
+	  blocked: []
+	};
 	return (
-		// <>
-			<div className={`quantico-regular relative min-h-screen transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
-    			<div className={`min-h-20 border-b-1 border-solid flex items-center justify-between px-2 md:px-10 relative ${!isOn ? "bg-[#EFE0FF] text-[#6E3CA3]" : "bg-[#141414] text-[#6E3CA3]"}`}>
+		<>
+			<div className={`relative h-dvh overflow-hidden transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
+    			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative ${!isOn ? "bg-[#EFE0FF] text-[#6E3CA3]" : "bg-[#141414] text-[#6E3CA3]"}`}>
     				<div className="flex items-center space-x-4">
         				<MyButton onClick={() => DisplayMenu()}>
         					<Img src={menu} alt="Menu" className="w-8 md:w-10 h-auto" />
@@ -41,16 +57,17 @@ function Main({children = ""}) {
         					        	<button
         					        		key={tab}
         					        		onClick={() => setActiveTab(tab)}
-        					        		className={`px-2 py-1 transition ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
+        					        		className={`px-2 py-1 ${!isOn ? (activeTab === tab ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
         					        	>
         					          		{tab.charAt(0).toUpperCase() + tab.slice(1)}
         					        	</button>
         					    		))}
         							</div>
         							<ul className="space-y-2 mb-3">
-        								<Friend>Alice</Friend>
-										<Friend>Bob</Friend>
-        							</ul>
+										{data[activeTab]?.map((name) => (
+											<Friend>{name}</Friend>
+										))}
+									</ul>
 									<div className="flex justify-center p-2">
   										<input
   											type="text"
