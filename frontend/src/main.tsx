@@ -31,6 +31,7 @@ ReactDOM.createRoot(root!).render(
 				<Route path="/register" element={<Register />} />
 				<Route path="/chat" element={<Chat />} />
 				<Route path="/profile" element={<Profile />} />
+				<Route path="/profile/:username" element={<Profile />} />
 			</Routes>
 		</LangProvider>
 	</BrowserRouter>,
