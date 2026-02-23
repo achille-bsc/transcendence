@@ -16,6 +16,7 @@ export interface Translations {
 		pseudo_email: string;
 	},
 	Home_page: {
+		game_name: string;
 		play: string;
 		Friend_online: string;
 	};
