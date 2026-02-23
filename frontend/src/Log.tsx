@@ -4,6 +4,7 @@ import RegisterInput  from "./RegisterInput";
 import RegisterButton from "./RegisterButton";
 import Main from "./utils/Main.tsx"
 import { useLang } from "./script/langProvider.tsx";
+import '../node_modules/tailwindcss/index.css';
 
 function Log () {
 
@@ -34,7 +35,7 @@ function Log () {
 		console.log("P = ", pseudo, " PASS = ", password,);
 		e.preventDefault();
 
-		const res = await fetch("https://localhost:8443/api/db/login", {
+		const res = await fetch("/api/db/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -57,11 +58,11 @@ function Log () {
 	}
 
 	return (
-		<Main>
-			<div className="bg-[#1E1E1E] min-h-screen flex items-center justify-center text-[#6E3CA3]">
-				<div className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+			<div className="w-full">
+				<div className="w-full place-items-center">
 					<form
-						onSubmit={handleLogin}>
+						onSubmit={handleLogin}
+						className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 						<div className="flex">
 							<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.Log_register_page.login}</div>
 							<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >{lang.Log_register_page.register}</div></a>
@@ -101,22 +102,17 @@ function Log () {
 							</div>
 						</div>
 					</form>
-					<div className="flex flex-col items-center">
-						<img className="h-15 w-[90%]" src="../icons/ligne.png" alt="separator"/>
-						<div className="m-5 mt-0 flex items-center justify-center">
+					<div className="bg-[#282828] justify-center w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+						<div className="flex items-center justify-center">
 							<RegisterButton
 								icon="github"
-								className="cursor-pointer w-full sm:w-auto p-2 px-2 text-sm sm:text-base bg-[#282828] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
+								className="py-4 px-[35%] border-t-2 border-[var(--violet-default)] place-items-center w-full sm:w-auto p-2 px-2 text-sm sm:text-base bg-[#282828]"
 								onClick={handleGithubLogin}
 								/>
-							{/* <MyButton onClick={() => {handleGithubLogin}}>
-								<img className="cursor-pointer" src="../icons/github.png" alt="logo github pour connexion" href="https://github.com/achille-bsc/transcendence"/>
-							</MyButton> */}
 						</div>
 					</div>
 				</div>
 			</div>
-		</Main>
 	)
 }
 // w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]

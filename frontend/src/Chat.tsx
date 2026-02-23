@@ -8,21 +8,19 @@ import RegisterButton from "./RegisterButton";
 
 function Chat () {
 
-	let isAuth = false;
-	const token = localStorage.getItem('token')
-	if (token)
-	{
-		if (!verifToken(token))
-		{
-			window.location.href = "/log";
-		}
-		else
-		{
-				isAuth = true;
-		}
-	}
-	else
-		window.location.href = "/log";
+	// let isAuth = false;
+	// const token = localStorage.getItem('token')
+	// if (token && isAuth === true)
+	// {
+	// 	if (!verifToken(token))
+	// 	{
+	// 		window.location.href = "/log";
+	// 	}
+	// 	else
+	// 		isAuth = true;
+	// }
+	// else
+	// 	window.location.href = "/log";
 
 	const [msg, setMsg] = useState("");
 	const { getLang, setLang } = useLang();
@@ -64,7 +62,7 @@ function Chat () {
 	return (
 		<div className="bg-[var(--background)]">
 			<Main>
-				<div className="bg-[var(--background)] absolute inset-x-0 bottom-0 justify-center text-[var(--violet-default)]">
+				<div className="bg-[var(--background)] absolute inset-x-0 justify-center text-[var(--violet-default)]">
 					<label className="flex p-5">
 						<div className="flex items-center w-full">
 							<ChatInput
