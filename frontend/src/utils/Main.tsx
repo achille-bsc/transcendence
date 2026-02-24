@@ -2,7 +2,7 @@ import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
 import { menu, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
 import { useNavigate } from "react-router-dom";
@@ -22,33 +22,50 @@ function fetchPending(){
 	return ([{name: "David" }]);
 }
 
+function isUser(username: string){
+	console.log(username);
+	if (username != "tigre")
+		return false;
+	return true;
+}
+
 function SearchBar() {
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-
-    window.location.href = `/profile/${query}`
-    // navigate(`/profile/${query}`);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Search user..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="border p-2 rounded"
-      />
-    </form>
-  );
+	const [query, setQuery] = useState("");
+	const [error, setError] = useState("");
+	const handleSubmit = (e) => {
+  		e.preventDefault();
+  		if (!query.trim() || !isUser(query))
+		{
+    		setError("Cannot find user");
+    		return;
+    	}
+    	setError("");
+  		window.location.href = `/profile/${query}`
+  	};
+	return (
+		<>
+	 	 	<form onSubmit={handleSubmit}>
+	 	 	  	<input
+	 	 	    	type="text"
+	 	 	    	placeholder="Search user..."
+	 	 	    	value={query}
+	 	 	    	onChange={(e) => setQuery(e.target.value)}
+	 	 	    	className="border p-2 rounded"
+				/>
+				{error && <p className="text-center text-red-500">{error}</p>}
+	 	 	</form>
+		</>
+	);
 }
 
 function Main({children = ""}) {
-	const [isOn, setIsOn] = useState(false);
+	const [isOn, setIsOn] = useState(() => {
+		const savedTheme = localStorage.getItem("darkMode");
+		return savedTheme === "true";
+	});
+	useEffect(() => {
+		localStorage.setItem("darkMode", isOn);
+	}, [isOn]);
 	const [LanguagesClicked, setLanguages] = useState(false);
 	const [openMenu, setOpenMenu] = useState(null);
 	const [activeTab, setActiveTab] = useState("friends");
@@ -61,9 +78,9 @@ function Main({children = ""}) {
 		{ key: "blocked", label: lang.navbar.block }
 	];
 	const data = {
-	  friends: fetchFriends(),
-	  pending: fetchPending(),
-	  blocked: []
+		friends: fetchFriends(),
+		pending: fetchPending(),
+		blocked: []
 	};
 	return (
 		<>
@@ -134,7 +151,7 @@ function Main({children = ""}) {
 				</div>
 				{children}
 			</div>
-		// </>
+		</>
 	)
 }
 
