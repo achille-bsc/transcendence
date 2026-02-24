@@ -43,6 +43,7 @@ function Register () {
 		}
 
 		localStorage.setItem("token", data.token);
+		localStorage.setItem("username", pseudo);
 		window.location.href = "/log";
 	}
 

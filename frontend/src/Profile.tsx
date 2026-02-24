@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 function Profile() {
 	const { username } = useParams();
-	const loggedUser = "You.";
+	const loggedUser = localStorage.getItem("username");
 	const profileToDisplay = username || loggedUser;
 	return (
 		<Main> 

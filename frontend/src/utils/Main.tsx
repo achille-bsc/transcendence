@@ -66,6 +66,7 @@ function Main({children = ""}) {
 	useEffect(() => {
 		localStorage.setItem("darkMode", isOn);
 	}, [isOn]);
+	const navigate = useNavigate();
 	const [LanguagesClicked, setLanguages] = useState(false);
 	const [openMenu, setOpenMenu] = useState(null);
 	const [activeTab, setActiveTab] = useState("friends");
@@ -120,7 +121,7 @@ function Main({children = ""}) {
         				</div>
 						<SwitchButton checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
-					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold">
+					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold" onClick={() => navigate(`/`)}>
 						Transcendence
 					</span>
 					<div className="flex items-center space-x-4 items-start">
