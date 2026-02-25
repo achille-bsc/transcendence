@@ -3,33 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   gamesHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/01/26 13:43:57 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/25 17:59:27 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ClientState, Game, Difficults } from "../utils/types";
-import { games, kongMaxHeight, kongMaxLength, kongPlayerSpeed, persoKongHeight, persoKongWidth } from "../utils/const";
-import { sleep } from "../utils/utils";
+import { ClientState, Game, Difficults }											from "../utils/types";
+import { games, GRAVITY, JUMP_FORCE, kongMaxHeight, MOVE_SPEED, persoKongHeight }	from "../utils/const";
+import { generateKongMap, getPlatformYAtX }											from "./kongMap";
+import { sleep }																	from "../utils/utils";
 
 
-// Handle game actions from players
+
+
 export function handleGame(state: ClientState, datas:
 	[
 		"createGame"
-			| "joinGame"
-			| "jump"
-			| "goLeft"
-			| "goRight",
+		| "joinGame"
+		| "jump"
+		| "goLeft"
+		| "goRight",
+		string,
 		Difficults,
-		string
 	]
 ): void
 {
 	if (!state.gameId)
+	{
+		console.log(`player ${state.id} is trying to create a game with difficulty ${datas[2]}`);
 		return ;
+	}
 	const game: Game | undefined = games.get(state.gameId);
 	if (!game)
 		return ;
@@ -54,26 +59,23 @@ export function handleGame(state: ClientState, datas:
 function jump(game: Game, playerId: string): void
 {
 	const player = game.players.get(playerId);
-	if (!player || player.isJumping)
-		return ;
+	if (!player || player.isJumping || !player.isOnGround)
+		return;
+	
 	player.isJumping = true;
-	player.y -= 55.0;
-	setTimeout(() => {
-		player.y += 55.0;
-		player.isJumping = false;
-	}, 1000);
-	game.players.delete(playerId);
-	game.players.set(playerId, player);
+	player.isOnGround = false;
+	player.velocityY = JUMP_FORCE;
 }
 
 function goLeft(game: Game, playerId: string): void
 {
+	console.log(`Player ${playerId} is trying to go left in game hosted by ${game.host}`);
 	const player = game.players.get(playerId);
 	if (!player)
 		return ;
-	player.x -= kongPlayerSpeed;
-	game.players.delete(playerId);
-	game.players.set(playerId, player);
+	player.isGoingLeft = true;
+	// game.players.delete(playerId);
+	// game.players.set(playerId, player);
 }
 
 function goRight(game: Game, playerId: string): void
@@ -81,97 +83,120 @@ function goRight(game: Game, playerId: string): void
 	const player = game.players.get(playerId);
 	if (!player)
 		return ;
-	player.x += kongPlayerSpeed;
-	game.players.delete(playerId);
-	game.players.set(playerId, player);
+	player.isGoingRight = true;
+	// game.players.delete(playerId);
+	// game.players.set(playerId, player);
 }
 
 
 export function startGame(game: Game)
 {
-	// initiate the players values when they are added to the game
-	// but it stay here for now
+	// map de 5 etages
+	game.map = generateKongMap(5);
+
 	game.players.forEach((player) => {
 		console.log(`Initializing player ${player.id} in game hosted by ${game.host}`);
-		player.x = persoKongWidth	/ 2;
-		player.y = persoKongHeight	/ 2;
-		player.vSpeed = 0.0;
-		player.hSpeed = 0.0;
-		player.maxSpeed = kongPlayerSpeed;
+		player.x = game.map!.spawnPoint.x;
+		player.y = game.map!.spawnPoint.y;
+		player.velocityY = 0;
+		player.isOnGround = false;
 	});
 
 	console.log(`Starting game hosted by ${game.host}`);
-	// console.log(`Game is Finished: ${game.isFinish}`);
+	console.log(`Map generated with ${game.map.platforms.length} platforms`);
 	game.isStarted = true;
-	sendGameState(game);
+	sendGameState(game, true);
 	gameLoop(game);
 }
 
 async function gameLoop(game: Game)
 {
-	let oldGame: Game = game;
+	console.log(games);
 	while (!game.isFinish && game.isStarted) {
-		game = games.get(game.host)!;
-		// Players Movements => on verifie seulement que le perso sort pas de l'ecran
-		// On rajmovementoutera les collisions une fois le concept de map etablis
+		game = games.get(game.id.toString())!;
+		if (!game || !game.map)
+			break;
+
 		game.players.forEach((player) => {
-			// Gravity
-			if (player.y < 510 && player.isJumping !== true)
-				player.y = player.y + 15 > 510 ? 510 : player.y + 15;
-		})
-		await sleep(100);
+			if (player.isGoingLeft) {
+				player.x -= MOVE_SPEED;
+				player.isGoingLeft = false;
+			}
+			if (player.isGoingRight) {
+				player.x += MOVE_SPEED;
+				player.isGoingRight = false;
+			}
+			player.x = Math.max(80, Math.min(player.x, game.map!.platforms[0]!.endX));
+		});
+
 		handleGamePhysics(game);
 		
-	
-		if (checkDiffState(game, oldGame ? oldGame : game))
-			sendGameState(game);
-		oldGame = {
-			...game,
-			players: new Map(Array.from(game.players.entries()).map(([id, player]) => [id, { ...player }]))
-		};
+		await sleep(100);
+		sendGameState(game);
 	}
 }
 
-function checkDiffState(game: Game, oldGame: Game): boolean
+function sendGameState(game: Game, includeMap: boolean = false)
 {
-	let isDifferent = false;
-	game.players.forEach((player, id) => {
-		const oldPlayer = oldGame.players.get(id);
-		if (!oldPlayer)
-			isDifferent = true;
-		else if (player.x !== oldPlayer.x || player.y !== oldPlayer.y
-			|| player.vSpeed !== oldPlayer.vSpeed || player.hSpeed !== oldPlayer.hSpeed)
-			isDifferent = true;
-	});
-	return isDifferent;
-}
+	const mapData = (includeMap && game.map) ? {
+		platforms: game.map.platforms,
+		spawnPoint: game.map.spawnPoint,
+		goalPoint: game.map.goalPoint
+	} : undefined;
 
-function sendGameState(game: Game)
-{
 	game.players.forEach((player) => {
 		const playersData = Array.from(game.players.values()).map(p => ({
 			id: p.id,
 			x: p.x,
 			y: p.y,
-			vSpeed: p.vSpeed,
-			hSpeed: p.hSpeed,
-			maxSpeed: p.maxSpeed,
+			isOnGround: p.isOnGround,
+			isJumping: p.isJumping
 		}));
-		player.socket.send(JSON.stringify(playersData));
+		
+		const message: any = {
+			type: 'gameState',
+			players: playersData
+		};
+		
+		if (mapData) {
+			message.map = mapData;
+		}
+		
+		player.socket.send(JSON.stringify(message));
 	});
 }
 
 function handleGamePhysics(game: Game)
 {
+	if (!game.map)
+		return;
+
 	game.players.forEach((player) => {
-		if (player.y + player.vSpeed / 10 <= (kongMaxHeight - persoKongHeight / 2))
-			player.y += player.vSpeed / 10;
-		else
-			player.y = kongMaxHeight - persoKongHeight / 2
+		player.velocityY += GRAVITY;
+		player.y += player.velocityY;
 		
-		if (player.x + player.hSpeed /10 <= (kongMaxLength - persoKongWidth / 2))
-			player.x += player.hSpeed / 10;
-		else
-			player.x = kongMaxLength - persoKongWidth / 2;
-	})
+		player.isOnGround = false;
+		
+		for (const platform of game.map!.platforms) {
+			if (player.x < platform.startX || player.x > platform.endX)
+				continue;
+
+			const platformY = getPlatformYAtX(platform, player.x);
+			const playerFeetY = player.y + persoKongHeight / 2;
+			
+			if (playerFeetY >= platformY && playerFeetY <= platformY + 15 && player.velocityY >= 0) {
+				player.y = platformY - persoKongHeight / 2;
+				player.velocityY = 0;
+				player.isOnGround = true;
+				player.isJumping = false;
+				break;
+			}
+		}
+		
+		if (player.y > kongMaxHeight + 50) {
+			player.x = game.map!.spawnPoint.x;
+			player.y = game.map!.spawnPoint.y;
+			player.velocityY = 0;
+		}
+	});
 }

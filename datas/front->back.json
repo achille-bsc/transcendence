@@ -1,0 +1,42 @@
+export type WSMessage = 
+  | {
+      type: 'kong',
+      userID: string
+      payload:
+      {
+        type:
+          | 'gameAction'
+          | 'globalAction',
+        datas: [
+          (
+            | 'createGame'
+            | 'joinGame'
+            | 'jump'
+            | 'goLeft'
+            | 'goRight'
+          ),
+          Difficults,
+          string,
+        ]
+      }
+    }
+  | {
+      type: 'aow',
+      userID: string
+      payload:
+      {
+        type:
+          | 'gameAction'
+          | 'globalAction',
+        datas: [
+          ('createGame' | 'joinGame'),
+          Difficults
+        ]
+      }
+    }
+  | {
+      type: 'auth',
+      userID: string
+      payload: { token: string }
+    }
+;

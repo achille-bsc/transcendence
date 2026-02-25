@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auth.ts                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 18:09:29 by marvin            #+#    #+#             */
-/*   Updated: 2026/01/25 15:30:37 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/20 14:09:46 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ export function verifToken(socket: WebSocket, msg: WSMessage, state: ClientState
 
 	state.id = msg.userID;
 
-	if (msg.payload.token.endsWith('42token'))
+	if (msg.payload?.token?.endsWith('42token'))
 	{
 		state.isAuthenticated = true;
 		socket.send(JSON.stringify({ type: 'auth_response', status: 'authenticated' }));
@@ -32,7 +32,7 @@ export function verifToken(socket: WebSocket, msg: WSMessage, state: ClientState
 	}
 
 	const body = JSON.stringify({
-		token: msg.payload.token
+		token: msg.payload?.token?.toString() || ''
 	});
 
 	const req: ClientRequest  = http.request({
@@ -42,13 +42,14 @@ export function verifToken(socket: WebSocket, msg: WSMessage, state: ClientState
 		method: 'GET',
 		headers: {
 			'content': 'application/json',
-			'content-length': msg.payload.token.length
+			'content-length': body.length
 		},
 	}, (res) => {
 		if (res.statusCode === 200) {
 			state.isAuthenticated = true;
 			socket.send(JSON.stringify({ type: 'auth_response', status: 'authenticated' }));
 		} else {
+			console.log(`Authentication failed with status code: ${res.statusCode}`);
 			socket.send(JSON.stringify({ type: 'auth_response', status: 'rejected' }));
 			socket.close();
 		}
