@@ -1,17 +1,18 @@
 import { createDmConversation, newDirectMessage } from '../utils/utils_message';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../../prisma';
+import { findUserByPseudo } from '../utils/utils_user';
 //TODO
 export default async function messageRoutes(server: FastifyInstance) {
   server.post("/chat/dm", {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const { receiverId, content } = request.body as {
-      receiverId: number;
+    const { receiverPseudo, content } = request.body as {
+      receiverPseudo: string;
       content: string;
     };
     const senderId = request.user.id;
-    const conv = await createDmConversation(senderId, receiverId);
+    const conv = await createDmConversation(senderId, findUserByPseudo(receiverPseudo).id);
     if (!conv) {
       return reply.code(400).send({ error: 'Cannot create DM conversation' });
     }

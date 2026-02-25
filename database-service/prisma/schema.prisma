@@ -1,4 +1,3 @@
-// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -11,30 +10,32 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  pseudo    String @unique
-  email     String  @unique
-  password  String
-  
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  lastLoginAt         DateTime?
+  id          Int       @id @default(autoincrement())
+  pseudo      String    @unique
+  email       String    @unique
+  password    String
+  avatar      String?   @default("default.png")
 
-  blocked         Block[]
-  message_history GlobalChat[]
-  
-  participants    ConversationParticipant[]
-  sentMessages    Message[]
-  
-  friend          Friend[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+
+  participants  ConversationParticipant[]
+  sentMessages  Message[]
+  globalHistory GlobalChat[]
+  friendRequestsSent     Friend[] @relation("UserAsRequester")
+  friendRequestsReceived Friend[] @relation("UserAsAddressee")
+  blocksInitiated Block[] @relation("UserBlocker")
+  blockedBy       Block[] @relation("UserBlocked")
 }
 
 model Conversation {
-  id        Int      @id @default(autoincrement())
-  name      String? 
-  isGroup   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  
+  id           Int      @id @default(autoincrement())
+  name         String?  
+  isGroup      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt 
+
   participants ConversationParticipant[]
   messages     Message[]
 }
@@ -43,45 +44,69 @@ model ConversationParticipant {
   id             Int      @id @default(autoincrement())
   conversationId Int
   userId         Int
+  
   role           String   @default("member")
   joinedAt       DateTime @default(now())
-  
+
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  user           User @relation(fields: [userId], references: [id])
-  
+  user           User         @relation(fields: [userId], references: [id])
+
   @@unique([conversationId, userId])
 }
 
 model Message {
   id             Int      @id @default(autoincrement())
+
   conversationId Int
   senderId       Int
+  
   content        String
   createdAt      DateTime @default(now())
-  
+
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User @relation(fields: [senderId], references: [id])
+  sender         User         @relation(fields: [senderId], references: [id])
 }
 
 model Block {
-  id    Int     @id @default(autoincrement())
-  user     User @relation(fields: [userId], references: [id])
-  userId   Int
-  blockedId  Int
+  id        Int      @id @default(autoincrement())
+  
+
+  blockerId Int      
+  blocker   User     @relation("UserBlocker", fields: [blockerId], references: [id])
+  
+  blockedId Int 
+  blocked   User     @relation("UserBlocked", fields: [blockedId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
 }
 
 model Friend {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  friendId  Int
-  status    String
+  id          Int      @id @default(autoincrement())
+
+  requesterId Int
+  requester   User     @relation("UserAsRequester", fields: [requesterId], references: [id]) // Le lien
+
+  // 2. Celui qui reçoit la demande
+  addresseeId Int      // La colonne physique
+  addressee   User     @relation("UserAsAddressee", fields: [addresseeId], references: [id]) // Le lien
+
+  status      String   @default("PENDING") // 'PENDING', 'ACCEPTED', 'BLOCKED'
+  createdAt   DateTime @default(now())
+
+  @@unique([requesterId, addresseeId]) 
 }
 
 model GlobalChat {
-  id_message        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement()) 
+  
+  // Champ physique
   userId    Int
+  
   message   String
   createdAt DateTime @default(now())
+
+  // Relation logique
+  user      User     @relation(fields: [userId], references: [id])
 }
