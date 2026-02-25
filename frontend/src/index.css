@@ -15,3 +15,40 @@
 		--background-header-light: #EFE0FF;
 	}
 }
+
+body {
+	animation:
+		truc 3s ease-in 5s,
+		bgrandom 3s ease-in 5s;
+}
+
+@keyframes truc {
+	0% {
+		transform: skew(0px, 0px);
+	}
+	25% {
+		transform: skew(-150deg, -500deg);
+	}
+	50% {
+		transform: skew(360deg, 1000deg);
+	}
+	75% {
+		transform: skew(150deg, 500deg);
+	}
+	100% {
+		transform: skew(0px, 0px);
+	}
+}
+
+@keyframes bgrandom {
+	0%   { background: red; }
+	10%  { background: blue; }
+	20%  { background: green; }
+	30%  { background: purple; }
+	40%  { background: linear-gradient(45deg, red, blue); }
+	50%  { background: linear-gradient(90deg, yellow, pink); }
+	60%  { background: black; }
+	70%  { background: linear-gradient(135deg, cyan, magenta); }
+	80%  { background: orange; }
+	100% { background: linear-gradient(60deg, lime, purple); }
+}
