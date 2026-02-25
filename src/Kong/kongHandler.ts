@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   kongHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/01/26 12:55:18 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/25 18:00:21 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ClientState, Game, WSMessage, PlayerDatas }					from "../utils/types";
-import { WebSocket }													from "@fastify/websocket";
-import { error }														from "../utils/utils";
-import { games, kongPlayerSpeed, persoKongHeight, persoKongWidth }	from "../utils/const";
-import { handleGame, startGame }													from "./gamesHandler";
+import { ClientState, Game, WSMessage, PlayerDatas }	from "../utils/types";
+import { WebSocket }									from "@fastify/websocket";
+import { error }										from "../utils/utils";
+import { games, persoKongHeight, persoKongWidth }		from "../utils/const";
+import { handleGame, startGame }						from "./gamesHandler";
 
 export function kongHandler(
 	webSocket: WebSocket,
@@ -23,6 +23,7 @@ export function kongHandler(
 	clients: Map<WebSocket, ClientState>
 ): void
 {
+	console.log(msg);
 	if (!state.isAuthenticated)
 		return (error('unauth'));
 
@@ -45,25 +46,29 @@ export function kongHandler(
 
 function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): void
 {
+	console.log("try connecting to game");
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
+		console.log("try connecting to game with id : " + msg.payload.datas[1]);
 		const player: PlayerDatas = {
 			id: msg.userID,
 			x: persoKongWidth	/ 2,
 			y: persoKongHeight	/ 2,
-			vSpeed: 0.0,
-			hSpeed: 0.0,
-			maxSpeed: kongPlayerSpeed,
+			velocityY: 0,
+			isOnGround: false,
 			socket: webSocket
 		}
+		console.log("games ids: " + Array.from(games.keys()).join(', '));
 		const game = games.get(msg.payload.datas[1]);
 		if (!game)
 		{
+			console.log("game not found");
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
 		}
 		game.players.set(player.id, player);
-		state.gameId = game.host;
+		state.gameId = game.id.toString();
+		console.log(`Player ${player.id} joined game ${game.host}`);
 		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: game.host }))
 	}
 }
@@ -83,7 +88,8 @@ function createGame(
 	// }
 	const game: Game = {
 		host: msg.userID,
-		difficulty: msg.payload.datas[1],
+		id: games.size + 1,
+		difficulty: msg.payload.datas[2],
 		players_count: 1,
 		players: new Map<string, PlayerDatas>(),
 		isFinish: false,
@@ -93,14 +99,15 @@ function createGame(
 		id: msg.userID,
 		x: persoKongWidth	/ 2,
 		y: persoKongHeight	/ 2,
-		vSpeed: 0.0,
-		hSpeed: 0.0,
-		maxSpeed: kongPlayerSpeed,
+		velocityY: 0,
+		isGoingLeft: false,
+		isGoingRight: false,
+		isOnGround: false,
 		socket: webSocket
 	}
 	game.players.set(owner.id, owner);
-	state.gameId = msg.userID;
-	webSocket.send(JSON.stringify({ type: 'gameCreated', gameId: msg.userID }));
-	games.set(msg.userID, game);
+	state.gameId = game.id.toString();
+	webSocket.send(JSON.stringify({ type: 'gameCreated', gameId: game.id }));
+	games.set(game.id.toString(), game);
 	startGame(game);
 }
