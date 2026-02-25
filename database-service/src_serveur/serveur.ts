@@ -3,6 +3,7 @@ import corsPlugin from './plugins/cors';
 import authPlugin from './plugins/tokens';
 import authRoutes from './routes/register';
 import userRoutes from './routes/user';
+import friendRoutes from './routes/friend';
 import inviteRoutes from './routes/invite';
 import healthRoutes from './routes/health';
 import messageRoutes from './routes/messages';
@@ -14,6 +15,7 @@ await server.register(corsPlugin);
 await server.register(authPlugin);
 await server.register(websocketPlugin);
 
+await server.register(friendRoutes);
 await server.register(authRoutes);
 await server.register(userRoutes);
 await server.register(healthRoutes);
