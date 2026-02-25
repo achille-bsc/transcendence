@@ -9,11 +9,21 @@
 
 export type GameType = 'kong' | 'aow'; // aow = Age Of War
 
-/**
- * ============================================================================
- * MESSAGE TYPES - Communication Front <-> Back via WebSocket
- * ============================================================================
- */
+export type Platform = {
+  id:        number,    // Numéro de l'étage (0 = bas)
+  startX:    number,    // X gauche
+  endX:      number,    // X droite  
+  startY:    number,    // Y à gauche
+  endY:      number,    // Y à droite (différent = diagonale)
+  hasLadder: boolean,   // Échelle vers l'étage suivant
+  ladderX:   number,    // Position X de l'échelle
+}
+
+export type KongMap = {
+  platforms:  Platform[],
+  spawnPoint: { x: number, y: number },
+  goalPoint:  { x: number, y: number },
+}
 
 export enum Difficults 
 {
@@ -40,8 +50,8 @@ export type WSMessage =
             | 'goLeft'
             | 'goRight'
           ),
-          Difficults,
           string,
+          Difficults,
         ]
       }
     }
@@ -66,28 +76,31 @@ export type WSMessage =
     }
 ;
 export type ClientState = {
-  id?: string,
-  isAuthenticated: boolean,
-  lastPingAt: number,
-  gameId: string | null
+  id?:				string,
+  isAuthenticated:	boolean,
+  lastPingAt:		number,
+  gameId:			string | null
 }
 
 export type PlayerDatas = {
-  id: string,
-  x: number,
-  y: number,
-  vSpeed: number,
-  hSpeed: number,
-  maxSpeed: number,
-  socket: WebSocket,
-  isJumping?: boolean
+  id:				string,
+  x:				number,
+  y:				number,
+  velocityY:		number,			// Vitesse verticale (gravité)
+  isGoingLeft?:		boolean,
+  isGoingRight?:	boolean,
+  isJumping?:		boolean,
+  isOnGround?:		boolean,		// Est sur une plateforme
+  socket:			WebSocket,
 }
 
 export type Game = {
-  host: string,
-  difficulty: Difficults,
-  players_count: number,
-  players: Map<string, PlayerDatas>,
-  isFinish: boolean
-  isStarted: boolean
+  host:				string,
+  id:         number,
+  difficulty:		Difficults,
+  players_count:	number,
+  players:			Map<string, PlayerDatas>,
+  map?:				KongMap,		// Map du niveau
+  isFinish:			boolean
+  isStarted:		boolean
 }
