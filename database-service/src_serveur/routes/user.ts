@@ -21,6 +21,7 @@ export default async function userRoutes(server: FastifyInstance) {
         lastLoginAt: true,
       }
     });
+    console.log("test\n\n\n :", request.user.id);
     if (!user)
       return reply.code(404).send({ error: 'User not found' });
     return { user };
