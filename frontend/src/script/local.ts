@@ -37,6 +37,9 @@ export interface Translations {
 		nb_game: string;
 		win_rate: string;
 		lose_game: string;
+	};
+	Game_page: {
+		description: string;
 	}
 }
 // Load translations based on language

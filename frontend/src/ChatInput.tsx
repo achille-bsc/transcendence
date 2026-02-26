@@ -2,15 +2,16 @@ interface InputProps {
 	type?: string;
 	id?:string;
 	name?:string;
+	value?: string;
 	className?: string;
 	placeholder?: string;
-	onChange?: () => void;
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	required:boolean;
 	autoComplete?: string;
 	onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export default function ChatInput ({type, id, name, className, placeholder, onChange, required, autoComplete, onKeyDown} : InputProps) {
+export default function ChatInput ({type, id, name, value, className, placeholder, onChange, required, autoComplete, onKeyDown} : InputProps) {
 
 	return (
 		<div className="w-full">
@@ -18,6 +19,7 @@ export default function ChatInput ({type, id, name, className, placeholder, onCh
 				type={type}
 				id={id}
 				name={name}
+				value={value}
 				className={className}
 				placeholder={placeholder}
 				onChange={onChange}

@@ -42,17 +42,16 @@ function Register () {
 			return;
 		}
 
-		localStorage.setItem("token", data.token);
 		window.location.href = "/log";
 	}
 
 	return (
-		<div className="bg-[var(--background)]">
+		<div className="relative bg-[var(--background)]">
 			<Main>
-				<div className="w-full flex place-items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+				<div className="place-items-center">
 					<form 
 						onSubmit={handleRegister}
-						className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+						className="space-y-4 bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 						<div className="flex">
 							<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="log"><div >{lang.Log_register_page.login}</div></a>
 							<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.Log_register_page.register}</div>
@@ -63,7 +62,7 @@ function Register () {
 									type="text"
 									id="name"
 									name="name"
-									className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 									placeholder={lang.Log_register_page.pseudo}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
 									autoComplete="false"
@@ -75,7 +74,7 @@ function Register () {
 									type="email"
 									id="email"
 									name="email"
-									className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 									placeholder={lang.Log_register_page.email}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
 									autoComplete="false"
@@ -87,7 +86,7 @@ function Register () {
 									type="password"
 									id="password"
 									name="password"
-									className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 									placeholder={lang.Log_register_page.password}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 									autoComplete="false"
@@ -99,7 +98,7 @@ function Register () {
 									type="password"
 									id="confirmpassword"
 									name="confirmpassword"
-									className="w-full border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
 									placeholder={lang.Log_register_page.confirm_password}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
 									autoComplete="false"

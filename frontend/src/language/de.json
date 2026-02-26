@@ -24,7 +24,7 @@
 			"block": "Gesperrt"
 		},
 		"Chat_page": {
-			"input": "Geben Sie Ihre Nachricht hier ein..."
+			"input": "Geben Sie Ihre Nachricht ein..."
 		},
 		"Stat_page": {
 			"invite": "Einladen",
@@ -34,6 +34,9 @@
 			"nb_game": "Anzahl der Spiele",
 			"win_rate": "Siegesrate",
 			"lose_game": "Verlorene Spiele"
+		},
+		"Game_page": {
+			"description": "Ich bin die Spiel-Seite"
 		}
 	}
 }

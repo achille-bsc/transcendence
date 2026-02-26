@@ -1,15 +1,17 @@
-import Sidebar from "./utils/Sidebar.tsx";
+import Sidebar from "./script/Sidebar_dm.tsx";
 import Main from "./utils/Main.tsx"
-import { useParams } from "react-router-dom";
+import ChatInputBar from "./ChatInputBar";
+import "./index.css";
+import "./Home.css"
 
 // import { useNavigate } from "react-router-dom";
 // function ListeConversations() {
 //   const navigate = useNavigate();
-
+//
 //   const openConversation = (id) => {
 //     navigate(`/chat/${id}`);
 //   };
-
+//
 //   return (
 //     <button onClick={() => openConversation(12345)}>
 //       Ouvrir
@@ -17,19 +19,28 @@ import { useParams } from "react-router-dom";
 //   );
 // }
 
-function Conversation({children =""})
-{
-    const { conversationId } = useParams()
-    return (
-        <Main>
-            <div className="flex">
-                <Sidebar> {children} </Sidebar>
-                <h1 className="text-[#6E3CA3]"> TEST {conversationId} </h1>
-            </div>
-        </Main>
-    )
+function Conversation({ children = "help" }) {
+	return (
+		<Main>
+			<div className="flex quantico-regular h-[calc(100dvh-5rem)] min-h-0">
+				<Sidebar className="flex-none"> {children} </Sidebar>
+				<div className="m-3 flex min-h-0 flex-1 flex-col">
+					<div className="flex-1 min-h-0 overflow-y-auto">
+						<div className="flex flex-col gap-2">
+							{Array.from({length: 200}, () =>
+							<div className="bg-black/10 p-2 text-red-900">test</div>)}
+						</div>
+					</div>
+					<div className="shrink-0 pt-2">
+						<ChatInputBar>{children}</ChatInputBar>
+					</div>
+				</div>
+			</div>
+		</Main>
+	)
 }
 
 export default Conversation
 
+// quantico border-5 grid p-4 sm:p-5 md:p-6 grid-cols-3 content-end
 // window.location.href = `/chat/${id}

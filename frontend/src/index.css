@@ -16,10 +16,10 @@
 	}
 }
 
-body {
+/* body {
 	animation:
-		truc 3s ease-in 5s,
-		bgrandom 3s ease-in 5s;
+		truc 3s ease-in 1s,
+		bgrandom 3s ease-in 1s;
 }
 
 @keyframes truc {
@@ -51,4 +51,4 @@ body {
 	70%  { background: linear-gradient(135deg, cyan, magenta); }
 	80%  { background: orange; }
 	100% { background: linear-gradient(60deg, lime, purple); }
-}
+} */

@@ -51,7 +51,7 @@ function Profile() {
 							<p>{profileToDisplay}</p>
 						</div>
 						<div className="border-b-2 border-solid p-6">
-							<Img src="/src/img/img.webp" alt="User Profile Picture" className="w-[15vw] aspect-square rounded-full"/>	
+							<Img src="/src/img/img.webp" alt="User Profile Picture" className="w-[15vw] aspect-square rounded-full object-cover"/>	
 						</div>
 						<div className="grid grid-cols-3 w-full gap-6 text-[#6E3CA3] text-[10px] md:text-[25px] font-bold">
 							<div className="justify-self-start">
