@@ -11,12 +11,12 @@ export default async function messageRoutes(server: FastifyInstance) {
       receiverPseudo: string;
       content: string;
     };
-    const senderId = request.user.id;
-    const conv = await createDmConversation(senderId, findUserByPseudo(receiverPseudo).id);
+    const senderPseudo = request.user.pseudo;
+    const conv = await createDmConversation(senderPseudo, receiverPseudo);
     if (!conv) {
       return reply.code(400).send({ error: 'Cannot create DM conversation' });
     }
-    const result = await newDirectMessage(senderId, conv.id, content);
+    const result = await newDirectMessage(senderPseudo, conv.id, content);
     if (!result.success || !result.new_message) {
        return reply.code(500).send({ error: 'Failed to save message' });
     }
@@ -24,7 +24,7 @@ export default async function messageRoutes(server: FastifyInstance) {
        type: 'NEW_MESSAGE',
        data: result.new_message
     });
-    server.sendToUser(receiverId, wsPayload);
+    server.sendToUser(receiverPseudo, wsPayload);
     return { status: "success", message: "DM sent successfully.", data: result.new_message };
   });
 }

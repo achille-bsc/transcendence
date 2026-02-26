@@ -9,7 +9,6 @@ export default async function authRoutes(server: FastifyInstance) {
 		pseudo: string,
 		email: string,
 		password: string };
-    console.log(pseudo, email, password)
     if (!await checkSignin(pseudo, email, password, reply))
       return;
     const user = await createUser(pseudo, email, password, reply);
@@ -30,6 +29,7 @@ export default async function authRoutes(server: FastifyInstance) {
       return; 
     const token = server.jwt.sign({
       id: user.id,
+      pseudo: user.pseudo,
       email: user.email
     });
     return {

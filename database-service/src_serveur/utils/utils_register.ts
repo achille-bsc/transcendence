@@ -5,21 +5,13 @@ export async function checkLogin(log_name: string, password: string, reply: any)
 	if (log_name.includes('@'))
 	{
 		if (!log_name || log_name.length === 0 || log_name.includes(' ') ||
-			log_name.split('@').length !== 2 || !log_name.includes('.'))
-		{
-			reply.code(404).send({ error: 'Bad email' })
-			return 
-		}
+			  log_name.split('@').length !== 2 || !log_name.includes('.'))
+			return reply.code(404).send({ error: 'Bad email' });
 	}
 	else
-	{
 		if (!log_name || log_name.length === 0 || log_name.includes(' '))
-		{
-			reply.code(404).send({ error: 'Bad pseudo' })
-			return
-		}
-	}
-    const user = await findProfile(log_name)
+			return reply.code(404).send({ error: 'Bad pseudo' })
+  const user = await findProfile(log_name)
 	if (!user || await comparePassword(password, user!.password) === false) 
 	{
     	reply.code(404).send({ error: 'User not found, check your password and your pseudo/email' })

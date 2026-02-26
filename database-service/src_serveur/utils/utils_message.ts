@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma'
-import { findUserById } from './utils_user';
+import { findUserByPseudo } from './utils_user';
 
 export async function newDirectMessage(senderId: number, conversationId: number, content: string)
 {
@@ -33,18 +33,18 @@ export async function newDirectMessage(senderId: number, conversationId: number,
   return { success: true, new_message };
 }
 
-export async function createDmConversation(user1id: number, user2id: number)
+export async function createDmConversation(user1Pseudo: string, user2Pseudo: string)
 {
-	const user1 = await findUserById(user1id);
-	const user2 = await findUserById(user2id);
+	const user1 = await findUserByPseudo(user1Pseudo);
+	const user2 = await findUserByPseudo(user2Pseudo);
 	if (!user1 || !user2 || user1 === user2)
 		return null;
 	const convExists = await prisma.conversation.findFirst({
         where: {
             isGroup: false,
             AND: [
-                { participants: { some: { userId: user1id } } },
-                { participants: { some: { userId: user2id } } }
+                { participants: { some: { userId: user1.id } } },
+                { participants: { some: { userId: user2.id } } }
             ]
         },
         include: {
