@@ -88,8 +88,7 @@ model Friend {
   requesterId Int
   requester   User     @relation("UserAsRequester", fields: [requesterId], references: [id]) // Le lien
 
-  // 2. Celui qui reçoit la demande
-  addresseeId Int      // La colonne physique
+  addresseeId Int      
   addressee   User     @relation("UserAsAddressee", fields: [addresseeId], references: [id]) // Le lien
 
   status      String   @default("PENDING") // 'PENDING', 'ACCEPTED', 'BLOCKED'
