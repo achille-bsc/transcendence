@@ -6,16 +6,14 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/02/25 17:59:27 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/26 23:21:32 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ClientState, Game, Difficults }											from "../utils/types";
 import { games, GRAVITY, JUMP_FORCE, kongMaxHeight, MOVE_SPEED, persoKongHeight }	from "../utils/const";
+import { ClientState, Game, Difficults }											from "../utils/types";
 import { generateKongMap, getPlatformYAtX }											from "./kongMap";
 import { sleep }																	from "../utils/utils";
-
-
 
 
 export function handleGame(state: ClientState, datas:
@@ -51,6 +49,7 @@ export function handleGame(state: ClientState, datas:
 		case 'goRight':
 			goRight(game, state.id!);
 			break;
+
 		default:
 			break;
 	}
@@ -111,7 +110,8 @@ export function startGame(game: Game)
 
 async function gameLoop(game: Game)
 {
-	console.log(games);
+	let frameCount = 0;
+
 	while (!game.isFinish && game.isStarted) {
 		game = games.get(game.id.toString())!;
 		if (!game || !game.map)
@@ -130,7 +130,7 @@ async function gameLoop(game: Game)
 		});
 
 		handleGamePhysics(game);
-		
+		frameCount++;
 		await sleep(100);
 		sendGameState(game);
 	}
