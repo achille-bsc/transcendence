@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   const.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:46:01 by abosc             #+#    #+#             */
-/*   Updated: 2026/01/30 18:52:24 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/26 02:24:58 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { kongHandler }	from "../Kong/kongHandler";
-import { aowHandler }	from "../AgeOfWar/GamesManager";
 import { verifToken } from "../auth/auth";
 import { ClientState, Game } from "./types";
 
@@ -42,11 +41,11 @@ export const MOVE_SPEED			= 10;
 // MAPS //
 //////////
 export const FIRST_STEP_HIGHT = 510;
+
 //////////////
 // HANDLERS //
 //////////////
 export const HANDLERS = {
     kong:	kongHandler,
-    aow:	aowHandler,
     auth:	verifToken,
 };

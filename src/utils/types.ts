@@ -56,20 +56,6 @@ export type WSMessage =
       }
     }
   | {
-      type: 'aow',
-      userID: string
-      payload:
-      {
-        type:
-          | 'gameAction'
-          | 'globalAction',
-        datas: [
-          ('createGame' | 'joinGame'),
-          Difficults
-        ]
-      }
-    }
-  | {
       type: 'auth',
       userID: string
       payload: { token: string }
@@ -103,4 +89,5 @@ export type Game = {
   map?:				KongMap,		// Map du niveau
   isFinish:			boolean
   isStarted:		boolean
+  barils:			{ x: number, y: number }[]
 }
