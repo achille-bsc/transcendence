@@ -24,7 +24,7 @@
 			"block": "Bloqués"
 		},
 		"Chat_page": {
-			"input": "Tapez votre message ici..."
+			"input": "Tapez votre message..."
 		},
 		"Stat_page": {
 			"invite": "Inviter",
@@ -34,6 +34,9 @@
 			"nb_game": "Nombre de parties",
 			"win_rate": "Taux de victoires",
 			"lose_game": "Parties perdues"
+		},
+		"Game_page": {
+			"description": "Je suis la page de jeu"
 		}
 	}
 }

@@ -1,0 +1,140 @@
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import MyButton from "../Button";
+
+async function fetchFriends() {
+	return [
+		{
+			id: 1,
+			username: "Alice",
+			picture: "/src/img/img.webp",
+			author: "Alice",
+			last_message: "Hey, how are you?"
+		},
+		{
+			id: 2,
+			username: "Bob",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "Let's play tonight!"
+		},
+		{
+			id: 3,
+			username: "Charlie",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "See you tomorrow 👋"
+		},
+		{
+			id: 4,
+			username: "Alice",
+			picture: "/src/img/img.webp",
+			author: "Alice",
+			last_message: "Hey, how are you?"
+		},
+		{
+			id: 5,
+			username: "Bob",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "Let's play tonight!"
+		},
+		{
+			id: 6,
+			username: "Charlie",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "See you tomorrow 👋"
+		},
+		{
+			id: 7,
+			username: "Micheline",
+			picture: "/src/img/img.webp",
+			author: "Alice",
+			last_message: "Hey, how are you?"
+		},
+		{
+			id: 8,
+			username: "Michel",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "Let's play tonight!"
+		},
+		{
+			id: 9,
+			username: "Gerard",
+			picture: "/src/img/img.webp",
+			author: "You",
+			last_message: "See you tomorrow 👋"
+		},
+		
+	];
+}
+
+// async function fetchFriends(username)
+// {
+// 	try
+// 	{
+// 		const response = await fetch('https://caddy:443/db/friends', {
+// 			method: 'POST',
+// 			body: JSON.stringify(username)
+// 		});
+// 		if (!response.ok)
+// 			throw new Error('Something went wrong');
+// 		const data = await response.json();
+// 		return data;
+// 	}
+// 	catch (error)
+// 	{
+// 		console.error('Error:', error);
+// 		return [];
+// 	}
+	
+// }
+
+interface InputProps {
+	type?: string;
+	id?:string;
+	name?:string;
+	value?: string;
+	className?: string;
+	placeholder?: string;
+	onChange?: () => void | undefined;
+	autoComplete?:string;
+	required?:boolean;
+}
+
+export default function Sidebar_dm({className} : InputProps, {children})
+{
+	const [friends, setFriends] = useState([]);
+	useEffect(() => {
+		fetchFriends(children).then(data => {
+			setFriends(data);
+		});
+	}, [children]);
+	const navigate = useNavigate();
+	const openConversation = (id) => {
+		navigate(`/conversation/${id}`);
+	};
+	return (
+		<div className={className}>
+			<div className="h-[calc(100vh-5rem)]  overflow-y-auto border-r-2 border-b border-solid">
+				<div className="grid grid-cols-1 gap-6">
+				{friends.map((friend) => (
+					<MyButton key={friend.id} className="" onClick={() => openConversation(friend.id)}>
+					<div className="grid grid-cols-1 p-3 border-b">
+						<img
+						src={friend.picture}
+						alt="friend"
+						className="w-[5rem] aspect-square rounded-full object-cover justify-self-center mb-2"
+						/>
+						<p>{friend.username}</p>
+					</div>
+					</MyButton>
+				))}
+				</div>
+			</div>
+		</div>
+	)
+}

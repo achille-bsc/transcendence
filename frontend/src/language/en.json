@@ -24,7 +24,7 @@
 			"block": "Blocked"
 		},
 		"Chat_page": {
-			"input": "Type your message here..."
+			"input": "Type your message..."
 		},
 		"Stat_page": {
 			"invite": "Invite",
@@ -34,6 +34,9 @@
 			"nb_game": "Number of games",
 			"win_rate": "Win rate",
 			"lose_game": "Lose game"
+		},
+		"Game_page": {
+			"description": "I am the game page"
 		}
 	}
 }

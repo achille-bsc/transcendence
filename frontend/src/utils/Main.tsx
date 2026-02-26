@@ -108,7 +108,7 @@ function Main({children = ""}) {
 			<div className={`relative h-dvh overflow-hidden transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
     			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative ${!isOn ? "bg-[#EFE0FF] text-[#6E3CA3]" : "bg-[#141414] text-[#6E3CA3]"}`}>
     				<div className="flex items-center space-x-4">
-        				<MyButton onClick={() => DisplayMenu()}>
+        				<MyButton onClick={() => window.location.href = "/chat"}>
         					<Img src={menu} alt="Menu" className="w-8 md:w-10 h-auto" />
         				</MyButton>
         				<div >
@@ -135,17 +135,24 @@ function Main({children = ""}) {
 									</ul>
 									<div className="flex justify-center p-2">
   										<SearchBar/>
+  										<input
+  											type="text"
+  											placeholder={lang.navbar.search}
+  											className={`focus:outline-hidden border-1 border-solid border-[var(--violet-default)] text-[#969696] text-sm p-2 ${!isOn ? "bg-[#EFE0FF]" : "bg-[#2D2D2D]"}`}
+  										/>
   									</div>
         						</div>
         					)}
         				</div>
 						<SwitchButton checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
-					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold" onClick={() => navigate(`/`)}>
-						Transcendence
+					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold">
+						<div className="cursor-pointer" onClick={() => window.location.href = "/"}>
+							Transcendence
+						</div>
 					</span>
 					<div className="flex items-center space-x-4 items-start">
-						<MyButton onClick={() => DisplayMenu()}>
+						<MyButton onClick={() => window.location.href = "/game"}>
 							<Img src={game} alt="Game" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
 						<div className="w-8 md:w-10 h-auto">
@@ -162,7 +169,7 @@ function Main({children = ""}) {
 								</div>
 							}
 						</div>
-						<MyButton onClick={() => DisplayMenu()}>
+						<MyButton onClick={() => window.location.href = "/dm"}>
 							<Img src={notifications} alt="Notifications" className="w-8 md:w-10 h-auto"/>
 						</MyButton>
 						<MyButton onClick={() => window.location.href = "/profile"}>

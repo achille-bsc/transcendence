@@ -23,7 +23,7 @@ function Home () {
 							<div className="flex justify-center items-center">
 								<Button
 									className="cursor-pointer text-[25px] w-full sm:w-auto p-2 px-9 bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
-									onClick={() => "game page"}
+									onClick={() => window.location.href = "/game"}
 									label={lang.Home_page.play}
 									/>
 							</div>

@@ -71,7 +71,7 @@ function Chat () {
 								type="text"
 								id="dialogue"
 								name="text"
-								className="flex w-full focus:outline-hidden border border-[var(--violet-default)] py-2 p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--violet-default)] text-[var(--white)]"
+								className="flex  w-full focus:outline-hidden border border-[var(--violet-default)] py-2 p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--violet-default)] text-[var(--white)]"
 								placeholder={lang.Chat_page.input}
 								autoComplete="off"
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}
