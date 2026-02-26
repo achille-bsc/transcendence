@@ -11,11 +11,31 @@ function DisplayMenu(){
 	return
 }
 
-function fetchFriends() {
-  return [
-    {name: "Bob" },
-    {name: "Alice" }
-  ];
+async function fetchFriends() {
+	try
+	{
+		const token = localStorage.getItem("token");
+		if (!token) {
+			console.error("Token not found");
+			return false;
+		}
+		console.log("CHEEEEEEEEEEEEEEEEEEEEF", token);
+		const res = await fetch('/api/db/profileuser', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}` 
+			}
+		});
+		console.log("TESSSSSSST", res);
+		const data = await res.json();
+		console.log("TEST", data.user.pseudo);
+		return data.user.pseudo;
+	}
+	catch (error)
+	{
+		console.error("Invalid token:", error);
+		return false;
+	}
 }
 
 function fetchPending(){
