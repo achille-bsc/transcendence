@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:46:01 by abosc             #+#    #+#             */
-/*   Updated: 2026/02/26 02:24:58 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/01 03:35:33 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ export const persoKongWidth		= 5;
 export const kongPlayerSpeed	= 25;
 export const kongMaxHeight		= 650;
 export const kongMaxLength		= 1600;
-export const GRAVITY			= 0.5;
-export const JUMP_FORCE			= -12;
-export const MOVE_SPEED			= 10;
+export const GRAVITY			= 25;
+export const JUMP_FORCE			= -90;
+export const MOVE_SPEED			= 25;
 
 //////////
 // MAPS //

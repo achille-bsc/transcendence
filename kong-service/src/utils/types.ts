@@ -10,13 +10,13 @@
 export type GameType = 'kong' | 'aow'; // aow = Age Of War
 
 export type Platform = {
-  id:        number,    // Numéro de l'étage (0 = bas)
-  startX:    number,    // X gauche
-  endX:      number,    // X droite  
-  startY:    number,    // Y à gauche
-  endY:      number,    // Y à droite (différent = diagonale)
-  hasLadder: boolean,   // Échelle vers l'étage suivant
-  ladderX:   number,    // Position X de l'échelle
+  id:        number,
+  startX:    number,
+  endX:      number,
+  startY:    number,
+  endY:      number,
+  hasLadder: boolean,
+  ladderX:   number,
 }
 
 export type KongMap = {
@@ -31,6 +31,16 @@ export enum Difficults
   normal      = 'normal',
   difficulty  = 'difficult',
   impossible  = 'impossible'
+}
+
+export type KongGameState = {
+  type: 'gameState',
+  players: PlayerDatas[],
+  map?: {
+    platforms: Platform[],
+    spawnPoint: { x: number, y: number },
+    goalPoint: { x: number, y: number },
+  }
 }
 
 export type WSMessage = 

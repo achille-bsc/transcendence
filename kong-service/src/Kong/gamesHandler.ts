@@ -6,12 +6,12 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/02/26 23:21:32 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/01 03:42:59 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { games, GRAVITY, JUMP_FORCE, kongMaxHeight, MOVE_SPEED, persoKongHeight }	from "../utils/const";
-import { ClientState, Game, Difficults }											from "../utils/types";
+import { ClientState, Game, Difficults, KongGameState, PlayerDatas }				from "../utils/types";
 import { generateKongMap, getPlatformYAtX }											from "./kongMap";
 import { sleep }																	from "../utils/utils";
 
@@ -28,12 +28,12 @@ export function handleGame(state: ClientState, datas:
 	]
 ): void
 {
-	if (!state.gameId)
-	{
-		console.log(`player ${state.id} is trying to create a game with difficulty ${datas[2]}`);
-		return ;
-	}
-	const game: Game | undefined = games.get(state.gameId);
+	// if (!state.gameId)
+	// {
+	// 	console.log(`player ${state.id} is trying to create a game with difficulty ${datas[2]}`);
+	// 	return ;
+	// }
+	const game: Game | undefined = games.get(state.gameId!);
 	if (!game)
 		return ;
 
@@ -57,10 +57,11 @@ export function handleGame(state: ClientState, datas:
 
 function jump(game: Game, playerId: string): void
 {
+	console.log(`Player ${playerId} request Jumping`)
 	const player = game.players.get(playerId);
-	if (!player || player.isJumping || !player.isOnGround)
+	if (!player || player.isJumping /*|| !player.isOnGround*/)
 		return;
-	
+	console.log(`Player jumping`);
 	player.isJumping = true;
 	player.isOnGround = false;
 	player.velocityY = JUMP_FORCE;
@@ -151,9 +152,9 @@ function sendGameState(game: Game, includeMap: boolean = false)
 			y: p.y,
 			isOnGround: p.isOnGround,
 			isJumping: p.isJumping
-		}));
+		})) as PlayerDatas[];
 		
-		const message: any = {
+		const message: KongGameState = {
 			type: 'gameState',
 			players: playersData
 		};
@@ -166,15 +167,30 @@ function sendGameState(game: Game, includeMap: boolean = false)
 	});
 }
 
+// function handleGameFphysics(game: Game)
+// {
+// 	if (!game.map)
+// 		return;
+	
+// 	game.players.forEach((player) => {
+// 		if (!player.isOnGround && player.velocityY < 0)
+// 		{
+// 			player.velocityY += GRAVITY;
+// 		}
+// 	})
+// }
+
 function handleGamePhysics(game: Game)
 {
 	if (!game.map)
 		return;
 
 	game.players.forEach((player) => {
-		player.velocityY += GRAVITY;
-		player.y += player.velocityY;
+		console.log(`appplying gravity for ${player.id} with velocity ${player.velocityY}`)
+		if (!player.isOnGround && player.velocityY < 0)
+			player.velocityY += GRAVITY;
 		
+		player.y += player.velocityY;
 		player.isOnGround = false;
 		
 		for (const platform of game.map!.platforms) {
@@ -200,3 +216,4 @@ function handleGamePhysics(game: Game)
 		}
 	});
 }
+
