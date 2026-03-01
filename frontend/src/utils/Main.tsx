@@ -7,6 +7,8 @@ import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
 import { useNavigate } from "react-router-dom";
 
+//attention couleur ligne 125
+
 function DisplayMenu(){
 	return
 }
@@ -19,16 +21,13 @@ async function fetchFriends() {
 			console.error("Token not found");
 			return false;
 		}
-		console.log("CHEEEEEEEEEEEEEEEEEEEEF", token);
 		const res = await fetch('/api/db/profileuser', {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}` 
 			}
 		});
-		console.log("TESSSSSSST", res);
 		const data = await res.json();
-		console.log("TEST", data.user.pseudo);
 		return data.user.pseudo;
 	}
 	catch (error)
@@ -81,10 +80,13 @@ function SearchBar() {
 function Main({children = ""}) {
 	const [isOn, setIsOn] = useState(() => {
 		const savedTheme = localStorage.getItem("darkMode");
-		return savedTheme === "true";
+		return savedTheme === "dark";
 	});
 	useEffect(() => {
-		localStorage.setItem("darkMode", isOn);
+		const nextTheme = isOn ? "dark" : "light";
+		localStorage.setItem("darkMode", nextTheme);
+		document.documentElement.classList.remove("light", "dark");
+		document.documentElement.classList.add(nextTheme);
 	}, [isOn]);
 	const navigate = useNavigate();
 	const [LanguagesClicked, setLanguages] = useState(false);
@@ -105,8 +107,8 @@ function Main({children = ""}) {
 	};
 	return (
 		<>
-			<div className={`relative h-dvh overflow-hidden transition-colors duration-300 ${!isOn ? "bg-white text-[#6E3CA3]" : "bg-[#1A1A1A] text-[#6E3CA3]"}`} >
-    			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative ${!isOn ? "bg-[#EFE0FF] text-[#6E3CA3]" : "bg-[#141414] text-[#6E3CA3]"}`}>
+			<div className={`relative h-dvh overflow-hidden transition-colors duration-300 bg-[var(--background)] text-[var(--default)]`} >
+    			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative bg-[var(--background-header)]`}>
     				<div className="flex items-center space-x-4">
         				<MyButton onClick={() => window.location.href = "/chat"}>
         					<Img src={menu} alt="Menu" className="w-8 md:w-10 h-auto" />
@@ -116,8 +118,8 @@ function Main({children = ""}) {
         						<Img src={friends} alt="Friends" className="w-8 md:w-10 h-auto" />
         					</MyButton>
         					{openMenu === "friends" && (
-        						<div className={`absolute top-full w-70 text-[var(--violet-default)] ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
-        							<div className="grid grid-cols-3 mb-3">
+        						<div className={`absolute top-full w-70 text-[var(--default)] bg-[var(--background-box-select)]`}>
+									<div className="grid grid-cols-3 mb-3">
         								{tabs.map((tab) => (
         					        	<button
         					        		key={tab.key}
@@ -138,7 +140,7 @@ function Main({children = ""}) {
   										<input
   											type="text"
   											placeholder={lang.navbar.search}
-  											className={`focus:outline-hidden border-1 border-solid border-[var(--violet-default)] text-[#969696] text-sm p-2 ${!isOn ? "bg-[#EFE0FF]" : "bg-[#2D2D2D]"}`}
+  											className={`focus:outline-hidden border-1 border-solid border-[var(--default)] text-[var(--props)] text-sm p-2 bg-[var(--background-box)]`}
   										/>
   									</div>
         						</div>
@@ -146,7 +148,7 @@ function Main({children = ""}) {
         				</div>
 						<SwitchButton checked={isOn} onChange={() => setIsOn(!isOn)} />
 					</div>
-					<span className="quantico-regular text-[#6E3CA3] text-[25px] md:text-[50px] font-bold">
+					<span className="quantico-regular text-[var(--default)] text-[25px] md:text-[50px] font-bold">
 						<div className="cursor-pointer" onClick={() => window.location.href = "/"}>
 							Transcendence
 						</div>
@@ -160,8 +162,8 @@ function Main({children = ""}) {
 								<Img src={language} alt="Language ??" className="w-8 md:w-10 h-auto"/>
 							</MyButton>
 							{LanguagesClicked &&
-								<div className={`absolute top-full w-20 h-auto border-2 border-solid ${!isOn ? "bg-[#E5CDFF]" : "bg-[#282828]"}`}>
-									<div className="grid grid-rows text-[#6E3CA3] text-[15px] md:text-[15px]">
+								<div className={`absolute top-full w-20 h-auto border-2 border-solid bg-[var(--background-box-select)]`}>
+									<div className="grid grid-rows text-[var(--default)] text-[15px] md:text-[15px]">
 										<MyButton onClick={() => setLang("fr")}>Français</MyButton>
 										<MyButton onClick={() => setLang("en")}>English</MyButton>
 										<MyButton onClick={() => setLang("de")}>Deutsch</MyButton>

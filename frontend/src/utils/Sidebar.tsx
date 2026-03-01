@@ -62,12 +62,13 @@ function Sidebar({children})
 	const navigate = useNavigate();
 	const openConversation = (id) => {
 		navigate(`/conversation/${id}`);
-	};
+	}
+
     return (
-        <div className="w-[30vw] min-h-screen border-r-2 border-solid overflow-y-auto text-[#6E3CA3]">
+        <div className="w-[30vw] min-h-screen border-r-2 border-solid overflow-y-auto text-[var(--default)]">
 	    	{friends.map((friend) => (
 				<MyButton className="w-full" onClick={() => openConversation(friend.id)}>
-					<div key={friend.id} className="w-[30vw] p-3 border-b flex items-center gap-6 text-[#6E3CA3]">
+					<div key={friend.id} className="w-[30vw] p-3 border-b flex items-center gap-6 text-[var(--default)]">
 	    				<img
 	    					src={friend.picture}
 	    					alt="friend"

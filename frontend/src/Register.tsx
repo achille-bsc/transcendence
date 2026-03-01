@@ -46,14 +46,14 @@ function Register () {
 	}
 
 	return (
-		<div className="relative bg-[var(--background)]">
+		<div className="relative quantico-regular">
 			<Main>
 				<div className="place-items-center">
 					<form 
 						onSubmit={handleRegister}
-						className="space-y-4 bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+						className="space-y-4 bg-[var(--background-box-select)] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 						<div className="flex">
-							<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="log"><div >{lang.Log_register_page.login}</div></a>
+							<a className="w-1/2 text-center p-4 sm:p-5 bg-[var(--not-selected-items)] cursor-pointer" href="log"><div >{lang.Log_register_page.login}</div></a>
 							<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.Log_register_page.register}</div>
 						</div>
 						<div className="p-4 sm:p-5 md:p-6">
@@ -62,7 +62,7 @@ function Register () {
 									type="text"
 									id="name"
 									name="name"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
 									placeholder={lang.Log_register_page.pseudo}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
 									autoComplete="false"
@@ -74,7 +74,7 @@ function Register () {
 									type="email"
 									id="email"
 									name="email"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
 									placeholder={lang.Log_register_page.email}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
 									autoComplete="false"
@@ -86,7 +86,7 @@ function Register () {
 									type="password"
 									id="password"
 									name="password"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
 									placeholder={lang.Log_register_page.password}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 									autoComplete="false"
@@ -98,7 +98,7 @@ function Register () {
 									type="password"
 									id="confirmpassword"
 									name="confirmpassword"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
 									placeholder={lang.Log_register_page.confirm_password}
 									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
 									autoComplete="false"
@@ -109,7 +109,7 @@ function Register () {
 								<RegisterButton
 									label={lang.Log_register_page.register}
 									icon=""
-									className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
+									className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background:var(--button)] focus:outline-2 text-[var(--white)]"
 									/>
 							</div>
 						</div>

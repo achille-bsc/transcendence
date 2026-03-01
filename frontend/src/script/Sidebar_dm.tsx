@@ -107,22 +107,23 @@ interface InputProps {
 
 export default function Sidebar_dm({className} : InputProps, {children})
 {
-	const [friends, setFriends] = useState([]);
+	const [friends, setFriends] = useState<{ id: number; username: string; picture: string; author: string; last_message: string; }[]>([]);
 	useEffect(() => {
-		fetchFriends(children).then(data => {
+		fetchFriends().then(data => {
 			setFriends(data);
 		});
-	}, [children]);
+	}, []);
 	const navigate = useNavigate();
 	const openConversation = (id) => {
 		navigate(`/conversation/${id}`);
-	};
+	}
+
 	return (
 		<div className={className}>
 			<div className="h-[calc(100vh-5rem)]  overflow-y-auto border-r-2 border-b border-solid">
 				<div className="grid grid-cols-1 gap-6">
 				{friends.map((friend) => (
-					<MyButton key={friend.id} className="" onClick={() => openConversation(friend.id)}>
+					<MyButton key={friend.id} onClick={() => openConversation(friend.id)}>
 					<div className="grid grid-cols-1 p-3 border-b">
 						<img
 						src={friend.picture}
