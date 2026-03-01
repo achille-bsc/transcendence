@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/02/25 18:00:21 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/27 19:16:05 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,6 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
 		console.log("try connecting to game with id : " + msg.payload.datas[1]);
-		const player: PlayerDatas = {
-			id: msg.userID,
-			x: persoKongWidth	/ 2,
-			y: persoKongHeight	/ 2,
-			velocityY: 0,
-			isOnGround: false,
-			socket: webSocket
-		}
 		console.log("games ids: " + Array.from(games.keys()).join(', '));
 		const game = games.get(msg.payload.datas[1]);
 		if (!game)
@@ -65,6 +57,14 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 			console.log("game not found");
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
+		}
+		const player: PlayerDatas = {
+			id: msg.userID,
+			x: game.map!.spawnPoint.x,
+			y: game.map!.spawnPoint.y,
+			velocityY: 0,
+			isOnGround: false,
+			socket: webSocket
 		}
 		game.players.set(player.id, player);
 		state.gameId = game.id.toString();
@@ -89,6 +89,7 @@ function createGame(
 	const game: Game = {
 		host: msg.userID,
 		id: games.size + 1,
+		barils: [],
 		difficulty: msg.payload.datas[2],
 		players_count: 1,
 		players: new Map<string, PlayerDatas>(),
