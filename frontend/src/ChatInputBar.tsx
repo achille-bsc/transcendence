@@ -4,44 +4,48 @@ import ChatInput from "./ChatInput";
 import { useLang } from "./script/langProvider.tsx";
 import RegisterButton from "./RegisterButton";
 
-export default function ChatInputBar ({pseudo}) {
+interface ChatInputBarProps {
+	onMessageSent?: (message: string) => void;
+	receiverPseudo?: string;
+}
+
+export default function ChatInputBar ({ onMessageSent, receiverPseudo = "help" }: ChatInputBarProps) {
 	const [msg, setMsg] = useState("");
 	const lang = useLang().getLang();
 	
-	async function sendMessage() { // See it with API
-		console.log(pseudo);
+	async function sendMessage() {
 		if (msg.trim() === '') {
 			return;
 		}
 		
-		const data = JSON.stringify({
-			// receiverPseudo: pseudo,
-			content: msg,
+		const res = await fetch('/api/db/chat/dm', {
+			method: 'POST',
+			headers: {
+				"Authorization": `Bearer ${localStorage.getItem('token')}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				receiverPseudo,
+				content: msg,
+			}),
 		});
-		
-		try {
-			const response = await fetch('/api/db/chat/dm', {
-				method: 'POST',
-				headers: {
-					"Authorization": `Bearer ${localStorage.getItem('token')}`,
-					'Content-Type': 'application/json'
-				},
-				body: data
-			});
-			console.log("response = ", response);
-			if (!response.ok) {
-				throw new Error('Something went wrong');
-			}
-			const result = await response.json();
 
-			setMsg("");
+		const data = await res.json();
 
-			// const messages = result.msg;
-			console.log(result);
-		} catch (error)
-		{
-			console.error('Error:', error);
+		console.log("response = ", data);
+
+		if (!res.ok) {
+			console.error("Something went wrong");
+			return ;
 		}
+		const { content, sender, conversationId } = data.data;
+		console.log("msg : ", content);
+		console.log("sender : ", sender);
+		console.log("conversationId : ", conversationId);
+		const message = data.data.content;
+		
+		onMessageSent?.(message);
+		setMsg("");
 	}
 
 // 		if (!res.ok) {
@@ -56,21 +60,21 @@ export default function ChatInputBar ({pseudo}) {
 // 		window.location.href = "/";
 // 	}
 
-	function onInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+	async function onInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
 		if (event.key === "Enter") {
 			event.preventDefault();
-			void sendMessage();
+			await sendMessage();
 		}
 	}
 
 	return (
-		<div className="flex w-full items-center border">
+		<div className="flex w-full items-center border bg-[var(--background-box)] border-[var(--default)] text-[var(--contrast)]">
 				<ChatInput
 					type="text"
 					id="dialogue"
 					name="text"
 					value={msg}
-					className="focus:outline-hidden w-full min-w-0 px-3 py-5 text-base"
+					className="focus:outline-hidden w-full min-w-0 px-3 py-5 text-base placeholder-[var(--props)]"
 					placeholder={lang.Chat_page.input}
 					autoComplete="off"
 					required

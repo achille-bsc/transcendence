@@ -33,11 +33,11 @@ export function SwitchButton({ checked, onChange }) {
       />
 
       <div
-        className="relative bg-gray-300 rounded-full transition-colors duration-300"
+        className="relative bg-[var(--props)] rounded-full transition-colors duration-300"
         style={{
             width: "4vw",
             height: "2vw",
-            backgroundColor: checked ? "var(--violet-default)" : "var(--change-theme)",
+            backgroundColor: checked ? "var(--default)" : "var(--change-theme)",
         }}
       >
         <span

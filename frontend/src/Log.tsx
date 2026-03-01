@@ -4,7 +4,7 @@ import RegisterInput  from "./RegisterInput";
 import RegisterButton from "./RegisterButton";
 import Main from "./utils/Main.tsx"
 import { useLang } from "./script/langProvider.tsx";
-// import '../node_modules/tailwindcss/index.css';
+import '../node_modules/tailwindcss/index.css';
 
 function Log () {
 
@@ -48,15 +48,15 @@ function Log () {
 	}
 
 	return (
-			<div className="quantico-regular bg-[#1A1A1A] text-[#FFFFFF]">
+			<div className="quantico-regular">
 				<Main>
 					<div className="w-full place-items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 						<form
 							onSubmit={handleLogin}
-							className="bg-[#282828] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+							className="bg-[var(--background-box-select)] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 							<div className="flex">
 								<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.Log_register_page.login}</div>
-								<a className="w-1/2 text-center p-4 sm:p-5 bg-[#202020] cursor-pointer" href="register"><div >{lang.Log_register_page.register}</div></a>
+								<a className="w-1/2 text-center p-4 sm:p-5 bg-[var(--not-selected-items)] cursor-pointer" href="register"><div >{lang.Log_register_page.register}</div></a>
 							</div>
 							<div className="p-4 sm:p-5 md:p-6">
 								<label className="flex justify-center"><br />
@@ -64,7 +64,7 @@ function Log () {
 										type="text"
 										id="name"
 										name="name"
-										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[--contrast]"
 										placeholder={lang.Log_register_page.pseudo_email}
 										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
 										autoComplete="false"
@@ -77,7 +77,7 @@ function Log () {
 										type="password"
 										id="password"
 										name="password"
-										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[#3A3A3A] placeholder-[#9B9B9B] border-[#6E3CA3] text-[#ffffff]"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[--contrast]"
 										placeholder={lang.Log_register_page.password}
 										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 										autoComplete="false"
@@ -88,16 +88,16 @@ function Log () {
 									<RegisterButton
 										label={lang.Log_register_page.login}
 										icon=""
-										className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[#3A3A3A] hover:bg-linear-[90deg,#6E3CA3,#A82828] focus:outline-2 text-[#FFFFFF]"
+										className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background:var(--button)] focus:outline-2 text-[var(--white)]"
 										/>
 								</div>
 							</div>
 						</form>
-						<div className="bg-[#282828] justify-center w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
+						<div className="bg-[var(--background-box-select)] justify-center w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
 							<div className="flex items-center justify-center">
 								<RegisterButton
 									icon="github"
-									className="py-4 px-[35%] border-t-2 border-[var(--violet-default)] place-items-center w-full sm:w-auto p-2 px-2 text-sm sm:text-base bg-[#282828]"
+									className="py-4 px-[35%] border-t-2 border-[var(--default)] place-items-center w-full sm:w-auto p-2 px-2 text-sm sm:text-base"
 									onClick={handleGithubLogin}
 									/>
 							</div>

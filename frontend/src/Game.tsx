@@ -27,12 +27,12 @@ export default function Game () {
 
 	
 		return (
-		<div className="quantico-regular bg-[#1A1A1A] text-[#FFFFFF]">
+		<div className="quantico-regular">
 			<Main>
 				<div className="absolute top-1/2 left-1/2">
 					{lang.Game_page.description} <br />
 					<button 
-						className="cursor-pointer border-1 p-2 px-4 bg-[var(--background-header-light)]" 
+						className="cursor-pointer border-1 p-2 px-4 bg-[var(--background-header)]" 
 						onClick={() => setI(i + 1)}>nb: {i}
 					</button>
 				</div>

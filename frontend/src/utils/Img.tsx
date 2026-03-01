@@ -10,7 +10,7 @@
 // }
 
 
-function Img({ src, alt= "Triste", className = "" }) {
+function Img({ src, alt = "Triste", className = "" }: { src: string; alt?: string; className?: string }) {
   return (
     <img
       src={src}

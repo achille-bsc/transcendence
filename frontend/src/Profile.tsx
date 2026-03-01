@@ -4,6 +4,8 @@ import Main from "./utils/Main.tsx"
 import Sidebar from "./utils/Sidebar.tsx"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import "./index.css";
+import "./Home.css";
 
 async function getUsername()
 {
@@ -43,17 +45,17 @@ function Profile() {
 	const profileToDisplay = username || loggedUser;
 	return (
 		<Main> 
-			<div className="flex">
+			<div className="flex quantico-regular">
 				<Sidebar>{loggedUser}</Sidebar>
 				<div className="flex-1 flex flex-col items-center">
 					<div className="w-[40vw] flex flex-col items-center space-y-4 p-6">
-						<div className="text-[#6E3CA3] text-[20px] md:text-[30px] font-bold">
+						<div className="text-[var(--default)] text-[20px] md:text-[30px]">
 							<p>{profileToDisplay}</p>
 						</div>
 						<div className="border-b-2 border-solid p-6">
 							<Img src="/src/img/img.webp" alt="User Profile Picture" className="w-[15vw] aspect-square rounded-full object-cover"/>	
 						</div>
-						<div className="grid grid-cols-3 w-full gap-6 text-[#6E3CA3] text-[10px] md:text-[25px] font-bold">
+						<div className="grid grid-cols-3 w-full gap-6 text-[var(--default)] text-[10px] md:text-[25px]">
 							<div className="justify-self-start">
 								<MyButton>Invite</MyButton>
 							</div>
@@ -66,10 +68,10 @@ function Profile() {
 						</div>
 					</div>	
 					<div className="w-[40vw] flex flex-col space-y-4 mt-10 p-4">
-						<div className="border-b-2 border-solid text-center text-[#6E3CA3] text-[20px] md:text-[30px] font-bold">
+						<div className="border-b-2 border-solid text-center text-[var(--default)] text-[20px] md:text-[30px]">
 							<p>STATS</p>
 						</div>
-						<div className="p-4 text-[#6E3CA3] text-[15px] md:text-[20px] font-bold space-y-4">
+						<div className="p-4 text-[var(--default)] text-[15px] md:text-[20px] space-y-4">
 							<p>Games played:</p>
 							<p>Wins:</p>
 							<p>Losses:</p>

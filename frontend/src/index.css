@@ -2,18 +2,46 @@
 
 @layer base{
 	:root {
-		--violet-default: #6E3CA3;
-		--background: #1A1A1A;
-		--background-header: #141414;
-		--select-header: #1C1C1C;
-		--background-box: #2D2D2D;
-		--background-select: #282828;
-		--props: #939393;
+		--default: #6E3CA3;
+		--background-dark: #1A1A1A;
+		--background-light: #FFFFFF;
+		--background-header-dark: #141414;
+		--background-header-light: #E4CCFF;
+		--select-header-dark: #1C1C1C;
+		--select-header-light: #E1C5FF;
+		--background-box-dark: #3A3A3A;
+		--background-box-light: #EFE0FF;
+		--background-box-select-dark: #282828;
+		--background-box-select-light: #E5CDFF;
+		--not-selected-items-dark: #202020;
+		--not-selected-items-light: #F0E2FF;
+		--props: #9B9B9B;
 		--change-theme: #D1D5DB;
 		--white: #FFFFFF;
 		--black: #000000;
-		--background-header-light: #EFE0FF;
-	}
+		--button-dark: linear-gradient(90deg, #6E3CA3, #A82828);
+		--button-light: linear-gradient(90deg, #B78EE3, #E46868);
+	};
+	.dark {
+		--background: var(--background-dark);
+		--background-header: var(--background-header-dark);
+		--select-header: var(--select-header-dark);
+		--background-box: var(--background-box-dark);
+		--background-box-select: var(--background-box-select-dark);
+		--button: var(--button-dark);
+		--contrast: var(--white);
+		--not-selected-items: var(--not-selected-items-dark);
+	};
+	.light {
+		--background: var(--background-light);
+		--background-header: var(--background-header-light);
+		--select-header: var(--select-header-light);
+		--background-box: var(--background-box-light);
+		--background-box-select: var(--background-box-select-light);
+		--button: var(--button-light);
+		--contrast: var(--black);
+		--not-selected-items: var(--not-selected-items-light);
+	};
 }
 
 /* body {

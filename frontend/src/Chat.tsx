@@ -64,14 +64,14 @@ function Chat () {
 	return (
 		<div className="bg-[var(--background)]">
 			<Main>
-				<div className="bg-[var(--background)] absolute inset-x-0 bottom-0 justify-center text-[var(--violet-default)]">
+				<div className="bg-[var(--background)] absolute inset-x-0 bottom-0 justify-center text-[var(--default)]">
 					<label className="flex p-5">
 						<div className="flex items-center w-full">
 							<ChatInput
 								type="text"
 								id="dialogue"
 								name="text"
-								className="flex  w-full focus:outline-hidden border border-[var(--violet-default)] py-2 p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--violet-default)] text-[var(--white)]"
+								className="flex  w-full focus:outline-hidden border border-[var(--default)] py-2 p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
 								placeholder={lang.Chat_page.input}
 								autoComplete="off"
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMsg(e.target.value)}
