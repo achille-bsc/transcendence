@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kongMap.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 17:47:17 by abosc             #+#    #+#             */
-/*   Updated: 2026/01/30 18:14:11 by abosc            ###   ########.fr       */
+/*   Updated: 2026/02/28 00:13:57 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ import { KongMap, Platform }			from "../utils/types";
 export function generateKongMap(numFloors: number): KongMap {
   const platforms: Platform[] = [];
   const floorHeight = kongMaxHeight / (numFloors + 1);
-  const slopeRatio = 0.04; // 4% de pente
+  const slopeRatio = 0.05;
  
   
   for (let i = 0; i < numFloors; i++) {
