@@ -5,7 +5,7 @@ import userRoutes from './routes/user';
 import friendRoutes from './routes/friend';
 import inviteRoutes from './routes/invite';
 import healthRoutes from './routes/health';
-import messageRoutes from './routes/messages';
+import messageRoutes from '../../chat-service/messages';
 import websocketPlugin from './plugins/websocket';
 import setupStaticFiles from './plugins/static';
 import multipart from '@fastify/multipart'
