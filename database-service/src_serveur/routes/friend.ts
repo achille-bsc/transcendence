@@ -69,7 +69,7 @@ export default async function friendRoutes(server: FastifyInstance) {
       if (friendRequest.status === "ACCEPTED")
        return reply.code(402).send({ error: "Request is already accepted..." });
       friendRequest = await prisma.friend.findFirst({ where: { requesterId: friendPseudo, addresseeId: request.user.pseudo }})
-      const FriendAccept = await prisma.friend.updateFirst({
+      const FriendAccept = await prisma.friend.updateMany({
         where: { OR : [ {
          requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
          { requesterId: request.user.pseudo, addresseeId: friendPseudo}] },
@@ -86,7 +86,7 @@ export default async function friendRoutes(server: FastifyInstance) {
   }
   });
 
-  server.post('/friend/accepte', {
+  server.post('/friend/accept', {
     onRequest: [server.authenticate]
   }, async (request, reply) => { 
   const { friendPseudo } = request.body as { friendPseudo: string };
