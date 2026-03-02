@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify';
 import { prisma } from '../../prisma';
-import { findUserByPseudo } from '../utils/utils_user';
 
 export default async function userRoutes(server: FastifyInstance) {
   server.post('/checktoken', {
