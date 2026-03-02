@@ -4,7 +4,7 @@ import fp from 'fastify-plugin'; // Me sert à créer des plugins pour mon code,
 
 async function authPlugin(server: FastifyInstance) {
   await server.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET || 'fallback-secret', //faudra remplacer cette ligne plus tard pour que ça s'accorde au front, je te laisse gérer
+    secret: process.env.JWT_SECRET_FILE || 'fallback-secret', //faudra remplacer cette ligne plus tard pour que ça s'accorde au front, je te laisse gérer
     sign: {                   //signe le token, la signature, c'est tout ce dont à besoin le serveur pour reconnaître le token et l'utilisateur
       expiresIn: '7d',   // expire au bout de 7j
       algorithm: 'HS256'       // le type de cryptage, entièrement proposé par l'ia, si tu veux le bouger libre à toi      
