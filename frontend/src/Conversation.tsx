@@ -20,7 +20,7 @@ import { useState } from "react";
 //   );
 // }
 
-function Conversation() {
+export default function Conversation() {
 	const [messages, setMessages] = useState<string[]>([]);
 
 	function handleMessageSent(message: string) {
@@ -54,8 +54,3 @@ function Conversation() {
 		</Main>
 	)
 }
-
-export default Conversation
-
-// quantico border-5 grid p-4 sm:p-5 md:p-6 grid-cols-3 content-end
-// window.location.href = `/chat/${id}

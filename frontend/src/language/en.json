@@ -21,7 +21,9 @@
 			"search": "Search someone...",
 			"add": "Add",
 			"pending": "Pending",
-			"block": "Blocked"
+			"block": "Blocked",
+			"profile": "Profile",
+			"deconnexion": "Deconnexion"
 		},
 		"Chat_page": {
 			"input": "Type your message..."
@@ -37,6 +39,19 @@
 		},
 		"Game_page": {
 			"description": "I am the game page"
+		},
+		"Alt_text": {
+			"menu_icon": "Menu icon",
+			"friend_icon": "Friend icon",
+			"game_icon": "Game icon",
+			"language_icon": "Language icon",
+			"dm_icon": "Dm icon",
+			"profile_icon": "Profile icon",
+			"profile_picture": "Profile picture",
+			"friend_request_accept": "Accept friend request",
+			"friend_request_reject": "Reject friend request",
+			"github_logo": "github logo for login",
+			"send_logo": "logo send for sending a message"
 		}
 	}
 }

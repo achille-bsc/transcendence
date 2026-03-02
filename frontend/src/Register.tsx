@@ -42,13 +42,15 @@ function Register () {
 			return;
 		}
 
-		window.location.href = "/log";
+		const token = data.token;
+		localStorage.setItem("token", token);
+		window.location.href = "/";
 	}
 
 	return (
 		<div className="relative quantico-regular">
 			<Main>
-				<div className="place-items-center">
+				<div className="w-full place-items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					<form 
 						onSubmit={handleRegister}
 						className="space-y-4 bg-[var(--background-box-select)] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">

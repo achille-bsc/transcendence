@@ -5,10 +5,10 @@ import { useLang } from './script/langProvider';
 import Main from './utils/Main.tsx';
 
 function Home () {
-	// if (!(await verifToken(localStorage.getItem('token') || "any")))
-	// {
-	// 	window.location.href = "/log";
-	// }
+	if (!localStorage.getItem("token")) {
+		window.location.href = "/log";
+		return;
+	}
 	const lang = useLang().getLang();
 
 	return (

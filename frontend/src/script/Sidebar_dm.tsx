@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyButton from "../Button";
+import { useLang } from "./langProvider";
 
 async function fetchFriends() {
 	return [
@@ -12,63 +13,6 @@ async function fetchFriends() {
 			author: "Alice",
 			last_message: "Hey, how are you?"
 		},
-		{
-			id: 2,
-			username: "Bob",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "Let's play tonight!"
-		},
-		{
-			id: 3,
-			username: "Charlie",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "See you tomorrow 👋"
-		},
-		{
-			id: 4,
-			username: "Alice",
-			picture: "/src/img/img.webp",
-			author: "Alice",
-			last_message: "Hey, how are you?"
-		},
-		{
-			id: 5,
-			username: "Bob",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "Let's play tonight!"
-		},
-		{
-			id: 6,
-			username: "Charlie",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "See you tomorrow 👋"
-		},
-		{
-			id: 7,
-			username: "Micheline",
-			picture: "/src/img/img.webp",
-			author: "Alice",
-			last_message: "Hey, how are you?"
-		},
-		{
-			id: 8,
-			username: "Michel",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "Let's play tonight!"
-		},
-		{
-			id: 9,
-			username: "Gerard",
-			picture: "/src/img/img.webp",
-			author: "You",
-			last_message: "See you tomorrow 👋"
-		},
-		
 	];
 }
 
@@ -107,6 +51,7 @@ interface InputProps {
 
 export default function Sidebar_dm({className} : InputProps, {children})
 {
+	const lang = useLang().getLang();
 	const [friends, setFriends] = useState<{ id: number; username: string; picture: string; author: string; last_message: string; }[]>([]);
 	useEffect(() => {
 		fetchFriends().then(data => {
@@ -120,14 +65,14 @@ export default function Sidebar_dm({className} : InputProps, {children})
 
 	return (
 		<div className={className}>
-			<div className="h-[calc(100vh-5rem)]  overflow-y-auto border-r-2 border-b border-solid">
+			<div className="h-[calc(100vh-5rem)]  overflow-y-auto border-r-2 border-b-0 border-solid">
 				<div className="grid grid-cols-1 gap-6">
 				{friends.map((friend) => (
 					<MyButton key={friend.id} onClick={() => openConversation(friend.id)}>
 					<div className="grid grid-cols-1 p-3 border-b">
 						<img
 						src={friend.picture}
-						alt="friend"
+						alt={lang.Alt_text.profile_picture}
 						className="w-[5rem] aspect-square rounded-full object-cover justify-self-center mb-2"
 						/>
 						<p>{friend.username}</p>

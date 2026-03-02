@@ -4,6 +4,7 @@ import Main from "./utils/Main.tsx"
 import Sidebar from "./utils/Sidebar.tsx"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLang } from "./script/langProvider.tsx";
 import "./index.css";
 import "./Home.css";
 
@@ -33,6 +34,12 @@ async function getUsername()
 }
 
 function Profile() {
+	const token = localStorage.getItem("token");
+	if (!token) {
+		window.location.href = "/log";
+		return null;
+	}
+	const lang = useLang().getLang();
 	const { username } = useParams();
 	const [loggedUser, setLoggedUser] = useState(null);
 	useEffect(() => {
@@ -89,7 +96,7 @@ function Profile() {
 							<p>{profileToDisplay}</p>
 						</div>
 						<div className="border-b-2 border-solid p-6">
-							<Img src="/src/img/img.webp" alt="User Profile Picture" className="w-[15vw] aspect-square rounded-full object-cover"/>	
+							<Img src="/src/img/img.webp" alt={lang.Alt_text.profile_picture} className="w-[15vw] aspect-square rounded-full object-cover"/>	
 						</div>
 						<div className="grid grid-cols-3 w-full gap-6 text-[var(--default)] text-[10px] md:text-[25px]">
 							<div className="justify-self-start">
