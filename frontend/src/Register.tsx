@@ -48,74 +48,76 @@ function Register () {
 	}
 
 	return (
-		<div className="relative quantico-regular">
+		<div className="quantico-regular">
 			<Main>
-				<div className="w-full place-items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-					<form 
-						onSubmit={handleRegister}
-						className="space-y-4 bg-[var(--background-box-select)] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]">
-						<div className="flex">
-							<a className="w-1/2 text-center p-4 sm:p-5 bg-[var(--not-selected-items)] cursor-pointer" href="log"><div >{lang.Log_register_page.login}</div></a>
-							<div className="w-1/2 text-center p-4 sm:p-5 cursor-pointer">{lang.Log_register_page.register}</div>
-						</div>
-						<div className="p-4 sm:p-5 md:p-6">
-							<label className="flex justify-center"><br />
-								<RegisterInput
-									type="text"
-									id="name"
-									name="name"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
-									placeholder={lang.Log_register_page.pseudo}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
-									autoComplete="false"
-									required
-									/>
-							</label><br />
-							<label className="flex justify-center"><br />
-								<RegisterInput
-									type="email"
-									id="email"
-									name="email"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
-									placeholder={lang.Log_register_page.email}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-									autoComplete="false"
-									required
-									/>
-							</label><br />
-							<label className="flex justify-center">
-								<RegisterInput
-									type="password"
-									id="password"
-									name="password"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
-									placeholder={lang.Log_register_page.password}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-									autoComplete="false"
-									required
-									/>
-							</label><br />
-							<label className="flex justify-center">
-								<RegisterInput 
-									type="password"
-									id="confirmpassword"
-									name="confirmpassword"
-									className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
-									placeholder={lang.Log_register_page.confirm_password}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
-									autoComplete="false"
-									required
-									/>
-							</label><br />
-							<div className="flex justify-center items-center transition-all duration-200 ">
-								<RegisterButton
-									label={lang.Log_register_page.register}
-									icon=""
-									className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background:var(--button)] focus:outline-2 text-[var(--white)]"
-									/>
+				<div className="relative w-full place-items-center h-[calc(85vh-20px)] flex flex-col overflow-y-auto">
+					<div className="my-auto">
+						<form 
+							onSubmit={handleRegister}
+							className="space-y-4 bg-[var(--background-box-select)]  w-[50vw]">
+							<div className="flex">
+								<a className="w-1/2 text-center p-4 sm:p-5 bg-[var(--not-selected-items)] cursor-pointer" href="log"><div >{lang.Log_register_page.login}</div></a>
+								<div className="w-1/2 text-center p-4 sm:p-5 bg-[var(--background-box-select)] cursor-pointer">{lang.Log_register_page.register}</div>
 							</div>
-						</div>
-					</form>
+							<div className="p-4 sm:p-5 md:p-6">
+								<label className="flex justify-center"><br />
+									<RegisterInput
+										type="text"
+										id="name"
+										name="name"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
+										placeholder={lang.Log_register_page.pseudo}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPseudo(e.target.value)}
+										autoComplete="false"
+										required
+										/>
+								</label><br />
+								<label className="flex justify-center"><br />
+									<RegisterInput
+										type="email"
+										id="email"
+										name="email"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
+										placeholder={lang.Log_register_page.email}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+										autoComplete="false"
+										required
+										/>
+								</label><br />
+								<label className="flex justify-center">
+									<RegisterInput
+										type="password"
+										id="password"
+										name="password"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
+										placeholder={lang.Log_register_page.password}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+										autoComplete="false"
+										required
+										/>
+								</label><br />
+								<label className="flex justify-center">
+									<RegisterInput 
+										type="password"
+										id="confirmpassword"
+										name="confirmpassword"
+										className="w-full focus:outline-hidden border p-2 sm:p-2.5 text-sm sm:text-base bg-[var(--background-box)] placeholder-[var(--props)] border-[var(--default)] text-[var(--contrast)]"
+										placeholder={lang.Log_register_page.confirm_password}
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+										autoComplete="false"
+										required
+										/>
+								</label><br />
+								<div className="flex justify-center items-center transition-all duration-200 ">
+									<RegisterButton
+										label={lang.Log_register_page.register}
+										icon=""
+										className="w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background:var(--button)] focus:outline-2 text-[var(--white)]"
+										/>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</Main>
 		</div>

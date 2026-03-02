@@ -4,38 +4,34 @@ import { useNavigate } from "react-router-dom";
 import MyButton from "../Button";
 import { useLang } from "./langProvider";
 
-async function fetchFriends() {
-	return [
-		{
-			id: 1,
-			username: "Alice",
-			picture: "/src/img/img.webp",
-			author: "Alice",
-			last_message: "Hey, how are you?"
-		},
-	];
+async function fetchFriends()
+{
+	const token = localStorage.getItem("token");
+	if (!token) {
+ 		console.error("Token not found");
+ 		return ;
+	}
+	try
+	{
+		const res = await fetch("/api/db/friend/list", {
+		method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+			},
+		});
+		console.log("Res friendlist", res);
+		if (!res.ok)
+			alert("An error occured");
+		const data = await res.json()
+		console.log(data);
+		return data;
+	}
+	catch (err)
+	{
+		console.log(err);
+		return;
+	}
 }
-
-// async function fetchFriends(username)
-// {
-// 	try
-// 	{
-// 		const response = await fetch('https://caddy:443/db/friends', {
-// 			method: 'POST',
-// 			body: JSON.stringify(username)
-// 		});
-// 		if (!response.ok)
-// 			throw new Error('Something went wrong');
-// 		const data = await response.json();
-// 		return data;
-// 	}
-// 	catch (error)
-// 	{
-// 		console.error('Error:', error);
-// 		return [];
-// 	}
-	
-// }
 
 interface InputProps {
 	type?: string;
@@ -52,10 +48,11 @@ interface InputProps {
 export default function Sidebar_dm({className} : InputProps, {children})
 {
 	const lang = useLang().getLang();
-	const [friends, setFriends] = useState<{ id: number; username: string; picture: string; author: string; last_message: string; }[]>([]);
+	const [friends, setFriends] = useState([]);
+
 	useEffect(() => {
 		fetchFriends().then(data => {
-			setFriends(data);
+			setFriends(data && data.friends);
 		});
 	}, []);
 	const navigate = useNavigate();
@@ -65,17 +62,17 @@ export default function Sidebar_dm({className} : InputProps, {children})
 
 	return (
 		<div className={className}>
-			<div className="h-[calc(100vh-5rem)]  overflow-y-auto border-r-2 border-b-0 border-solid">
+			<div className="h-[calc(100vh-5rem)] overflow-y-auto border-r-2 border-b-0 border-solid">
 				<div className="grid grid-cols-1 gap-6">
 				{friends.map((friend) => (
-					<MyButton key={friend.id} onClick={() => openConversation(friend.id)}>
+					<MyButton key={friend.id} onClick={() => openConversation(friend.pseudo)}>
 					<div className="grid grid-cols-1 p-3 border-b">
 						<img
-						src={friend.picture}
+						src="/src/img/img.webp"
 						alt={lang.Alt_text.profile_picture}
 						className="w-[5rem] aspect-square rounded-full object-cover justify-self-center mb-2"
 						/>
-						<p>{friend.username}</p>
+						<p>{friend.pseudo}</p>
 					</div>
 					</MyButton>
 				))}
