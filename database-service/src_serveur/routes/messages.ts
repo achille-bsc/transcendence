@@ -1,9 +1,9 @@
-import { createDmConversation, newDirectMessage } from '../utils/utils_message';
+import { createDmConversation, findDmConvesation, newDirectMessage } from '../utils/utils_message';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
 
 export default async function messageRoutes(server: FastifyInstance) {
-  server.post("/chat/dm", {
+  server.post("/chat/send/dm", {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { receiverPseudo, content } = request.body as {
@@ -25,5 +25,19 @@ export default async function messageRoutes(server: FastifyInstance) {
     });
     server.sendToUser(receiverPseudo, wsPayload);
     return { status: "success", message: "DM sent successfully.", data: result.new_message };
+  });
+
+  server.post("/chat/find/dm", {
+    onRequest: [server.authenticate]
+  }, async (request, reply) => {
+    const { receiverPseudo } = request.body as {
+      receiverPseudo: string;
+    };
+    const senderPseudo = request.user.pseudo;
+    const conv = await findDmConvesation(senderPseudo, receiverPseudo);
+    if (!conv) {
+      return reply.code(400).send({ error: 'Conversation not found' });
+    }
+    return { status: "success", message: "Conversation found.", data: conv };
   });
 }

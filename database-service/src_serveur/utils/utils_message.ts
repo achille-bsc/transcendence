@@ -33,7 +33,7 @@ export async function newDirectMessage(senderId: string, conversationId: string,
   return { success: true, new_message };
 }
 
-export async function createDmConversation(user1Pseudo: string, user2Pseudo: string)
+export async function findDmConvesation(user1Pseudo: string, user2Pseudo: string)
 {
 	const user1 = await findUserByPseudo(user1Pseudo);
 	const user2 = await findUserByPseudo(user2Pseudo);
@@ -54,13 +54,31 @@ export async function createDmConversation(user1Pseudo: string, user2Pseudo: str
                 },
             },
             messages: {
-                orderBy: { createdAt: 'asc' },
-                include: {
-                    sender: { select: {pseudo: true } },
-                },
-            },
+                take: 50,
+                orderBy: { createdAt: 'desc' },
+                include: {sender: { select: { pseudo: true} }}
+          },
         },
     });
+    if (convExists)
+		  return convExists;  
+    return null;
+}
+
+export async function createDmConversation(user1Pseudo: string, user2Pseudo: string)
+{
+	const user1 = await findUserByPseudo(user1Pseudo);
+	const user2 = await findUserByPseudo(user2Pseudo);
+	if (!user1 || !user2 || user1 === user2)
+		return null;
+	const convExists = await prisma.conversation.findFirst({
+        where: {
+            isGroup: false,
+            AND: [
+                { participants: { some: { userId: user1Pseudo } } },
+                { participants: { some: { userId: user2Pseudo } } }
+            ]
+        }});
 	if (convExists)
 		return convExists;
 	const newConv = await prisma.conversation.create({

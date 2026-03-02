@@ -8,8 +8,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const userId = request.user.pseudo;
-    try {
-      const friendships = await prisma.friend.findMany({
+    const friendships = await prisma.friend.findMany({
         where: {
           OR : [ 
           { requesterId: request.user.pseudo, status: 'ACCEPTED'}, 
@@ -20,15 +19,13 @@ export default async function friendRoutes(server: FastifyInstance) {
             addressee: { select: {pseudo: true} }
         }
       });
+      if (!friendships) {
+        return reply.code(411).send({ error: 'No friends found' });
+      }
       const formattedFriends = friendships.map(relation => 
          relation.requesterId === userId ? relation.addressee : relation.requester);
       return { success: true, friends: formattedFriends };
-    }
-    catch (error) {
-      server.log.error(error);
-      return reply.code(400).send({ error: 'Error when search all friend' });
-    }
-  });
+});
 
   server.post('/friend/receive', {
     onRequest: [server.authenticate]
