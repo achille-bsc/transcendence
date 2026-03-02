@@ -23,14 +23,14 @@ import { useState } from "react";
 export default function Conversation() {
 	const [messages, setMessages] = useState<string[]>([]);
 
-	function handleMessageSent(message: string) {
+	async function handleMessageSent(message: string) {
 		setMessages((prev) => [...prev, message]);
 	}
 
 	return (
 		<Main>
 			<div className="flex quantico-regular h-[calc(100dvh-5rem)] min-h-0">
-				<Sidebar className="flex-none" />
+				<Sidebar className="flex-none"/>
 				<div className="m-3 flex min-h-0 flex-1 flex-col">
 					<div className="flex-1 min-h-0 overflow-y-auto">
 						<div className="flex flex-col gap-2">
@@ -40,6 +40,7 @@ export default function Conversation() {
 								</div>
 							)}
 							{messages.map((message, index) => (
+								
 								<div key={`${index}-${message}`} className="bg-[var(--background-box)] p-2 text-[var(--contrast)] border-[var(--default)] border">
 									{message}
 								</div>

@@ -9,7 +9,7 @@ interface ChatInputBarProps {
 	receiverPseudo?: string;
 }
 
-export default function ChatInputBar ({ onMessageSent, receiverPseudo = "try" }: ChatInputBarProps) {
+export default function ChatInputBar ({ onMessageSent, receiverPseudo = "try"}: ChatInputBarProps) {
 	const [msg, setMsg] = useState("");
 	const lang = useLang().getLang();
 	
@@ -17,8 +17,7 @@ export default function ChatInputBar ({ onMessageSent, receiverPseudo = "try" }:
 		if (msg.trim() === '') {
 			return;
 		}
-		
-		const res = await fetch('/api/db/chat/dm', {
+		const res = await fetch('/api/db/chat/send/dm', {
 			method: 'POST',
 			headers: {
 				"Authorization": `Bearer ${localStorage.getItem('token')}`,
