@@ -1,74 +1,69 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyRequest } from 'fastify';
 import websocket from '@fastify/websocket';
 import fp from 'fastify-plugin';
-import { WebSocket } from 'ws'; // ← Import depuis ws
+import { WebSocket } from 'ws';
 
 export const clients = new Map<number, Set<WebSocket>>();
 
 async function websocketPlugin(server: FastifyInstance) {
   await server.register(websocket, {
     options: {
-      maxPayload: 1048576, // 1MB
-      verifyClient: (info, next) => {
-        const userId = info.req.headers['user-id'];
-        if (!userId)
-        {
-          server.log.warn('WebSocket connection attempt without user-id');
-          return next(false, 401, 'user-id header required');
-        }
-        next(true);
-      },
+      maxPayload: 1048576,
     },
   });
 
-  server.get('/ws', { websocket: true }, (socket, req) => {
+  server.get('/ws', { websocket: true }, (connection, req: FastifyRequest) => {
+    const socket = connection.socket;
     const userIdStr = req.headers['user-id'] as string;
-    if (!userIdStr) 
-    {
+
+    if (!userIdStr) {
       socket.close(1008, 'user-id header required');
       return;
     }
+
     const userId = parseInt(userIdStr);
-    if (isNaN(userId))
-    {
+    if (isNaN(userId)) {
       socket.close(1008, 'Invalid user-id');
       return;
     }
-    if (!clients.has(userId))
+
+    if (!clients.has(userId)) {
       clients.set(userId, new Set());
+    }
     clients.get(userId)!.add(socket);
-    const deviceCount = clients.get(userId)!.size;
-    server.log.info(`User ${userId} connected (${deviceCount} device(s)). Total users: ${clients.size}`);
+
     socket.send(JSON.stringify({
       type: 'connected',
       userId,
       timestamp: new Date().toISOString(),
     }));
+
     socket.on('message', (data: Buffer) => {
       try {
         const message = JSON.parse(data.toString());
         handleClientMessage(server, userId, socket, message);
       } catch (error) {
-        server.log.error(error, 'Invalid message format:');
         socket.send(JSON.stringify({
           type: 'error',
           message: 'Invalid JSON format',
         }));
       }
     });
+
     socket.on('close', () => {
       const userSockets = clients.get(userId);
-      userSockets?.delete(socket);  
-      if (userSockets?.size === 0)
-        clients.delete(userId);
-          server.log.info(`User ${userId} disconnected. Total users: ${clients.size}`);
+      if (userSockets) {
+        userSockets.delete(socket);
+        if (userSockets.size === 0) {
+          clients.delete(userId);
+        }
+      }
     });
-    socket.on('error', (error) => {
-      server.log.error(error, `WebSocket error for user ${userId}:`);
+
+    socket.on('error', () => {
       const userSockets = clients.get(userId);
       userSockets?.delete(socket);
-      if (userSockets?.size === 0) 
-        clients.delete(userId);
+      if (userSockets?.size === 0) clients.delete(userId);
     });
   });
 
@@ -76,13 +71,8 @@ async function websocketPlugin(server: FastifyInstance) {
   server.decorate('sendToUsers', sendToUsers);
   server.decorate('sendToAll', sendToAll);
   server.decorate('getOnlineUsers', getOnlineUsers);
-  
-  server.log.info('WebSocket plugin registered');
 }
 
-// ==================
-// HANDLERS
-// ==================
 
 function handleClientMessage(
   server: FastifyInstance,
@@ -97,18 +87,18 @@ function handleClientMessage(
         timestamp: new Date().toISOString(),
       }));
       break;
-      
     default:
-      server.log.warn(`Unknown message type from user ${userId}: ${message.type}`);
+      server.log.warn(`Unknown message type: ${message.type}`);
   }
 }
 
-function sendToUser(userId: number, message: string): boolean {
+function sendToUser(userId: number, message: any): boolean {
   const sockets = clients.get(userId);
-  if (!sockets || sockets.size === 0)
-    return false;
+  if (!sockets || sockets.size === 0) return false;
+
   const messageStr = JSON.stringify(message);
   let sent = 0;
+  
   sockets.forEach(socket => {
     if (socket.readyState === WebSocket.OPEN) {
       socket.send(messageStr);
@@ -119,22 +109,10 @@ function sendToUser(userId: number, message: string): boolean {
 }
 
 function sendToUsers(userIds: number[], message: any): number {
-  const messageStr = JSON.stringify(message);
   let totalSent = 0;
-  
-  userIds.forEach(userId => {
-    const sockets = clients.get(userId);
-    
-    if (sockets) {
-      sockets.forEach(socket => {
-        if (socket.readyState === WebSocket.OPEN) { // ← WebSocket.OPEN
-          socket.send(messageStr);
-          totalSent++;
-        }
-      });
-    }
+  userIds.forEach(id => {
+    if (sendToUser(id, message)) totalSent++;
   });
-  
   return totalSent;
 }
 
@@ -144,7 +122,7 @@ function sendToAll(message: any): number {
   
   clients.forEach((sockets) => {
     sockets.forEach(socket => {
-      if (socket.readyState === WebSocket.OPEN) { // ← WebSocket.OPEN
+      if (socket.readyState === WebSocket.OPEN) {
         socket.send(messageStr);
         totalSent++;
       }
@@ -160,8 +138,8 @@ function getOnlineUsers(): number[] {
 
 declare module 'fastify' {
   interface FastifyInstance {
-    sendToUser(userId: number, message: string): boolean;
-    sendToUsers(userIds: number[], message: string): number;
+    sendToUser(userId: number, message: any): boolean;
+    sendToUsers(userIds: number[], message: any): number;
     sendToAll(message: any): number;
     getOnlineUsers(): number[];
   }
