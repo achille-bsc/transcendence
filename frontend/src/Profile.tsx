@@ -89,7 +89,7 @@ function Profile() {
 								<MyButton>Message</MyButton>
 							</div>
 							<div className="justify-self-start">
-								<MyButton onClick={sendRequest()}>Ajout</MyButton>
+								<MyButton onClick={() => sendRequest()}>Ajout</MyButton>
 							</div>
 							<div className="justify-self-end">
 								<MyButton>Block</MyButton>
