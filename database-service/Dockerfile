@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 5000
 
-ENTRYPOINT [ "sh", "-c", "npx prisma generate dev && npx prisma migrate dev && npm run start" ]
+ENTRYPOINT [ "sh", "-c", "npx prisma generate && npx prisma migrate dev --name init_schema && npm run start" ]
