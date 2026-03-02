@@ -1,7 +1,7 @@
 import { createDmConversation, newDirectMessage } from '../utils/utils_message';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../../prisma';
-import { findUserByPseudo } from '../utils/utils_user';
+import { findUserById, findUserByPseudo } from '../utils/utils_user';
 //TODO
 export default async function messageRoutes(server: FastifyInstance) {
   server.post("/chat/dm", {
@@ -11,6 +11,7 @@ export default async function messageRoutes(server: FastifyInstance) {
       receiverPseudo: string;
       content: string;
     };
+    
     const senderPseudo = request.user.pseudo;
     const conv = await createDmConversation(senderPseudo, receiverPseudo);
     if (!conv) {

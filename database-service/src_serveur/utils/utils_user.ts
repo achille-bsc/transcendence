@@ -18,6 +18,7 @@ export async function findUserById(id: number) {
 	const user = await prisma.user.findUnique({
 		where: { id: id },
 	});
+	console.log(user);
 	if (!user)
 		return null;
 	return user;
