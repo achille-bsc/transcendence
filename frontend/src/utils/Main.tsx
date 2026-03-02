@@ -51,8 +51,37 @@ function fetchFriends() {
 	// }
 }
 
-function fetchPending(){
-	return ([{name: "David" }]);
+async function fetchPending(){
+	try
+	{
+		const token = localStorage.getItem("token");
+		if (!token) {
+			console.error("Token not found");
+			return [];
+		}
+		console.log(token);
+		const res = await fetch('/api/db/friend/receive', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+			}
+		});
+		console.log(res);
+		const data = await res.json();
+		console.log(data);
+		 if (data.friends && data.friends.length > 0)
+		{
+    		const pseudos = data.friends.map(f => f.friend.requester.pseudo);
+    		return pseudos;
+    	}
+		else
+    	  return [];
+	}
+	catch (error)
+	{
+		console.error("Invalid token:", error);
+		return [];
+	}
 }
 
 function isUser(username: string){

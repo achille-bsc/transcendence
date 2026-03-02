@@ -30,6 +30,34 @@ async function getUsername()
 	}
 }
 
+async function sendRequest()
+{
+	const { username } = useParams();
+	if (!username)
+	{
+		alert("YOU CANNOT ADD YOURSELF");
+		return;
+	}
+	try
+	{
+		const res = await fetch("/api/db/friend/send", {
+		method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({friendPseudo : username}),
+		});
+		if (!res.ok)
+			alert("An error occured");
+	}
+	catch
+	{
+		alert("ERROR");
+		return;
+	}
+}
+
 function Profile() {
 	const { username } = useParams();
 	const [loggedUser, setLoggedUser] = useState(null);
@@ -59,6 +87,9 @@ function Profile() {
 							</div>
 							<div className="justify-self-center">
 								<MyButton>Message</MyButton>
+							</div>
+							<div className="justify-self-start">
+								<MyButton onClick={sendRequest()}>Ajout</MyButton>
 							</div>
 							<div className="justify-self-end">
 								<MyButton>Block</MyButton>
