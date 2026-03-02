@@ -32,6 +32,27 @@ export default async function friendRoutes(server: FastifyInstance) {
     }
   });
 
+  server.post('/friend/receive', {
+    onRequest: [server.authenticate]
+  }, async (request, reply) => {
+    try {
+      const friendSend = await prisma.friend.findMany({
+        where: {
+           addresseeId: request.user.id, status: 'PENDING', },
+        include: {
+          friend: {
+            requester: { select: { id: true, pseudo: true} },
+          }
+        }
+      });
+      return { success: true, friends: friendSend };
+    }
+    catch (error) {
+      server.log.error(error);
+      return reply.code(400).send({ error: 'Error when search all friend' });
+    }
+  });
+
   server.post('/friend/send', {
     onRequest: [server.authenticate]
   }, async (request, reply) => { 
@@ -88,6 +109,27 @@ export default async function friendRoutes(server: FastifyInstance) {
     if (!FriendAccept)
       return reply.code(403).send({ error: "Anormal Error..." });
     return { success: true, message: "Friend request accepted", data: FriendAccept };
+  }
+  catch (error) {
+    server.log.error(error);
+    return reply.code(500).send({ error: "Server Error" });
+  }
+  });
+
+  server.post('/friend/refuse', {
+    onRequest: [server.authenticate]
+  }, async (request, reply) => { 
+  const { friendPseudo } = request.body as { friendPseudo: string };
+  try {
+    const friend = await findUserByPseudo(friendPseudo);
+    if (!friend)
+      return reply.code(400).send({ error: "This account doesn't exists" });
+    await prisma.friend.deleteMany({
+        where: { OR : [ {
+         requesterId: friend.id, addresseeId: request.user.id }, 
+         { requesterId: request.user.id, addresseeId: friend.id}] } })
+
+    return { success: true, message: "Friend request refused"};
   }
   catch (error) {
     server.log.error(error);
