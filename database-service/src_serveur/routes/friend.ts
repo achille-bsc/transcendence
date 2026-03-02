@@ -58,25 +58,29 @@ export default async function friendRoutes(server: FastifyInstance) {
     const friend = await findUserByPseudo(friendPseudo);
     if (!friend)
       return reply.code(400).send({ error: "This account doesn't exists" });
+    console.log("test : ", friendPseudo, request.user.pseudo);
     let friendRequest = await prisma.friend.findFirst({
     where: {
-         requesterId: request.user.pseudo, addresseeId: friend.pseudo
+         requesterId: friendPseudo, addresseeId: request.user.pseudo
         }})
+        console.log("test 2: ", friendRequest);
     if (friendRequest)
     {
       if (friendRequest.status === "PENDING")
-       return reply.code(402).send({ error: "Request is already pending..." });
+      {
+        const FriendAccept = await prisma.friend.updateMany({
+          where: { OR : [ {
+          requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
+          { requesterId: request.user.pseudo, addresseeId: friendPseudo}] },
+          data : { status : "ACCEPTED" }})
+        return { success: true, message: "Reverse friend request send, accepted", data: FriendAccept };
+      }
       if (friendRequest.status === "ACCEPTED")
        return reply.code(402).send({ error: "Request is already accepted..." });
-      friendRequest = await prisma.friend.findFirst({ where: { requesterId: friendPseudo, addresseeId: request.user.pseudo }})
-      const FriendAccept = await prisma.friend.updateMany({
-        where: { OR : [ {
-         requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
-         { requesterId: request.user.pseudo, addresseeId: friendPseudo}] },
-        data : { status : "ACCEPTED" }})
-      return { success: true, message: "Reverse friend request send, accepted", data: FriendAccept };
     }
     else {
+      if (await prisma.friend.findFirst({ where: {requesterId: request.user.pseudo, addresseeId: friendPseudo}}))
+        return reply.code(400).send({ error: "Friend request already sent" });
       const newFriendRequest = await prisma.friend.create({ data: { requesterId: request.user.pseudo, addresseeId: friendPseudo }});
       return { success: true, message: "Friend Request send succefuly", data: newFriendRequest }
     }
