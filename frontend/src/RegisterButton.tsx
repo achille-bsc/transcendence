@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLang } from "./script/langProvider";
 
 interface ButtonProps {
 	label?: string;
@@ -9,11 +10,12 @@ interface ButtonProps {
 }
 
 export default function RegisterButton ({label, icon, className, onClick} : ButtonProps) {
+	const lang = useLang().getLang();
 
 	return (
 		<button className={className ? className : "w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background-[var(--button)]] focus:outline-2 text-[var(--contrast)]"} onClick={onClick} >
-			<div>{icon == "github" ? <img className="cursor-pointer hover:[background-[var(--button)]]" src="../icons/github.png" alt="logo github pour connexion"/> : "" }</div>
-			<div>{icon == "send" ? <img className="cursor-pointer" src="../icons/send.png" alt="logo send pour envoyer le message"/> : "" }</div>
+			<div>{icon == "github" ? <img className="cursor-pointer hover:[background-[var(--button)]]" src="../icons/github.png" alt={lang.Alt_text.github_logo}/> : "" }</div>
+			<div>{icon == "send" ? <img className="cursor-pointer" src="../icons/send.png" alt={lang.Alt_text.send_logo}/> : "" }</div>
 			{label}
 		</button>
 	)

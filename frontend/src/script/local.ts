@@ -25,6 +25,8 @@ export interface Translations {
 		add: string;
 		pending: string;
 		block: string;
+		profile: string;
+		deconnexion: string;
 	};
 	Chat_page: {
 		input: string;
@@ -40,7 +42,20 @@ export interface Translations {
 	};
 	Game_page: {
 		description: string;
-	}
+	};
+	Alt_text: {
+			menu_icon: string;
+			friend_icon: string;
+			game_icon: string;
+			language_icon: string;
+			dm_icon: string;
+			profile_icon: string;
+			profile_picture: string;
+			friend_request_accept: string;
+			friend_request_reject: string;
+			github_logo: string;
+			send_logo: string;
+		}
 }
 // Load translations based on language
 export function getLanguageData(lang: string): Translations {

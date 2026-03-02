@@ -6,7 +6,7 @@ import Main from "./utils/Main.tsx"
 import { useLang } from "./script/langProvider.tsx";
 import '../node_modules/tailwindcss/index.css';
 
-function Log () {
+export default function Log () {
 
 	const [pseudo, setPseudo] = useState("");
 	const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ function Log () {
 			"&scope=user:email";
 		window.location.href = githubAuthUrl;
 	}
-	
+
 	async function handleLogin(e :React.FormEvent) {
 		console.log("P = ", pseudo, " PASS = ", password,);
 		e.preventDefault();
@@ -97,7 +97,7 @@ function Log () {
 							<div className="flex items-center justify-center">
 								<RegisterButton
 									icon="github"
-									className="py-4 px-[35%] border-t-2 border-[var(--default)] place-items-center w-full sm:w-auto p-2 px-2 text-sm sm:text-base"
+									className="py-4 px-[35%] sm:w-auto border-t-2 border-[var(--default)] place-items-center w-full p-2 px-2 text-sm sm:text-base"
 									onClick={handleGithubLogin}
 									/>
 							</div>
@@ -107,7 +107,3 @@ function Log () {
 			</div>
 	)
 }
-// w-[90%] sm:w-[70%] md:w-[50%] lg:w-[35%]
-export default Log
-
-//return de l'ID pseudo email et token

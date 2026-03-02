@@ -9,7 +9,7 @@ interface ChatInputBarProps {
 	receiverPseudo?: string;
 }
 
-export default function ChatInputBar ({ onMessageSent, receiverPseudo = "help" }: ChatInputBarProps) {
+export default function ChatInputBar ({ onMessageSent, receiverPseudo = "try" }: ChatInputBarProps) {
 	const [msg, setMsg] = useState("");
 	const lang = useLang().getLang();
 	

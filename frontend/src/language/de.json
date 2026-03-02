@@ -21,7 +21,9 @@
 			"search": "Suche jemanden...",
 			"add": "Hinzufügen",
 			"pending": "Ausstehend",
-			"block": "Gesperrt"
+			"block": "Gesperrt",
+			"profile": "Profil",
+			"deconnexion": "Abmelden"
 		},
 		"Chat_page": {
 			"input": "Geben Sie Ihre Nachricht ein..."
@@ -37,6 +39,19 @@
 		},
 		"Game_page": {
 			"description": "Ich bin die Spiel-Seite"
+		},
+		"Alt_text": {
+			"menu_icon": "Menü-Symbol",
+			"friend_icon": "Freundes-Symbol",
+			"game_icon": "Spiel-Symbol",
+			"language_icon": "Sprachen-Symbol",
+			"dm_icon": "Direktnachrichten-Symbol",
+			"profile_icon": "Profil-Symbol",
+			"profile_picture": "Profilbild",
+			"friend_request_accept": "Freundesanfrage akzeptieren",
+			"friend_request_reject": "Freundesanfrage ablehnen",
+			"github_logo": "github-Logo für die Anmeldung",
+			"send_logo": "Logo zum Senden einer Nachricht"
 		}
 	}
 }

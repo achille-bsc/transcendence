@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyButton from "../Button";
+import { useLang } from "../script/langProvider";
 
 // async function fetchFriends() {
 // 	return [
@@ -61,6 +62,7 @@ async function fetchFriends()
 
 function Sidebar({children})
 {
+	const lang = useLang().getLang();
     const [friends, setFriends] = useState([]);
     useEffect(() => {
         fetchFriends().then(data => {
@@ -79,7 +81,7 @@ function Sidebar({children})
 			    	<div className="w-[30vw] p-3 border-b flex items-center gap-6 text-[var(--default)]">
 			        	<img
 			        	    src="/src/img/img.webp"
-			        	    alt={friend.pseudo}
+			        	    alt={lang.Alt_text.profile_picture}
 			        	    className="w-[5vw] aspect-square rounded-full"
 			        	/>
 			        	<span>{friend.pseudo}</span>
