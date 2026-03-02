@@ -11,31 +11,44 @@ function DisplayMenu(){
 	return
 }
 
-async function fetchFriends() {
-	try
-	{
-		const token = localStorage.getItem("token");
-		if (!token) {
-			console.error("Token not found");
-			return false;
-		}
-		console.log("CHEEEEEEEEEEEEEEEEEEEEF", token);
-		const res = await fetch('/api/db/profileuser', {
-			method: "POST",
-			headers: {
-				"Authorization": `Bearer ${token}` 
-			}
-		});
-		console.log("TESSSSSSST", res);
-		const data = await res.json();
-		console.log("TEST", data.user.pseudo);
-		return data.user.pseudo;
-	}
-	catch (error)
-	{
-		console.error("Invalid token:", error);
-		return false;
-	}
+function fetchFriends() {
+	return ([{name: "David" }, 
+		{name: "EST" },
+		{name: "OUAIS" }
+	]);
+	// try
+	// {
+	// 	const token = localStorage.getItem("token");
+	// 	if (!token) {
+	// 		console.error("Token not found");
+	// 		return false;
+	// 	}
+	// 	console.log(token);
+	// 	const res = await fetch('/api/db/profileuser', {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Authorization": `Bearer ${token}`,
+	// 		}
+	// 	});
+	// 	console.log(res);
+	// 	if (!res.ok)
+	// 	{
+	// 		console.error("Server error:", res.status);
+	// 		const text = await res.text();
+	// 		console.error("Response body:", text);
+	// 		return false;
+	// 	}
+	// 	console.log(res.status);
+	// 	console.log(res.ok);
+	// 	const data = await res.json();
+	// 	console.log(data);
+	// 	return data.user.pseudo;
+	// }
+	// catch (error)
+	// {
+	// 	console.error("Invalid token:", error);
+	// 	return false;
+	// }
 }
 
 function fetchPending(){
@@ -50,6 +63,8 @@ function isUser(username: string){
 }
 
 function SearchBar() {
+	const { getLang, setLang } = useLang();
+	const lang = useLang().getLang();
 	const [query, setQuery] = useState("");
 	const [error, setError] = useState("");
 	const handleSubmit = (e) => {
@@ -67,7 +82,7 @@ function SearchBar() {
 	 	 	<form onSubmit={handleSubmit}>
 	 	 	  	<input
 	 	 	    	type="text"
-	 	 	    	placeholder="Search user..."
+	 	 	    	placeholder={lang.navbar.search}
 	 	 	    	value={query}
 	 	 	    	onChange={(e) => setQuery(e.target.value)}
 	 	 	    	className="border p-2 rounded"
@@ -135,11 +150,6 @@ function Main({children = ""}) {
 									</ul>
 									<div className="flex justify-center p-2">
   										<SearchBar/>
-  										<input
-  											type="text"
-  											placeholder={lang.navbar.search}
-  											className={`focus:outline-hidden border-1 border-solid border-[var(--violet-default)] text-[#969696] text-sm p-2 ${!isOn ? "bg-[#EFE0FF]" : "bg-[#2D2D2D]"}`}
-  										/>
   									</div>
         						</div>
         					)}
