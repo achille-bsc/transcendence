@@ -65,13 +65,13 @@ export default async function friendRoutes(server: FastifyInstance) {
     where: {
          requesterId: request.user.id, addresseeId: friend.id 
         }})
-    if (friendRequest.status === "PENDING")
-      return reply.code(402).send({ error: "Request is already pending..." });
-    if (friendRequest.status === "ACCEPTED")
-      return reply.code(402).send({ error: "Request is already accepted..." });
-    friendRequest = await prisma.friend.findFirst({ where: { requesterId: friend.id, addresseeId: request.user.id }})
     if (friendRequest)
     {
+      if (friendRequest.status === "PENDING")
+       return reply.code(402).send({ error: "Request is already pending..." });
+      if (friendRequest.status === "ACCEPTED")
+       return reply.code(402).send({ error: "Request is already accepted..." });
+      friendRequest = await prisma.friend.findFirst({ where: { requesterId: friend.id, addresseeId: request.user.id }})
       const FriendAccept = await prisma.friend.updateFirst({
         where: { OR : [ {
          requesterId: friend.id, addresseeId: request.user.id }, 
