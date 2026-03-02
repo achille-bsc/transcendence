@@ -23,37 +23,4 @@ async function authPlugin(server: FastifyInstance) {
   });
 }
 
-/*
-2 façons de gérer les tokens :
-1 : un seul token (ce que je fais actuellement), manière suffisante pour transcendance mais pas complète, et on n'a pas accès nous même au token, on se réfère à la signature et il est stocké chez l'utilisateur
-2 : Refresh et access token, façon clean, un token logue durée (refresh) et l'autre courte durée qu'on refresh avec le premier, on peut partir là-dessus mais faudra bouger la db, ça me dérange pas.
-Je te laisse décider de ce que tu préfères
-*/
-/*
-
-EXEMPLE D'UTILISATION d'AUTHENTICATE (ce que je fais ligne 17)
-logout sert quasi à rien vu que actuellement c'est le front qui delete le token dans le localstorage
-
-server.post('/logout', {
-  onRequest: [server.authenticate]                   //Premier hook executé par fastify, et appel authenticate, si c'est bon ça continu, sinon ça tombe dans l'erreur ligne 21
-}, async (request, reply) => {
-  return { 
-    success: true, 
-    message: 'Déconnexion réussie' 
-  };
-});
-*/
-
-// Petite info supplémentaire
-/*
-Voici le module que j'ai dans mon serveur.ts, donc il me permet de récupérer l'id et l'email dans chaque requête où traine le token
-declare module '@fastify/jwt' {
-  interface FastifyJWT {
-    user: {
-      id: number
-      email: string
-    }
-  }
-}*/
-
 export default fp(authPlugin); // exporte le plugin

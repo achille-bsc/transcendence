@@ -3,7 +3,7 @@ import websocket from '@fastify/websocket';
 import fp from 'fastify-plugin';
 import { WebSocket } from 'ws';
 
-export const clients = new Map<number, Set<WebSocket>>();
+export const clients = new Map<string, Set<WebSocket>>();
 
 async function websocketPlugin(server: FastifyInstance) {
   await server.register(websocket, {
@@ -12,59 +12,62 @@ async function websocketPlugin(server: FastifyInstance) {
     },
   });
 
-  server.get('/ws', { websocket: true }, (connection, req: FastifyRequest) => {
+  server.get('/ws', { websocket: true }, async (connection, req: FastifyRequest) => {
     const socket = connection.socket;
-    const userIdStr = req.headers['user-id'] as string;
-
-    if (!userIdStr) {
-      socket.close(1008, 'user-id header required');
-      return;
-    }
-
-    const userId = parseInt(userIdStr);
-    if (isNaN(userId)) {
-      socket.close(1008, 'Invalid user-id');
-      return;
-    }
-
-    if (!clients.has(userId)) {
-      clients.set(userId, new Set());
-    }
-    clients.get(userId)!.add(socket);
-
-    socket.send(JSON.stringify({
-      type: 'connected',
-      userId,
-      timestamp: new Date().toISOString(),
-    }));
-
-    socket.on('message', (data: Buffer) => {
-      try {
-        const message = JSON.parse(data.toString());
-        handleClientMessage(server, userId, socket, message);
-      } catch (error) {
-        socket.send(JSON.stringify({
-          type: 'error',
-          message: 'Invalid JSON format',
-        }));
+    
+    try {
+      const token = (req.query as { token?: string }).token;
+      
+      if (!token) {
+        socket.close(1008, 'Token required');
+        return;
       }
-    });
 
-    socket.on('close', () => {
-      const userSockets = clients.get(userId);
-      if (userSockets) {
-        userSockets.delete(socket);
-        if (userSockets.size === 0) {
-          clients.delete(userId);
+      const decoded = server.jwt.verify<{ pseudo: string }>(token);
+      const pseudo = decoded.pseudo;
+
+      if (!clients.has(pseudo)) {
+        clients.set(pseudo, new Set());
+      }
+      clients.get(pseudo)!.add(socket);
+
+      socket.send(JSON.stringify({
+        type: 'connected',
+        pseudo,
+        timestamp: new Date().toISOString(),
+      }));
+
+      socket.on('message', (data: Buffer) => {
+        try {
+          const message = JSON.parse(data.toString());
+          handleClientMessage(server, pseudo, socket, message);
+        } catch (error) {
+          socket.send(JSON.stringify({
+            type: 'error',
+            message: 'Invalid JSON format',
+          }));
         }
-      }
-    });
+      });
 
-    socket.on('error', () => {
-      const userSockets = clients.get(userId);
-      userSockets?.delete(socket);
-      if (userSockets?.size === 0) clients.delete(userId);
-    });
+      socket.on('close', () => {
+        const userSockets = clients.get(pseudo);
+        if (userSockets) {
+          userSockets.delete(socket);
+          if (userSockets.size === 0) {
+            clients.delete(pseudo);
+          }
+        }
+      });
+
+      socket.on('error', () => {
+        const userSockets = clients.get(pseudo);
+        userSockets?.delete(socket);
+        if (userSockets?.size === 0) clients.delete(pseudo);
+      });
+
+    } catch (error) {
+      socket.close(1008, 'Invalid token');
+    }
   });
 
   server.decorate('sendToUser', sendToUser);
@@ -73,10 +76,9 @@ async function websocketPlugin(server: FastifyInstance) {
   server.decorate('getOnlineUsers', getOnlineUsers);
 }
 
-
 function handleClientMessage(
   server: FastifyInstance,
-  userId: number,
+  pseudo: string,
   socket: WebSocket,
   message: any
 ) {
@@ -92,8 +94,8 @@ function handleClientMessage(
   }
 }
 
-function sendToUser(userId: number, message: any): boolean {
-  const sockets = clients.get(userId);
+function sendToUser(pseudo: string, message: any): boolean {
+  const sockets = clients.get(pseudo);
   if (!sockets || sockets.size === 0) return false;
 
   const messageStr = JSON.stringify(message);
@@ -108,10 +110,10 @@ function sendToUser(userId: number, message: any): boolean {
   return sent > 0;
 }
 
-function sendToUsers(userIds: number[], message: any): number {
+function sendToUsers(pseudos: string[], message: any): number {
   let totalSent = 0;
-  userIds.forEach(id => {
-    if (sendToUser(id, message)) totalSent++;
+  pseudos.forEach(p => {
+    if (sendToUser(p, message)) totalSent++;
   });
   return totalSent;
 }
@@ -132,16 +134,16 @@ function sendToAll(message: any): number {
   return totalSent;
 }
 
-function getOnlineUsers(): number[] {
+function getOnlineUsers(): string[] {
   return Array.from(clients.keys());
 }
 
 declare module 'fastify' {
   interface FastifyInstance {
-    sendToUser(userId: number, message: any): boolean;
-    sendToUsers(userIds: number[], message: any): number;
+    sendToUser(pseudo: string, message: any): boolean;
+    sendToUsers(pseudos: string[], message: any): number;
     sendToAll(message: any): number;
-    getOnlineUsers(): number[];
+    getOnlineUsers(): string[];
   }
 }
 

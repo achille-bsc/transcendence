@@ -9,7 +9,6 @@ declare module 'fastify' {
 declare module '@fastify/jwt' {
   interface FastifyJWT {
     user: {
-      id: number
       pseudo : string
     }
   }

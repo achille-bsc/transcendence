@@ -13,12 +13,3 @@ export async function findUserByPseudo(pseudo: string) {
 		return null;
     return user;
 }
-
-export async function findUserById(id: number) {
-	const user = await prisma.user.findUnique({
-		where: { id: id },
-	});
-	if (!user)
-		return null;
-	return user;
-}

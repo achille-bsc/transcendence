@@ -1,7 +1,7 @@
 import { prisma } from '../../prisma'
 import { findUserByPseudo } from './utils_user';
 
-export async function newDirectMessage(senderId: number, conversationId: number, content: string)
+export async function newDirectMessage(senderId: string, conversationId: string, content: string)
 {
 	const participant = await prisma.conversationParticipant.findFirst({
 		where: {
@@ -27,7 +27,7 @@ export async function newDirectMessage(senderId: number, conversationId: number,
 			content: content
 		},
 		include: {
-      		sender: { select: { id: true, pseudo: true } },
+      		sender: { select: {pseudo: true } },
     },
   });
   return { success: true, new_message };
@@ -43,20 +43,20 @@ export async function createDmConversation(user1Pseudo: string, user2Pseudo: str
         where: {
             isGroup: false,
             AND: [
-                { participants: { some: { userId: user1.id } } },
-                { participants: { some: { userId: user2.id } } }
+                { participants: { some: { userId: user1Pseudo } } },
+                { participants: { some: { userId: user2Pseudo } } }
             ]
         },
         include: {
             participants: {
                 include: {
-                    user: { select: { id: true, pseudo: true } },
+                    user: { select: {pseudo: true } },
                 },
             },
             messages: {
                 orderBy: { createdAt: 'asc' },
                 include: {
-                    sender: { select: { id: true, pseudo: true } },
+                    sender: { select: {pseudo: true } },
                 },
             },
         },
@@ -68,15 +68,15 @@ export async function createDmConversation(user1Pseudo: string, user2Pseudo: str
       isGroup: false,
       participants: {
         create: [
-          { userId: user1.id },
-          { userId: user2.id },
+          { userId: user1Pseudo },
+          { userId: user2Pseudo },
         ],
       },
     },
     include: {
       participants: {
         include: {
-          user: { select: { id: true, pseudo: true } },
+          user: { select: {pseudo: true } },
         },
       },
       messages: true,
