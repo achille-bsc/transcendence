@@ -122,36 +122,65 @@ services:
         networks:
             - transcendence-network
         restart: unless-stopped
-# # ======================== AUTHENTICATION ========================
-    # auth-service:
-    #     build:
-    #         context: ./auth-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - 3001
-    #     secrets:
-    #         - api_pass
-    #         - jwt_secret
-    #         - github_oauth_id
-    #         - github_oauth_secret
-    #     develop:
-    #         watch:
-    #             - path: ./auth-service
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     depends_on:
-    #         user-management-service:
-    #             condition: service-started
-    #             restart: true
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #     restart: unless-stopped
+# ======================== AUTHENTICATION ========================
+    auth-service:
+        build:
+            context: ./auth-service
+            dockerfile: Dockerfile
+        expose:
+            - 3001
+        secrets:
+            - api_pass
+            - jwt_secret
+            - github_oauth_id
+            - github_oauth_secret
+        develop:
+            watch:
+                - path: ./auth-service
+                  action: sync
+                  target: /app
+                  ignore:
+                    - .git
+                    - .dockerignore
+                    - Dockerfile
+        depends_on:
+            # user-management-service:
+            #     condition: service-started
+            #     restart: true
+            database-service:
+                condition: service_healthy
+                restart: true
+        restart: unless-stopped
+
+# ======================== CHAT-SERVICE ========================
+    chat-service:
+        build:
+            context: ./chat-service
+            dockerfile: Dockerfile
+        expose:
+            - 3004
+        secrets:
+            - api_pass
+            - jwt_secret
+            - github_oauth_id
+            - github_oauth_secret
+        develop:
+            watch:
+                - path: ./chat-service
+                  action: sync
+                  target: /app
+                  ignore:
+                    - .git
+                    - .dockerignore
+                    - Dockerfile
+        depends_on:
+            # user-management-service:
+            #     condition: service-started
+            #     restart: true
+            database-service:
+                condition: service_healthy
+                restart: true
+        restart: unless-stopped
 # ======================== DB ========================
     database-service:
         container_name: database-service
@@ -219,7 +248,7 @@ services:
     #         context: ./file-management-service
     #         dockerfile: Dockerfile
     #     expose: 
-    #         - #
+    #         - 5010
     #     secrets:
     #         - api_pass
     #     develop:
@@ -237,24 +266,24 @@ services:
     #             condition: service_healthy
     #             restart: true
     #     restart: unless-stopped
-# # ======================== KONG ========================
-    # kong-service:
-    #     build:
-    #         context: ./kong-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - #
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     restart: unless-stopped
+# ======================== KONG ========================
+    kong-service:
+        build:
+            context: ./kong-service
+            dockerfile: Dockerfile
+        expose:
+            - 5001
+        develop:
+            watch:
+                - path: ./**/*.tsx
+                  action: sync+exec
+                  target: /app
+                  exec:
+                    command: "./scripts/handle_file_change.sh {{ .Path }}"
+                - path: ../shared/scripts
+                  target: /app/scripts
+                  action: sync
+        restart: unless-stopped
 # # ======================== TOURNAMENT ========================
     # tournament-service:
     #     build:
@@ -352,3 +381,4 @@ secrets:
         file: secrets/jwt_secret
     # db_url:
     #     environment: "DATABASE_URL" 
+
