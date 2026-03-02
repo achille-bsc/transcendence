@@ -53,12 +53,39 @@ function fetchFriends() {
 	// }
 }
 
-function fetchPending(){
-	return ([{name: "David" }]);
+async function fetchPending(){
+	try
+	{
+		const token = localStorage.getItem("token");
+		if (!token) {
+			console.error("Token not found");
+			return [];
+		}
+		const res = await fetch('/api/db/friend/receive', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+			}
+		});
+		const data = await res.json();
+		if (data.friends && data.friends.length > 0)
+		{
+    		const pseudos = data.friends
+  			.filter(f => f.requester)
+  			.map(f => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
+    		return pseudos;
+    	}
+		else
+    	  return [];
+	}
+	catch (error)
+	{
+		console.error("Invalid token:", error);
+		return [];
+	}
 }
 
 function isUser(username: string){
-	console.log(username);
 	if (username != "tigre")
 		return false;
 	return true;
@@ -118,11 +145,20 @@ function Main({children = ""}) {
 		{ key: "pending", label: lang.navbar.pending },
 		{ key: "blocked", label: lang.navbar.block }
 	];
-	const data = {
-		friends: fetchFriends(),
-		pending: fetchPending(),
-		blocked: []
-	};
+	const [data, setData] = useState({ friends: [], pending: [], blocked: [] });
+	useEffect(() => {
+    	async function loadData() {
+  			try {
+  				const friends = fetchFriends();
+  				const pending = await fetchPending();
+  				setData({ friends, pending, blocked: [] });
+  			}
+			catch (err) {
+  			  console.error("Error loading data:", err);
+  			}
+  		}
+  		loadData();
+  	}, []);
 	return (
 		<>
 			<div className={`relative h-dvh overflow-hidden transition-colors duration-300 bg-[var(--background)] text-[var(--default)]`} >
@@ -149,9 +185,10 @@ function Main({children = ""}) {
         					    		))}
         							</div>
         							<ul className="space-y-2 mb-3">
-										{data[activeTab]?.map(({name}) => (
-											<Friend>{name}</Friend>
-										))}
+										{data[activeTab] && data[activeTab].length > 0 ? (
+											data[activeTab].map(({ id, pseudo }) => (
+												<Friend key={id}>{pseudo}</Friend>))
+										) : (<li className="items-center text-[var(--default)]"> No friends found</li> )}
 									</ul>
 									<div className="flex justify-center p-2">
   										<SearchBar/>

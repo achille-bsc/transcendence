@@ -43,6 +43,42 @@ function Profile() {
 		fetchUsername();
 	}, []);
 	const profileToDisplay = username || loggedUser;
+	async function sendRequest()
+	{
+		if (!username)
+		{
+			alert("YOU CANNOT ADD YOURSELF");
+			return;
+		}
+		const token = localStorage.getItem("token");
+		console.log(token);
+		if (!token) {
+	 		console.error("Token not found");
+	 		return ;
+		}
+		try
+		{
+			const res = await fetch("/api/db/friend/send", {
+			method: "POST",
+				headers: {
+					"Authorization": `Bearer ${token}`,
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({friendPseudo : username}),
+			});
+			console.log("RESS", res);
+			if (!res.ok)
+				alert("An error occured");
+			const data = await res.json()
+			console.log(data);
+		}
+		catch (err)
+		{
+			alert("ERROR");
+			console.log(err);
+			return;
+		}
+	}
 	return (
 		<Main> 
 			<div className="flex quantico-regular">
@@ -61,6 +97,9 @@ function Profile() {
 							</div>
 							<div className="justify-self-center">
 								<MyButton>Message</MyButton>
+							</div>
+							<div className="justify-self-start">
+								<MyButton onClick={() => sendRequest()}>Ajout</MyButton>
 							</div>
 							<div className="justify-self-end">
 								<MyButton>Block</MyButton>
