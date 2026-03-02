@@ -1,12 +1,12 @@
 import fastify from 'fastify';
 import corsPlugin from './plugins/cors';
-import authPlugin from './plugins/tokens';
+import authPlugin from '../../auth-service/tokens';
 import authRoutes from './routes/register';
 import userRoutes from './routes/user';
 import friendRoutes from './routes/friend';
 import inviteRoutes from './routes/invite';
 import healthRoutes from './routes/health';
-import messageRoutes from './routes/messages';
+import messageRoutes from '../../chat-service/messages';
 import websocketPlugin from './plugins/websocket';
 import setupStaticFiles from './plugins/static';
 const server = fastify({ logger: true });
