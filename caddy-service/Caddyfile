@@ -10,6 +10,9 @@
 		format console
 		#format json
 	}
+#	on_demand_tls {
+#		ask https://caddy-cert-check:443/ask
+#	}
 }
 
 :80 {
