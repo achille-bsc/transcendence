@@ -7,17 +7,17 @@ export default async function friendRoutes(server: FastifyInstance) {
   server.post('/friend/list', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const userId = request.user.id;
+    const userId = request.user.pseudo;
     try {
       const friendships = await prisma.friend.findMany({
         where: {
           OR : [ 
-          { requesterId: request.user.id, status: 'ACCEPTED'}, 
-          { addresseeId: request.user.id, status: 'ACCEPTED',}
+          { requesterId: request.user.pseudo, status: 'ACCEPTED'}, 
+          { addresseeId: request.user.pseudo, status: 'ACCEPTED',}
         ] },
         include: {
-            requester: { select: { id: true, pseudo: true} },
-            addressee: { select: { id: true, pseudo: true} }
+            requester: { select: {pseudo: true} },
+            addressee: { select: {pseudo: true} }
         }
       });
       const formattedFriends = friendships.map(relation => 
@@ -36,9 +36,9 @@ export default async function friendRoutes(server: FastifyInstance) {
     try {
       const friendSend = await prisma.friend.findMany({
         where: {
-           addresseeId: request.user.id, status: 'PENDING', },
+           addresseeId: request.user.pseudo, status: 'PENDING', },
         include: {
-            requester: { select: { id: true, pseudo: true} },
+            requester: { select: {pseudo: true} },
           }
       });
       return { success: true, friends: friendSend };
@@ -63,7 +63,7 @@ export default async function friendRoutes(server: FastifyInstance) {
       return reply.code(400).send({ error: "This account doesn't exists" });
     let friendRequest = await prisma.friend.findFirst({
     where: {
-         requesterId: request.user.id, addresseeId: friend.id 
+         requesterId: request.user.pseudo, addresseeId: friend.pseudo
         }})
     if (friendRequest)
     {
@@ -71,16 +71,16 @@ export default async function friendRoutes(server: FastifyInstance) {
        return reply.code(402).send({ error: "Request is already pending..." });
       if (friendRequest.status === "ACCEPTED")
        return reply.code(402).send({ error: "Request is already accepted..." });
-      friendRequest = await prisma.friend.findFirst({ where: { requesterId: friend.id, addresseeId: request.user.id }})
+      friendRequest = await prisma.friend.findFirst({ where: { requesterId: friendPseudo, addresseeId: request.user.pseudo }})
       const FriendAccept = await prisma.friend.updateFirst({
         where: { OR : [ {
-         requesterId: friend.id, addresseeId: request.user.id }, 
-         { requesterId: request.user.id, addresseeId: friend.id}] },
+         requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
+         { requesterId: request.user.pseudo, addresseeId: friendPseudo}] },
         data : { status : "ACCEPTED" }})
       return { success: true, message: "Reverse friend request send, accepted", data: FriendAccept };
     }
     else {
-      const newFriendRequest = await prisma.friend.create({ data: { requesterId: request.user.id, addresseeId: friend.id }});
+      const newFriendRequest = await prisma.friend.create({ data: { requesterId: request.user.pseudo, addresseeId: friendPseudo }});
       return { success: true, message: "Friend Request send succefuly", data: newFriendRequest }
     }
   } catch (error) {
@@ -99,8 +99,8 @@ export default async function friendRoutes(server: FastifyInstance) {
       return reply.code(400).send({ error: "This account doesn't exists" });
     const FriendAccept = await prisma.friend.updateMany({
         where: { OR : [ {
-         requesterId: friend.id, addresseeId: request.user.id }, 
-         { requesterId: request.user.id, addresseeId: friend.id}] },
+         requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
+         { requesterId: request.user.pseudo, addresseeId: friendPseudo}] },
         data : { status : "ACCEPTED" }})
     if (!FriendAccept)
       return reply.code(403).send({ error: "Anormal Error..." });
@@ -122,8 +122,8 @@ export default async function friendRoutes(server: FastifyInstance) {
       return reply.code(400).send({ error: "This account doesn't exists" });
     await prisma.friend.deleteMany({
         where: { OR : [ {
-         requesterId: friend.id, addresseeId: request.user.id }, 
-         { requesterId: request.user.id, addresseeId: friend.id}] } })
+         requesterId: friendPseudo, addresseeId: request.user.pseudo }, 
+         { requesterId: request.user.pseudo, addresseeId: friendPseudo}] } })
     return { success: true, message: "Friend request refused"};
   }
   catch (error) {

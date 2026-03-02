@@ -21,12 +21,10 @@ export async function checkLogin(log_name: string, password: string, reply: any)
 		return user
 }
 
-export async function findProfile(input: string | number) {
+export async function findProfile(input: string) {
   let whereClause = {}
 
-  if (typeof input === 'number')
-    whereClause = { id: input }
-  else if (input.includes('@'))
+  if (input.includes('@'))
     whereClause = { email: input }
   else
     whereClause = { pseudo: input }
@@ -87,7 +85,6 @@ export async function createUser(pseudo: string, email: string, password: string
 		password: await hashPassword(password),
 	},
 	select: {
-      id: true,
       pseudo: true,
       email: true
     }

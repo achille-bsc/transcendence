@@ -12,16 +12,13 @@ export default async function userRoutes(server: FastifyInstance) {
   server.post('/profileuser', { onRequest: [server.authenticate]},
     async (request, reply) => {
     const user = await prisma.user.findUnique({
-      where: { id: request.user.id },
+      where: { pseudo: request.user.pseudo },
       select: {
-        id: true,
         pseudo: true,
-        email: true,
         createdAt: true,
         lastLoginAt: true,
       }
     });
-    console.log("test\n\n\n :", request.user.id);
     if (!user)
       return reply.code(404).send({ error: 'User not found' });
     return { user };
@@ -35,9 +32,7 @@ export default async function userRoutes(server: FastifyInstance) {
     const user = await prisma.user.findUnique({
       where: { pseudo: pseudo },
       select: {
-        id: true,
         pseudo: true,
-        email: true,
         createdAt: true,
         lastLoginAt: true,
       }
@@ -46,14 +41,4 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(404).send({ error: 'User not found' });
     return { user };
   });
-
-  server.post('/finduserid', async (request, reply) =>{
-    const { pseudo } = request.body as {
-        pseudo: string;
-    };
-    const user = await findUserByPseudo(pseudo);
-    if (!user)
-      return reply.code(404).send({ error: 'User not found' });
-    return { id: user.id };
-});
 }

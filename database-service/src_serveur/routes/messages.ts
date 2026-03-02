@@ -1,8 +1,7 @@
 import { createDmConversation, newDirectMessage } from '../utils/utils_message';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { prisma } from '../../prisma';
-import { findUserByPseudo } from '../utils/utils_user';
-//TODO
+
+
 export default async function messageRoutes(server: FastifyInstance) {
   server.post("/chat/dm", {
     onRequest: [server.authenticate]
