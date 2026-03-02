@@ -16,10 +16,8 @@ export default async function friendRoutes(server: FastifyInstance) {
           { addresseeId: request.user.id, status: 'ACCEPTED',}
         ] },
         include: {
-          friend: {
             requester: { select: { id: true, pseudo: true} },
             addressee: { select: { id: true, pseudo: true} }
-          }
         }
       });
       const formattedFriends = friendships.map(relation => 
@@ -40,10 +38,8 @@ export default async function friendRoutes(server: FastifyInstance) {
         where: {
            addresseeId: request.user.id, status: 'PENDING', },
         include: {
-          friend: {
             requester: { select: { id: true, pseudo: true} },
           }
-        }
       });
       return { success: true, friends: friendSend };
     }
