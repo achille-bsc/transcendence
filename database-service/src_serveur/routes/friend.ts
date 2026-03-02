@@ -124,7 +124,6 @@ export default async function friendRoutes(server: FastifyInstance) {
         where: { OR : [ {
          requesterId: friend.id, addresseeId: request.user.id }, 
          { requesterId: request.user.id, addresseeId: friend.id}] } })
-
     return { success: true, message: "Friend request refused"};
   }
   catch (error) {
