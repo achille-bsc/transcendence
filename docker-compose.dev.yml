@@ -1,23 +1,17 @@
-# Add the develop options when I understand better what files to watch
-# and my options here.
-# develop:
-#   watch:
-#       - path: ./##
-#         include: "#" #optional
-#         ignore: "#.#" #optional
-#         action: sync+exec
-#         target: /##
-#         exec:
-#           command: ## ###
-#
 # NOTE: secrets are mounted in the container at /run/secrets/<secret_name>
-#
-# TODO determine specific ports and secret contents
-# TODO put networks if I decide the default one is insufficient
-# TODO grant access to secrets once I know better who needs what information
+
 name: transcendence
 
 services:
+# ========================= CERT GEN CHECK ========================
+    caddy-cert-check:
+        container_name: caddy-cert-check
+        build:
+            context: ./caddy-cert-check-service
+            dockerfile: Dockerfile
+        expose:
+            - 
+
 # ========================= CADDY ========================
     caddy:
         container_name: caddy
@@ -29,8 +23,6 @@ services:
             - "8080:80"
         networks:
             - transcendence-network
-        environment:
-            - XDG_CONFIG_HOME="/app/data"
         volumes:
             - caddy-volume:/data/caddy/
         develop:
@@ -48,10 +40,10 @@ services:
                 condition: service_started
             database-service:
                 condition: service_healthy
-            # auth-service:
-            #     condition: service_started
-            # chat-service:
-            #     condition: service_started
+            auth-service:
+                condition: service_started
+            chat-service:
+                condition: service_started
             # age-of-war-service:
             #     condition: service_started
             # file-management-service:
@@ -60,42 +52,10 @@ services:
             #     condition: service_started
             # user-analytics-service:
             #     condition: service_started
-            # user-management-service:
-            #     condition: service_started
+            user-management-service:
+                condition: service_started
         restart: always
-# ======================== CHAT ========================
-    # chat-service:
-    #     container_name: chat-service
-    #     build:
-    #         context: ./chat-service
-    #         dockerfile: Dockerfile
-    #         additional_contexts:
-    #             shared_ressources: ./shared
-    #     expose:
-    #         - "3000" # arbitrary
-    #     develop:
-    #         watch:
-    #             - path: ./chat-service
-    #               action: sync
-    #               target: /app
-    #               ignore:
-    #                 - .git
-    #     networks:
-    #         - transcendence-network
-    #     depends_on:
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #         # user-management-service:
-    #         #     condition: service_started
-    #         #     restart: true
-    #         # tournament-service:
-    #         #     condition: service_started
-    #         #     restart: true
-    #         # file-managment-service:
-    #         #     condition: service_started
-    #         #     restart: true
-    #     restart: unless-stopped
+
 # ======================== FRONT ========================
     frontend:
         container_name: frontend
@@ -114,14 +74,11 @@ services:
                   ignore:
                     - .git
                     - .dockerignore
-                #   exec:
-                #     command: "./scripts/handle_file_change.sh {{ .Path }}"
-                # - path: shared/scripts
-                #   target: /app/scripts
-                #   action: sync
+                    - Dockerfile
         networks:
             - transcendence-network
         restart: unless-stopped
+
 # ======================== AUTHENTICATION ========================
     auth-service:
         build:
@@ -144,15 +101,15 @@ services:
                     - .dockerignore
                     - Dockerfile
         depends_on:
-            # user-management-service:
-            #     condition: service-started
-            #     restart: true
+            user-management-service:
+                condition: service-started
+                restart: true
             database-service:
                 condition: service_healthy
                 restart: true
         restart: unless-stopped
 
-# ======================== CHAT-SERVICE ========================
+# ======================== CHAT ========================
     chat-service:
         build:
             context: ./chat-service
@@ -174,13 +131,20 @@ services:
                     - .dockerignore
                     - Dockerfile
         depends_on:
-            # user-management-service:
-            #     condition: service-started
-            #     restart: true
             database-service:
                 condition: service_healthy
                 restart: true
+            user-management-service:
+                condition: service_started
+                restart: true
+            # tournament-service:
+            #     condition: service_started
+            #     restart: true
+            # file-managment-service:
+            #     condition: service_started
+            #     restart: true
         restart: unless-stopped
+        
 # ======================== DB ========================
     database-service:
         container_name: database-service
@@ -190,8 +154,8 @@ services:
             dockerfile: Dockerfile
             additional_contexts: 
                 shared_ressources: ./shared
-        ports:
-            - "5555:5555"
+        ports: # TEMPORARY
+            - "5555:5555"  # ONLY TO CHECK DB FROM OUTSIDE, SO ONLY FOR DEV
         expose: 
             - "5000"
         environment:
@@ -213,8 +177,8 @@ services:
                   target: /app/scripts
                   action: sync
         volumes:
-            - ./user_management:/app/uploads
-            - ./db_data:/app/data # bind mount for now so that the db can be checked outside
+            - avatars-volume:/app/uploads
+            - ./db_data:/app/data # ONLY FOR DEV
         networks:
             - transcendence-network
         restart: unless-stopped
@@ -224,13 +188,14 @@ services:
             timeout: 30s
             retries: 5
             start_period: 5s
+
 # # ======================== AGE OF WAR ========================
     # age-of-war-service:
     #     build:
     #         context: ./age-of-war-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - # #
+    #         - 5002
     #     develop:
     #         watch:
     #             - path: ./**/*.tsx
@@ -242,6 +207,7 @@ services:
     #               target: /app/scripts
     #               action: sync
     #     restart: unless-stopped
+
 # # ======================== FILE MANAGEMENT ========================
     # file-management-service:
     #     build:
@@ -266,6 +232,7 @@ services:
     #             condition: service_healthy
     #             restart: true
     #     restart: unless-stopped
+
 # ======================== KONG ========================
     kong-service:
         build:
@@ -284,13 +251,14 @@ services:
                   target: /app/scripts
                   action: sync
         restart: unless-stopped
+
 # # ======================== TOURNAMENT ========================
     # tournament-service:
     #     build:
     #         context: ./tournament-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - # 
+    #         - 5003 
     #     secrets:
     #         - api_pass
     #     develop:
@@ -312,37 +280,14 @@ services:
     #         age-of-war-service:
     #             condition: service_started
     #     restart: unless-stopped
+
 # # ======================== USER ANALYTICS ========================
     # user-analytics-service:
     #     build:
     #         context: ./user-analytics-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - #
-    #     secrets:
-    #         - api_pass
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     depends_on:
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #     restart: unless-stopped
-# # ======================== USER MANAGEMENT ========================
-    # user-management-service:
-    #     build:
-    #         context: ./user-management-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - 3002
+    #         - 5000
     #     secrets:
     #         - api_pass
     #     develop:
@@ -361,8 +306,34 @@ services:
     #             restart: true
     #     restart: unless-stopped
 
+# ======================== USER MANAGEMENT ========================
+    user-management-service:
+        build:
+            context: ./user-management-service
+            dockerfile: Dockerfile
+        expose:
+            - 3003
+        secrets:
+            - api_pass
+        develop:
+            watch:
+                - path: ./**/*.tsx
+                  action: sync+exec
+                  target: /app
+                  exec:
+                    command: "./scripts/handle_file_change.sh {{ .Path }}"
+                - path: ../shared/scripts
+                  target: /app/scripts
+                  action: sync
+        depends_on:
+            database-service:
+                condition: service_healthy
+                restart: true
+        restart: unless-stopped
+
 volumes:
     caddy-volume: 
+    avatars-volume:
 
 networks:
     transcendence-network:

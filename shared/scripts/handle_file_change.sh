@@ -6,6 +6,7 @@ EXT=${CHANGED_FILE##*.}
 
 case "$EXT" in
 	tsx | ts )
+		echo "Reacting to file $1 changing"
 		npm run build;;
 	* )
 		echo "handle_file_change: unexpected file type"
