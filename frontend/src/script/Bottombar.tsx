@@ -42,11 +42,11 @@ async function fetchFriends(): Promise<Friend[]> {
 		.filter((friend: Friend) => friend.pseudo.trim() !== "");
 }
 
-interface SidebarDmProps {
+interface BottombarProps {
 	className?: string;
 }
 
-export default function Sidebar_dm({ className }: SidebarDmProps)
+export default function Bottombar({ className }: BottombarProps)
 {
 	const lang = useLang().getLang();
 	const [friends, setFriends] = useState<Friend[]>([]);
@@ -57,20 +57,20 @@ export default function Sidebar_dm({ className }: SidebarDmProps)
 	}, []);
 	const navigate = useNavigate();
 	const openConversation = (pseudo: string) => {
-		navigate(`/dm/${encodeURIComponent(pseudo)}`);
+		navigate(`/profile/${encodeURIComponent(pseudo)}`);
 	}
 
 	return (
 		<div className={className}>
-			<div className="dm-sidebar-scroll">
-				<div className="dm-sidebar-grid">
+			<div className="dm-bottombar-scroll">
+				<div className="dm-bottombar-grid">
 				{friends.map((friend) => (
 					<MyButton key={friend.pseudo} onClick={() => openConversation(friend.pseudo)}>
-					<div className="dm-sidebar-item">
+					<div className="dm-bottombar-item">
 						<img
 						src="/src/img/img.webp"
 						alt={lang.Alt_text.profile_picture}
-						className="dm-sidebar-avatar"
+						className="dm-bottombar-avatar"
 						/>
 						<p>{friend.pseudo}</p>
 					</div>

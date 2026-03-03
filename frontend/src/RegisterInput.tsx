@@ -8,23 +8,26 @@ interface InputProps {
 	onChange?: () => void | undefined;
 	autoComplete?:string;
 	required?:boolean;
+	ariaLabel?: string;
 }
 
-export default function RegisterInput ({value, type, id, name, className, placeholder, onChange, autoComplete, required} : InputProps) {
+export default function RegisterInput ({value, type, id, name, className, placeholder, onChange, autoComplete, required, ariaLabel} : InputProps) {
+	const computedAriaLabel = ariaLabel ?? placeholder ?? name ?? id ?? "input";
 
 	return (
-		<div className="w-full">
+		<div className="input-wrap-full">
 			{placeholder}
 			<input
 				type={type}
 				id={id}
 				name={name}
 				value={value}
-				className={className}
-				placeholder={placeholder}
-				onChange={onChange}
-				autoComplete={autoComplete}
-				required={required}
+					className={className}
+					placeholder={placeholder}
+					aria-label={computedAriaLabel}
+					onChange={onChange}
+					autoComplete={autoComplete}
+					required={required}
 				/>
 		</div>
 	)

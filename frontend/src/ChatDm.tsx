@@ -28,7 +28,7 @@ export default function ChatDm ({children = ""}) {
 
 	
 	return (
-		<div className="bg-[var(--background)] min-h-screen">
+		<div className="chatdm-root">
 			<Main>
 				<Sidebar>{children}</Sidebar>
 			</Main>
