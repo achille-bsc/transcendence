@@ -6,13 +6,6 @@ import path from 'path';
 import sharp from 'sharp';
 
 
-export default async function userRoutes(server: FastifyInstance) {
-  server.post('/checktoken', {
-    onRequest: [server.authenticate]
-  }, async (request, reply) => {
-    reply.code(200).send({ success: true });
-  });
-
   server.post('/profileuser', { onRequest: [server.authenticate] },
     async (request, reply) => {
       const user = await prisma.user.findUnique({
