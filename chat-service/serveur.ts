@@ -1,19 +1,13 @@
 import fastify from 'fastify';
 import authGuardPlugin from '../../shared/plugin/authGuard';
-import authRoutes from './routes/register';
-import userRoutes from './routes/user';
-import friendRoutes from './routes/friend';
-import inviteRoutes from './routes/invite';
-import healthRoutes from './routes/health';
 import messageRoutes from '../../chat-service/messages';
 import websocketPlugin from './plugins/websocket';
-import setupStaticFiles from './plugins/static';
+
 const server = fastify({ logger: true });
 
 await server.register(authPlugin);
 await server.register(websocketPlugin);
 await server.register(setupStaticFiles);
-
 await server.register(friendRoutes);
 await server.register(authRoutes);
 await server.register(userRoutes);

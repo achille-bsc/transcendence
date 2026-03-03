@@ -1,5 +1,4 @@
-import { hashPassword, comparePassword } from './hashing';
-import { prisma } from '../../prisma'
+import { hashPassword, comparePassword } from './hashing.ts';
 
 export async function checkLogin(log_name: string, password: string, reply: any) {
 	if (log_name.includes('@'))
@@ -25,7 +24,9 @@ export async function findProfile(input: string) {
   let whereClause = {}
 
   if (input.includes('@'))
+  {
     whereClause = { email: input }
+  }
   else
     whereClause = { pseudo: input }
   const user = await prisma.user.findFirst({
