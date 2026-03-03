@@ -15,6 +15,12 @@
 #	}
 }
 
+caddy-cert-check {
+	tls internal
+	bind caddy-cert-check
+	reverse_proxy caddy-cert-check:443
+}
+
 :80 {
 	redir https://{host}:8443{uri} permanent
 }
@@ -70,6 +76,3 @@
 		reverse_proxy frontend:3000
 	}
 }
-
-# NOTE: caddy stores certificates and other important assets in a data directory
-# $XDG_CONFIG_HOME/caddy (I'll set XDG_CONFIG_HOME=/app/data probably)
