@@ -18,7 +18,7 @@ export interface Translations {
 	Home_page: {
 		game_name: string;
 		play: string;
-		Friend_online: string;
+		friend: string;
 	};
 	navbar: {
 		search: string;
@@ -26,6 +26,7 @@ export interface Translations {
 		pending: string;
 		block: string;
 		profile: string;
+		settings: string;
 		deconnexion: string;
 	};
 	Chat_page: {

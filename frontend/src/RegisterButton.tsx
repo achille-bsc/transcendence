@@ -7,15 +7,20 @@ interface ButtonProps {
 	className?: string;
 	onClick?: () => void;
 	autoComplete?:string;
+	disabled?: boolean;
 }
 
-export default function RegisterButton ({label, icon, className, onClick} : ButtonProps) {
+export default function RegisterButton ({label, icon, className, onClick, disabled = false} : ButtonProps) {
 	const lang = useLang().getLang();
 
 	return (
-		<button className={className ? className : "w-full sm:w-auto p-2 px-5 text-sm sm:text-base bg-[var(--background-box)] hover:[background-[var(--button)]] focus:outline-2 text-[var(--contrast)]"} onClick={onClick} >
-			<div>{icon == "github" ? <img className="cursor-pointer hover:[background-[var(--button)]]" src="../icons/github.png" alt={lang.Alt_text.github_logo}/> : "" }</div>
-			<div>{icon == "send" ? <img className="cursor-pointer" src="../icons/send.png" alt={lang.Alt_text.send_logo}/> : "" }</div>
+		<button
+			className={className ? className : "register-btn-default"}
+			onClick={onClick}
+			disabled={disabled}
+		>
+			<div>{icon == "github" ? <img className="register-btn-icon-github" src="../icons/github.png" alt={lang.Alt_text.github_logo}/> : "" }</div>
+			<div>{icon == "send" ? <img className="register-btn-icon-send" src="../icons/send.png" alt={lang.Alt_text.send_logo}/> : "" }</div>
 			{label}
 		</button>
 	)

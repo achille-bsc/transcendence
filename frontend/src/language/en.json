@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Kong's game",
 			"play": "PLAY",
-			"Friend_online": "Friends online :"
+			"friend": "Friends :"
 		},
 		"navbar": {
 			"search": "Search someone...",
@@ -23,7 +23,8 @@
 			"pending": "Pending",
 			"block": "Blocked",
 			"profile": "Profile",
-			"deconnexion": "Deconnexion"
+			"settings": "Settings",
+			"deconnexion": "Logout"
 		},
 		"Chat_page": {
 			"input": "Type your message..."

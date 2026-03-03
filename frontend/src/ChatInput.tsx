@@ -9,12 +9,16 @@ interface InputProps {
 	required:boolean;
 	autoComplete?: string;
 	onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+	disabled?: boolean;
+	ariaLabel?: string;
+	maxLength?: number;
 }
 
-export default function ChatInput ({type, id, name, value, className, placeholder, onChange, required, autoComplete, onKeyDown} : InputProps) {
+export default function ChatInput ({type, id, name, value, className, placeholder, onChange, required, autoComplete, onKeyDown, disabled = false, ariaLabel, maxLength} : InputProps) {
+	const computedAriaLabel = ariaLabel ?? placeholder ?? name ?? id ?? "chat input";
 
 	return (
-		<div className="w-full">
+		<div className="input-wrap-full">
 			<input
 				type={type}
 				id={id}
@@ -23,10 +27,13 @@ export default function ChatInput ({type, id, name, value, className, placeholde
 				className={className}
 				placeholder={placeholder}
 				onChange={onChange}
-				required={required}
-				autoComplete={autoComplete}
-				onKeyDown={onKeyDown}
-				/>
+				aria-label={computedAriaLabel}
+						required={required}
+						autoComplete={autoComplete}
+						onKeyDown={onKeyDown}
+						maxLength={maxLength}
+					disabled={disabled}
+					/>
 		</div>
 	)
 }

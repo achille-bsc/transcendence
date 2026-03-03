@@ -70,19 +70,19 @@ function Sidebar({children})
         });
     }, [children]);
 	const navigate = useNavigate();
-	const openConversation = (id) => {
-		navigate(`/conversation/${id}`);
+	const openConversation = (pseudo) => {
+		navigate(`/profile/${encodeURIComponent(pseudo)}`);
 	}
 
     return (
-        <div className="w-[30vw] min-h-screen border-r-2 border-solid overflow-y-auto text-[var(--default)]">
-	    	{friends.map((friend) => (
-  				<MyButton key={friend.id} className="w-full" onClick={() => openConversation(friend.id)}>
-			    	<div className="w-[30vw] p-3 border-b flex items-center gap-6 text-[var(--default)]">
+        <div className="sidebar-root">
+		    	{friends.map((friend) => (
+	  				<MyButton key={friend.pseudo} className="sidebar-btn" onClick={() => openConversation(friend.pseudo)}>
+			    	<div className="sidebar-item">
 			        	<img
 			        	    src="/src/img/img.webp"
 			        	    alt={lang.Alt_text.profile_picture}
-			        	    className="w-[5vw] aspect-square rounded-full"
+			        	    className="sidebar-avatar"
 			        	/>
 			        	<span>{friend.pseudo}</span>
 			    	</div>

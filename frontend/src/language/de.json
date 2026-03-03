@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Kongs Spiel",
 			"play": "SPIELEN",
-			"Friend_online": "Freunde online :"
+			"friend": "Freunde :"
 		},
 		"navbar": {
 			"search": "Suche jemanden...",
@@ -23,6 +23,7 @@
 			"pending": "Ausstehend",
 			"block": "Gesperrt",
 			"profile": "Profil",
+			"settings": "Einstellungen",
 			"deconnexion": "Abmelden"
 		},
 		"Chat_page": {

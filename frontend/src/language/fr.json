@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Le jeu de Kong",
 			"play": "JOUER",
-			"Friend_online": "Amis en ligne :"
+			"friend": "Amis :"
 		},
 		"navbar": {
 			"search": "Rechercher quelqu'un...",
@@ -23,6 +23,7 @@
 			"pending": "En attente",
 			"block": "Bloqués",
 			"profile": "Profil",
+			"settings": "Paramètres",
 			"deconnexion": "Déconnexion"
 		},
 		"Chat_page": {

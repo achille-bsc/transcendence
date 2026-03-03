@@ -5,8 +5,6 @@ import Sidebar from "./utils/Sidebar.tsx"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLang } from "./script/langProvider.tsx";
-import "./index.css";
-import "./Home.css";
 
 async function getUsername()
 {
@@ -33,7 +31,7 @@ async function getUsername()
 	}
 }
 
-function Profile() {
+export default function Profile() {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		window.location.href = "/log";
@@ -88,36 +86,36 @@ function Profile() {
 	}
 	return (
 		<Main> 
-			<div className="flex quantico-regular">
+			<div className="profile-layout quantico-regular">
 				<Sidebar>{loggedUser}</Sidebar>
-				<div className="flex-1 flex flex-col items-center">
-					<div className="w-[40vw] flex flex-col items-center space-y-4 p-6">
-						<div className="text-[var(--default)] text-[20px] md:text-[30px]">
+				<div className="profile-main">
+					<div className="profile-card">
+						<div className="profile-avatar-wrap">
+							<Img src="/src/img/img.webp" alt={lang.Alt_text.profile_picture} className="profile-avatar"/>	
+						</div>
+						<div className="profile-username">
 							<p>{profileToDisplay}</p>
 						</div>
-						<div className="border-b-2 border-solid p-6">
-							<Img src="/src/img/img.webp" alt={lang.Alt_text.profile_picture} className="w-[15vw] aspect-square rounded-full object-cover"/>	
-						</div>
-						<div className="grid grid-cols-3 w-full gap-6 text-[var(--default)] text-[10px] md:text-[25px]">
-							<div className="justify-self-start">
+						<div className="profile-actions">
+							<div className="profile-action-start">
 								<MyButton>Invite</MyButton>
 							</div>
-							<div className="justify-self-center">
-								<MyButton>Message</MyButton>
+							<div className="profile-action-center">
+								<MyButton onClick={() => window.location.href = `/dm/${username}`}>Message</MyButton>
 							</div>
-							<div className="justify-self-start">
+							<div className="profile-action-start">
 								<MyButton onClick={() => sendRequest()}>Ajout</MyButton>
 							</div>
-							<div className="justify-self-end">
+							<div className="profile-action-end">
 								<MyButton>Block</MyButton>
 							</div>
 						</div>
 					</div>	
-					<div className="w-[40vw] flex flex-col space-y-4 mt-10 p-4">
-						<div className="border-b-2 border-solid text-center text-[var(--default)] text-[20px] md:text-[30px]">
+					<div className="profile-stats-wrap">
+						<div className="profile-stats-title">
 							<p>STATS</p>
 						</div>
-						<div className="p-4 text-[var(--default)] text-[15px] md:text-[20px] space-y-4">
+						<div className="profile-stats-list">
 							<p>Games played:</p>
 							<p>Wins:</p>
 							<p>Losses:</p>
@@ -129,5 +127,3 @@ function Profile() {
 		</Main>
 	);
 }
-
-export default Profile

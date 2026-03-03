@@ -52,13 +52,8 @@ function fetchFriends() {
 }
 
 async function fetchPending(){
-	try
-	{
-		const token = localStorage.getItem("token");
-		if (!token) {
-			console.error("Token not found");
-			return [];
-		}
+	const token = localStorage.getItem("token");
+	if (localStorage.getItem("token")) {
 		const res = await fetch('/api/db/friend/receive', {
 			method: "POST",
 			headers: {
@@ -68,18 +63,13 @@ async function fetchPending(){
 		const data = await res.json();
 		if (data.friends && data.friends.length > 0)
 		{
-    		const pseudos = data.friends
-  			.filter(f => f.requester)
-  			.map(f => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
-    		return pseudos;
-    	}
+			const pseudos = data.friends
+			.filter(f => f.requester)
+			.map(f => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
+			return pseudos;
+		}
 		else
-    	  return [];
-	}
-	catch (error)
-	{
-		console.error("Invalid token:", error);
-		return [];
+			return [];
 	}
 // async function fetchFriends() {
 
@@ -111,13 +101,21 @@ function Profile() {
 	window.location.href = "/profile";
 }
 
+function Settings() {
+	if (!localStorage.getItem("token"))
+	{
+		window.location.href = "/log";
+		return ;
+	}
+	window.location.href = "/settings";
+}
+
 function Deconnexion() {
 	localStorage.removeItem("token");
 	window.location.href = "/log";
 }
 
 function SearchBar() {
-	const { getLang, setLang } = useLang();
 	const lang = useLang().getLang();
 	const [query, setQuery] = useState("");
 	const [error, setError] = useState("");
@@ -131,17 +129,18 @@ function SearchBar() {
     	setError("");
   		window.location.href = `/profile/${query}`
   	};
-	return (
-		<>
-	 	 	<form onSubmit={handleSubmit}>
-	 	 	  	<input
-	 	 	    	type="text"
-	 	 	    	placeholder={lang.navbar.search}
-	 	 	    	value={query}
+		return (
+			<>
+		 	 	<form onSubmit={handleSubmit} aria-label="Search user form">
+		 	 	  	<input
+		 	 	    	aria-label="Search user"
+		 	 	    	type="text"
+		 	 	    	placeholder={lang.navbar.search}
+		 	 	    	value={query}
 	 	 	    	onChange={(e) => setQuery(e.target.value)}
-	 	 	    	className="border p-2 rounded"
+	 	 	    	className="main-search-form-input"
 				/>
-				{error && <p className="text-center text-red-500">{error}</p>}
+				{error && <p className="main-search-error">{error}</p>}
 	 	 	</form>
 		</>
 	);
@@ -179,93 +178,89 @@ function Main({children = ""}) {
 	const [profile, setprofile] = useState(false);
 
 	return (
-		<div className={`relative h-dvh overflow-hidden bg-[var(--background)] text-[var(--default)]`} >
-			<div className={`min-h-20 border-b-2 border-solid flex items-center justify-between px-2 md:px-10 relative bg-[var(--background-header)]`}>
-				<div className="flex items-center space-x-4">
+		<div className="main-layout" >
+			<div className="main-header">
+				<div className="main-section-left">
 					<MyButton onClick={() => window.location.href = "/chat"}>
-						<Img src={menu} alt={lang.Alt_text.menu_icon} className="w-8 md:w-10 h-auto" />
+						<Img src={menu} alt={lang.Alt_text.menu_icon} className="main-icon" />
 					</MyButton>
 					<div >
 						<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
-							<Img src={friends} alt={lang.Alt_text.friend_icon} className="w-8 md:w-10 h-auto" />
+							<Img src={friends} alt={lang.Alt_text.friend_icon} className="main-icon" />
 						</MyButton>
 						{openMenu === "friends" && (
-							<div className={`absolute top-full w-70 text-[var(--default)] bg-[var(--background-box-select)]`}>
-								<div className="grid grid-cols-3 mb-3">
+							<div className="main-friends-menu">
+								<div className="main-tabs">
 									{tabs.map((tab) => (
 									<button
 										key={tab.key}
 										onClick={() => setActiveTab(tab.key)}
-										className={`px-2 py-1 ${!isOn ? (activeTab === tab.key ? "bg-[#E5CDFF]" : "bg-[#F0E2FF] hover:text-white") : (activeTab === tab.key ? "bg-[#282828]" : "bg-[#202020] hover:text-white")}`}
+										className={`main-tab ${!isOn ? (activeTab === tab.key ? "main-tab-light-active" : "main-tab-light") : (activeTab === tab.key ? "main-tab-dark-active" : "main-tab-dark")}`}
 									>
 										{tab.label}
 									</button>
 									))}
 								</div>
-								<ul className="space-y-2 mb-3">
+								<ul className="main-friends-list">
 									{data[activeTab] && data[activeTab].length > 0 ? (
 										data[activeTab].map(({ id, pseudo }) => (
 											<Friend key={id}>{pseudo}</Friend>))
-									) : (<li className="items-center text-[var(--default)]"> No friends found</li> )}
+									) : (<li className="main-empty-item"> No friends found</li> )}
 								</ul>
-								<div className="flex justify-center p-2">
+								<div className="main-search-wrap">
 									<SearchBar/>
-									<input
-										type="text"
-										placeholder={lang.navbar.search}
-										className={`focus:outline-hidden border-1 border-solid border-[var(--default)] text-[var(--props)] text-sm p-2 bg-[var(--background-box)]`}
-									/>
 								</div>
 							</div>
 						)}
 					</div>
 					<SwitchButton checked={isOn} onChange={() => setIsOn(!isOn)} />
 				</div>
-				<span className="quantico-regular text-[var(--default)] text-[25px] md:text-[50px] font-bold">
-					<div className="cursor-pointer" onClick={() => window.location.href = "/"}>
+				<span className="main-title">
+					<div className="main-title-click" onClick={() => window.location.href = "/"}>
 						Transcendence
 					</div>
 				</span>
-				<div className="flex items-center space-x-4 items-start">
+				<div className="main-section-right">
 					<MyButton onClick={() => window.location.href = "/game"}>
-						<Img src={game} alt={lang.Alt_text.game_icon} className="w-8 md:w-10 h-auto"/>
+						<Img src={game} alt={lang.Alt_text.game_icon} className="main-icon"/>
 					</MyButton>
-					<div className="w-8 md:w-10 h-auto">
+					<div className="main-icon-wrap">
 						<MyButton onClick={() => setLanguages(!LanguagesClicked)}>
-							<Img src={language} alt={lang.Alt_text.language_icon} className="w-8 md:w-10 h-auto"/>
+							<Img src={language} alt={lang.Alt_text.language_icon} className="main-icon"/>
 						</MyButton>
 						{LanguagesClicked &&
-							<div className={`absolute top-full border-2 border-solid bg-[var(--background-box-select)]`}>
-								<div className="grid grid-rows text-[var(--default)] text-[15px] md:text-[15px]">
-									<MyButton className="cursor-pointer p-1 px-3 border-b-1 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--props)]" onClick={() => setLang("fr")}>🇫🇷 Français</MyButton>
-									<MyButton className="cursor-pointer p-1 px-3 border-b-1 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--props)]" onClick={() => setLang("en")}>🇬🇧 English</MyButton>
-									<MyButton className="cursor-pointer p-1 px-3 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--props)]" onClick={() => setLang("de")}>🇩🇪 Deutsch</MyButton>
+							<div className="main-menu-box">
+								<div className="main-menu-list">
+									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => setLang("fr")}>🇫🇷 Français</MyButton>
+									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => setLang("en")}>🇬🇧 English</MyButton>
+									<MyButton className="main-menu-btn" onClick={() => setLang("de")}>🇩🇪 Deutsch</MyButton>
 								</div>
 							</div>
 						}
 					</div>
 					<MyButton onClick={() => window.location.href = "/dm"}>
-						<Img src={notifications} alt={lang.Alt_text.dm_icon} className="w-8 md:w-10 h-auto"/>
+						<Img src={notifications} alt={lang.Alt_text.dm_icon} className="main-icon"/>
 					</MyButton>
-					<div className="w-8 md:w-10 h-auto">
+					<div className="main-icon-wrap">
 						<MyButton onClick={() => setprofile(!profile)}>
-							<Img src={user} alt={lang.Alt_text.profile_icon} className="w-8 md:w-10 h-auto"/>
+							<Img src={user} alt={lang.Alt_text.profile_icon} className="main-icon"/>
 						</MyButton>
 						{profile &&
-							<div className={`absolute top-full border-2 border-solid bg-[var(--background-box-select)] right-0`}>
-								<div className="grid grid-rows text-[var(--default)] text-[15px] md:text-[15px]">
-									<MyButton className="cursor-pointer p-1 px-3 border-b-1 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--props)]" onClick={() => Profile()}>{lang.navbar.profile}</MyButton>
-									<MyButton className="cursor-pointer p-1 px-3 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--props)]" onClick={() => Deconnexion()}>{lang.navbar.deconnexion}</MyButton>
+							<div className="main-menu-box main-menu-box-right">
+								<div className="main-menu-list">
+									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => Profile()}>{lang.navbar.profile}</MyButton>
+									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => Settings()}>{lang.navbar.settings}</MyButton>
+									<MyButton className="main-menu-btn" onClick={() => Deconnexion()}>{lang.navbar.deconnexion}</MyButton>
 								</div>
 							</div>
 						}
 					</div>
 				</div>
 			</div>
-			{children}
-		</div>
-	)
-}
+				{children}
+			</div>
+		)
+	}
 
 export default Main
 //essayer getelembyid pour inclure la page dans main sinon ff ca marche

@@ -1,5 +1,3 @@
-import '../node_modules/tailwindcss/index.css';
-import './Home.css';
 import Button from "./TryButton.tsx";
 import { useState } from "react";
 import { useLang } from './script/langProvider';
@@ -26,13 +24,13 @@ export default function Game () {
 	const [i, setI] = useState(0);
 
 	
-		return (
+	return (
 		<div className="quantico-regular">
 			<Main>
-				<div className="absolute top-1/2 left-1/2">
+				<div className="game-content">
 					{lang.Game_page.description} <br />
 					<button 
-						className="cursor-pointer border-1 p-2 px-4 bg-[var(--background-header)]" 
+						className="game-counter-btn" 
 						onClick={() => setI(i + 1)}>nb: {i}
 					</button>
 				</div>
