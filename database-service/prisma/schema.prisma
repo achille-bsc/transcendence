@@ -10,8 +10,10 @@ datasource db {
 model User {
   pseudo      String    @id
   email       String    @unique
-  password    String
+  password    String?
   avatar      String?   @default("default.png")
+
+  apiKey      String?
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -19,7 +21,6 @@ model User {
 
   participants  ConversationParticipant[]
   sentMessages  Message[]
-  globalHistory GlobalChat[]
   friendRequestsSent     Friend[] @relation("UserAsRequester")
   friendRequestsReceived Friend[] @relation("UserAsAddressee")
   blocksInitiated Block[] @relation("UserBlocker")
@@ -91,15 +92,4 @@ model Friend {
   createdAt   DateTime @default(now())
 
   @@unique([requesterId, addresseeId]) 
-}
-
-model GlobalChat {
-  id        Int      @id @default(autoincrement()) 
-  
-  userId    String
-  
-  message   String
-  createdAt DateTime @default(now())
-
-  user      User     @relation(fields: [userId], references: [pseudo])
 }
