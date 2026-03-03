@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
-import { createUser, checkSignin, checkLogin } from '../utils/utils_register';
-import { hashPassword, comparePassword } from '../utils/hashing';
-import { prisma } from '../../prisma'
+import { createUser, checkSignin, checkLogin } from './utils/utils_register';
+import { hashPassword, comparePassword } from './utils/hashing';
+import { prisma } from '../database-service/prisma'
 
 export default async function authRoutes(server: FastifyInstance) {
   server.post('/signin', async (request, reply) => {
