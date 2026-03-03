@@ -32,6 +32,9 @@
 		uri strip_prefix /api/db
 		reverse_proxy database-service:5000
 	}
+	handle /public/* {
+        reverse_proxy database-service:5000
+    }
 	handle /api/chat/* {
 		uri strip_prefix /api/chat
 		reverse_proxy chat-service:3004
