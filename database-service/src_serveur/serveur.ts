@@ -8,12 +8,13 @@ import inviteRoutes from './routes/invite';
 import healthRoutes from './routes/health';
 import messageRoutes from './routes/messages';
 import websocketPlugin from './plugins/websocket';
-
+import setupStaticFiles from './plugins/static';
 const server = fastify({ logger: true });
 
 await server.register(corsPlugin);
 await server.register(authPlugin);
 await server.register(websocketPlugin);
+await server.register(setupStaticFiles);
 
 await server.register(friendRoutes);
 await server.register(authRoutes);

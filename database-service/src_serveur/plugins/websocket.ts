@@ -1,23 +1,45 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import websocket from '@fastify/websocket';
 import fp from 'fastify-plugin';
+import { prisma } from '../../prisma';
 import { WebSocket } from 'ws';
 
 export const clients = new Map<string, Set<WebSocket>>();
 
 async function websocketPlugin(server: FastifyInstance) {
   await server.register(websocket, {
-    options: {
-      maxPayload: 1048576,
-    },
+    options: { maxPayload: 1048576 },
   });
+
+  async function notifyFriendsStatus(pseudo: string, status: 'online' | 'offline') {
+    try {
+      const friendships = await prisma.friend.findMany({
+        where: {
+          OR: [{ requesterId: pseudo }, { addresseeId: pseudo }],
+          status: 'ACCEPTED'
+        }
+      });
+
+      const friendPseudos = friendships.map(f => 
+        f.requesterId === pseudo ? f.addresseeId : f.requesterId
+      );
+
+      server.sendToUsers(friendPseudos, {
+        type: 'friend_status_change',
+        pseudo: pseudo,
+        status: status,
+        timestamp: new Date().toISOString()
+      });
+    } catch (err) {
+      server.log.error(err);
+    }
+  }
 
   server.get('/ws', { websocket: true }, async (connection, req: FastifyRequest) => {
     const socket = connection.socket;
     
     try {
       const token = (req.query as { token?: string }).token;
-      
       if (!token) {
         socket.close(1008, 'Token required');
         return;
@@ -28,6 +50,7 @@ async function websocketPlugin(server: FastifyInstance) {
 
       if (!clients.has(pseudo)) {
         clients.set(pseudo, new Set());
+        await notifyFriendsStatus(pseudo, 'online');
       }
       clients.get(pseudo)!.add(socket);
 
@@ -40,113 +63,56 @@ async function websocketPlugin(server: FastifyInstance) {
       socket.on('message', (data: Buffer) => {
         try {
           const message = JSON.parse(data.toString());
-          handleClientMessage(server, pseudo, socket, message);
+          if (message.type === 'ping') {
+            socket.send(JSON.stringify({ type: 'pong', timestamp: new Date().toISOString() }));
+          }
         } catch (error) {
-          socket.send(JSON.stringify({
-            type: 'error',
-            message: 'Invalid JSON format',
-          }));
+          socket.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
         }
       });
 
-      socket.on('close', () => {
+      const handleClose = async () => {
         const userSockets = clients.get(pseudo);
         if (userSockets) {
           userSockets.delete(socket);
           if (userSockets.size === 0) {
             clients.delete(pseudo);
+            await notifyFriendsStatus(pseudo, 'offline');
           }
         }
-      });
+      };
 
-      socket.on('error', () => {
-        const userSockets = clients.get(pseudo);
-        userSockets?.delete(socket);
-        if (userSockets?.size === 0) clients.delete(pseudo);
-      });
+      socket.on('close', handleClose);
+      socket.on('error', handleClose);
 
     } catch (error) {
       socket.close(1008, 'Invalid token');
     }
   });
 
-  server.decorate('sendToUser', sendToUser);
-  server.decorate('sendToUsers', sendToUsers);
-  server.decorate('sendToAll', sendToAll);
-  server.decorate('getOnlineUsers', getOnlineUsers);
-}
-
-function handleClientMessage(
-  server: FastifyInstance,
-  pseudo: string,
-  socket: WebSocket,
-  message: any
-) {
-  switch (message.type) {
-    case 'ping':
-      socket.send(JSON.stringify({
-        type: 'pong',
-        timestamp: new Date().toISOString(),
-      }));
-      break;
-    default:
-      server.log.warn(`Unknown message type: ${message.type}`);
-  }
-}
-
-function sendToUser(pseudo: string, message: any): boolean {
-  const sockets = clients.get(pseudo);
-  if (!sockets || sockets.size === 0) return false;
-
-  const messageStr = JSON.stringify(message);
-  let sent = 0;
-  
-  sockets.forEach(socket => {
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(messageStr);
-      sent++;
-    }
+  server.decorate('sendToUser', (pseudo: string, message: any) => {
+    const sockets = clients.get(pseudo);
+    if (!sockets || sockets.size === 0) return false;
+    const messageStr = JSON.stringify(message);
+    sockets.forEach(s => { if (s.readyState === WebSocket.OPEN) s.send(messageStr); });
+    return true;
   });
-  return sent > 0;
-}
 
-function sendToUsers(pseudos: string[], message: any): number {
-  let totalSent = 0;
-  pseudos.forEach(p => {
-    if (sendToUser(p, message)) totalSent++;
+  server.decorate('sendToUsers', (pseudos: string[], message: any) => {
+    let count = 0;
+    pseudos.forEach(p => { if (server.sendToUser(p, message)) count++; });
+    return count;
   });
-  return totalSent;
-}
 
-function sendToAll(message: any): number {
-  const messageStr = JSON.stringify(message);
-  let totalSent = 0;
-  
-  clients.forEach((sockets) => {
-    sockets.forEach(socket => {
-      if (socket.readyState === WebSocket.OPEN) {
-        socket.send(messageStr);
-        totalSent++;
-      }
-    });
-  });
-  
-  return totalSent;
-}
-
-function getOnlineUsers(): string[] {
-  return Array.from(clients.keys());
+  server.decorate('getOnlineUsers', () => Array.from(clients.keys()));
 }
 
 declare module 'fastify' {
   interface FastifyInstance {
     sendToUser(pseudo: string, message: any): boolean;
     sendToUsers(pseudos: string[], message: any): number;
-    sendToAll(message: any): number;
     getOnlineUsers(): string[];
   }
 }
 
-export default fp(websocketPlugin, {
-  name: 'websocket-plugin',
-});
+export default fp(websocketPlugin, { name: 'websocket-plugin' });

@@ -184,6 +184,7 @@ services:
                   target: /app/scripts
                   action: sync
         volumes:
+            - ./user_management:/app/uploads
             - ./db_data:/app/data # bind mount for now so that the db can be checked outside
         networks:
             - transcendence-network
