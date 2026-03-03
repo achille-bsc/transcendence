@@ -2,10 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# ADD package*.json ./
+ADD package*.json ./
 
-# COPY . .
+COPY . .
 
 EXPOSE 3001
 
-ENTRYPOINT [ "ash" ]
+ENTRYPOINT [ "sh", "-c", "npm run start" ]

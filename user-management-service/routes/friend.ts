@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { prisma } from '../../prisma';
-import { findUserByPseudo } from '../utils/utils_user';
+import { prisma } from '../../database-service/prisma';
+import { findUserByPseudo } from '../../auth-service/utils/utils_user';
 
 export default async function friendRoutes(server: FastifyInstance) {
   
