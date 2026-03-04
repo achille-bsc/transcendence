@@ -4,8 +4,7 @@ WORKDIR /app
 
 ADD package*.json ./
 
-# The --legacy-peer-deps is to be removed later
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY --from=shared_ressources ./scripts ./scripts
 COPY . .

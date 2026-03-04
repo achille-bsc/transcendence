@@ -3,14 +3,14 @@
 name: transcendence
 
 services:
-# ========================= CERT GEN CHECK ========================
-    caddy-cert-check:
-        container_name: caddy-cert-check
-        build:
-            context: ./caddy-cert-check-service
-            dockerfile: Dockerfile
-        expose:
-            - 
+# # ========================= CERT GEN CHECK ========================
+#     caddy-cert-check:
+#         container_name: caddy-cert-check
+#         build:
+#             context: ./caddy-cert-check-service
+#             dockerfile: Dockerfile
+#         expose:
+#             - "443"
 
 # ========================= CADDY ========================
     caddy:
@@ -44,13 +44,9 @@ services:
                 condition: service_started
             chat-service:
                 condition: service_started
-            # age-of-war-service:
-            #     condition: service_started
             # file-management-service:
             #     condition: service_started
             # kong-service:
-            #     condition: service_started
-            # user-analytics-service:
             #     condition: service_started
             user-management-service:
                 condition: service_started
@@ -84,8 +80,10 @@ services:
         build:
             context: ./auth-service
             dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
         expose:
-            - 3001
+            - "3001"
         secrets:
             - api_pass
             - jwt_secret
@@ -102,7 +100,7 @@ services:
                     - Dockerfile
         depends_on:
             user-management-service:
-                condition: service-started
+                condition: service_started
                 restart: true
             database-service:
                 condition: service_healthy
@@ -114,8 +112,10 @@ services:
         build:
             context: ./chat-service
             dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
         expose:
-            - 3004
+            - "3004"
         secrets:
             - api_pass
             - jwt_secret
@@ -189,25 +189,6 @@ services:
             retries: 5
             start_period: 5s
 
-# # ======================== AGE OF WAR ========================
-    # age-of-war-service:
-    #     build:
-    #         context: ./age-of-war-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - 5002
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     restart: unless-stopped
-
 # # ======================== FILE MANAGEMENT ========================
     # file-management-service:
     #     build:
@@ -239,7 +220,7 @@ services:
             context: ./kong-service
             dockerfile: Dockerfile
         expose:
-            - 5001
+            - "3000"
         develop:
             watch:
                 - path: ./**/*.tsx
@@ -258,7 +239,7 @@ services:
     #         context: ./tournament-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - 5003 
+    #         - "5003" 
     #     secrets:
     #         - api_pass
     #     develop:
@@ -277,17 +258,17 @@ services:
     #             restart: true
     #         kong-service:
     #             condition: service_started
-    #         age-of-war-service:
+    #         rabbit-mq-service:
     #             condition: service_started
     #     restart: unless-stopped
 
-# # ======================== USER ANALYTICS ========================
-    # user-analytics-service:
+# # ======================== TOURNAMENT ========================
+    # rabbit-mq-service:
     #     build:
-    #         context: ./user-analytics-service
+    #         context: ./rabbit-mq-service
     #         dockerfile: Dockerfile
     #     expose:
-    #         - 5000
+    #         - "5000" 
     #     secrets:
     #         - api_pass
     #     develop:
@@ -300,19 +281,16 @@ services:
     #             - path: ../shared/scripts
     #               target: /app/scripts
     #               action: sync
-    #     depends_on:
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #     restart: unless-stopped
 
 # ======================== USER MANAGEMENT ========================
     user-management-service:
         build:
             context: ./user-management-service
             dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
         expose:
-            - 3003
+            - "3003"
         secrets:
             - api_pass
         develop:
