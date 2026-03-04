@@ -4,6 +4,8 @@ WORKDIR /app
 
 ADD package*.json ./
 
+COPY --from=shared_ressources ./plugin ./plugin
+
 COPY . .
 
 EXPOSE 3001

@@ -29,12 +29,12 @@ caddy-cert-check {
 	tls internal {
 		on_demand
 	}
-	handle /api/auth/* {
-		uri strip_prefix /api/auth
+	handle /auth/* {
+		uri strip_prefix /auth
 		reverse_proxy auth-service:3001
 	}
-	handle /api/user/* {
-		uri strip_prefix /api/user
+	handle /user/* {
+		uri strip_prefix /user
 		reverse_proxy user-management-service:3003
 	}
 	handle /api/db/* {
@@ -44,34 +44,26 @@ caddy-cert-check {
 	handle /public/* {
         reverse_proxy database-service:5000
     }
-	handle /api/chat/* {
-		uri strip_prefix /api/chat
+	handle /chat/* {
+		uri strip_prefix /chat
 		reverse_proxy chat-service:3004
 	}
-	handle /api/aow/* {
-		uri strip_prefix /api/aow
-		reverse_proxy age-of-war-service:5002
+	handle /kong/* {
+		uri strip_prefix /kong
+		reverse_proxy kong-service:3000
 	}
-	handle /api/kong/* {
-		uri strip_prefix /api/kong
-		reverse_proxy kong-service:5001
-	}
-	handle /api/fm/* {
-		uri strip_prefix /api/fm
-		reverse_proxy file-management-service:5010
-	}
-	handle /api/tournament/* {
-		uri strip_prefix /api/tournament
-		reverse_proxy tournament-service:5003
-	}
-	handle /api/analytics/* {
-		uri strip_prefix /api/analytics
-		reverse_proxy user-analytics-service:5000
-	}
-	handle /api/rmq/* {
-		uri strip_prefix /api/rmq
-		reverse_proxy rabbit-mq-service:5000
-	}
+#	handle /fm/* {
+#		uri strip_prefix /fm
+#		reverse_proxy file-management-service:5010
+#	}
+#	handle /tournament/* {
+#		uri strip_prefix /tournament
+#		reverse_proxy tournament-service:5003
+#	}
+#	handle /rmq/* {
+#		uri strip_prefix /rmq
+#		reverse_proxy rabbit-mq-service:5000
+#	}
 	handle {
 		reverse_proxy frontend:3000
 	}
