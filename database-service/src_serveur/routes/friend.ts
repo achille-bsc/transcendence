@@ -4,7 +4,7 @@ import { findUserByPseudo } from '../utils/utils_user';
 
 export default async function friendRoutes(server: FastifyInstance) {
   
-  server.get('/friend/list', {
+  server.post('/friend/list', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const userId = request.user.pseudo;
@@ -35,7 +35,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     return { success: true, friends: formattedFriends };
   });
 
-  server.get('/friend/receive', {
+  server.post('/friend/receive', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     try {
