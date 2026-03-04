@@ -6,7 +6,7 @@ ADD package*.json ./
 
 RUN npm install && apk update && apk add --no-cache curl
 
-COPY --from=shared_ressources ./scripts ./scripts
+COPY --from=shared_ressources . .
 COPY . .
 
 EXPOSE 5000

@@ -4,6 +4,10 @@ WORKDIR /app
 
 ADD package*.json ./
 
+RUN npm install
+
+COPY --from=shared_ressources ./plugin ./plugin
+
 COPY . .
 
 EXPOSE 3003
