@@ -33,12 +33,31 @@ export async function newDirectMessage(senderId: string, conversationId: string,
   return { success: true, new_message };
 }
 
-export async function findDmConvesation(user1Pseudo: string, user2Pseudo: string)
+type FindDmConversationOptions = {
+	beforeId?: number;
+	limit?: number;
+};
+
+export async function findDmConvesation(
+	user1Pseudo: string,
+	user2Pseudo: string,
+	options?: FindDmConversationOptions
+)
 {
 	const user1 = await findUserByPseudo(user1Pseudo);
 	const user2 = await findUserByPseudo(user2Pseudo);
 	if (!user1 || !user2 || user1 === user2)
 		return null;
+	const rawLimit = options?.limit;
+	const safeLimit =
+		typeof rawLimit === "number" && Number.isInteger(rawLimit) && rawLimit > 0
+			? Math.min(rawLimit, 100)
+			: 50;
+	const beforeId = options?.beforeId;
+	const messageWhere =
+		typeof beforeId === "number" && Number.isInteger(beforeId) && beforeId > 0
+			? { id: { lt: beforeId } }
+			: undefined;
 	const convExists = await prisma.conversation.findFirst({
         where: {
             isGroup: false,
@@ -54,7 +73,8 @@ export async function findDmConvesation(user1Pseudo: string, user2Pseudo: string
                 },
             },
             messages: {
-                take: 50,
+                take: safeLimit,
+				where: messageWhere,
                 orderBy: { createdAt: 'desc' },
                 include: {sender: { select: { pseudo: true} }}
           },
