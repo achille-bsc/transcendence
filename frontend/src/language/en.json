@@ -22,9 +22,9 @@
 			"add": "Add",
 			"pending": "Pending",
 			"block": "Blocked",
-			"profile": "Profile",
-			"settings": "Settings",
-			"deconnexion": "Logout"
+			"profile": "👤 Profile",
+			"settings": "⚙️ Settings",
+			"deconnexion": "➜] Logout"
 		},
 		"Chat_page": {
 			"input": "Type your message..."

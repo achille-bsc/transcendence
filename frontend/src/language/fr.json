@@ -22,9 +22,9 @@
 			"add": "Ajouter",
 			"pending": "En attente",
 			"block": "Bloqués",
-			"profile": "Profil",
-			"settings": "Paramètres",
-			"deconnexion": "Déconnexion"
+			"profile": "👤 Profil",
+			"settings": "⚙️ Paramètres",
+			"deconnexion": "➜] Déconnexion"
 		},
 		"Chat_page": {
 			"input": "Tapez votre message..."

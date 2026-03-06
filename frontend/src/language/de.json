@@ -22,9 +22,9 @@
 			"add": "Hinzufügen",
 			"pending": "Ausstehend",
 			"block": "Gesperrt",
-			"profile": "Profil",
-			"settings": "Einstellungen",
-			"deconnexion": "Abmelden"
+			"profile": "👤 Profil",
+			"settings": "⚙️ Einstellungen",
+			"deconnexion": "➜] Abmelden"
 		},
 		"Chat_page": {
 			"input": "Geben Sie Ihre Nachricht ein..."

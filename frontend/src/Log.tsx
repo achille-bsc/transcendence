@@ -51,10 +51,6 @@ export default function Log () {
 		}
 		const token = data.token;
 		localStorage.setItem("token", token);
-		const picture = "/src/img/img.webp";
-		localStorage.setItem("img", picture);
-		const profile_picture = "picture";
-		localStorage.setItem("profile_img", profile_picture);
 		window.location.href = "/";
 	}
 

@@ -1,5 +1,4 @@
 import fastify from 'fastify';
-import corsPlugin from './plugins/cors';
 import authPlugin from './plugins/tokens';
 import authRoutes from './routes/register';
 import userRoutes from './routes/user';
@@ -9,9 +8,10 @@ import healthRoutes from './routes/health';
 import messageRoutes from './routes/messages';
 import websocketPlugin from './plugins/websocket';
 import setupStaticFiles from './plugins/static';
+import multipart from '@fastify/multipart'
 const server = fastify({ logger: true });
 
-await server.register(corsPlugin);
+await server.register(multipart);
 await server.register(authPlugin);
 await server.register(websocketPlugin);
 await server.register(setupStaticFiles);
