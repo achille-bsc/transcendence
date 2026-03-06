@@ -32,7 +32,7 @@
   }
 
   .home-play-btn {
-    @apply w-full cursor-pointer p-2 px-9 text-[25px] text-[var(--white)] focus:outline-2 sm:w-auto;
+    @apply w-full cursor-pointer p-2 px-9 text-[25px] text-[var(--white)] focus:outline-2 sm:w-auto hover:opacity-70;
     background: var(--button);
   }
 
@@ -371,7 +371,7 @@
   }
 
   .dm-sidebar-item {
-    @apply grid grid-cols-1 border-b p-3 text-[var(--contrast)] border-[var(--default)];
+    @apply grid grid-cols-1 border-b p-3 text-[var(--contrast)] border-[var(--default)] hover:bg-[var(--background-box)];
   }
 
   .dm-bottombar-item {
@@ -506,7 +506,7 @@
   }
 
   .conversation-sender {
-    @apply cursor-pointer mb-1 text-xs text-[var(--contrast)] text-[var(--props)];
+    @apply mb-1 text-xs text-[var(--contrast)] text-[var(--props)] hover:underline cursor-pointer hover:text-[var(--default)];
   }
 
   .conversation-bubble {

@@ -1,15 +1,17 @@
+import React from "react";
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
 import { menu, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
 import { useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
-function DisplayMenu(){
-	return
-}
+// function DisplayMenu(){
+// 	return
+// }
 
 function fetchFriends() {
 	return ([{name: "David" }, 
@@ -64,8 +66,8 @@ async function fetchPending(){
 		if (data.friends && data.friends.length > 0)
 		{
 			const pseudos = data.friends
-			.filter(f => f.requester)
-			.map(f => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
+			.filter((f: any) => f.requester)
+			.map((f: any) => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
 			return pseudos;
 		}
 		else
@@ -119,34 +121,34 @@ function SearchBar() {
 	const lang = useLang().getLang();
 	const [query, setQuery] = useState("");
 	const [error, setError] = useState("");
-	const handleSubmit = (e) => {
-  		e.preventDefault();
-  		if (!query.trim() || !isUser(query))
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!query.trim() || !isUser(query))
 		{
-    		setError("Cannot find user");
-    		return;
-    	}
-    	setError("");
-  		window.location.href = `/profile/${query}`
-  	};
-		return (
-			<>
-		 	 	<form onSubmit={handleSubmit} aria-label="Search user form">
-		 	 	  	<input
-		 	 	    	aria-label="Search user"
-		 	 	    	type="text"
-		 	 	    	placeholder={lang.navbar.search}
-		 	 	    	value={query}
-	 	 	    	onChange={(e) => setQuery(e.target.value)}
-	 	 	    	className="main-search-form-input"
+			setError("Cannot find user");
+			return;
+		}
+		setError("");
+		window.location.href = `/profile/${query}`
+	};
+	return (
+		<div>
+			<form onSubmit={handleSubmit} aria-label="Search user form">
+				<input
+					aria-label="Search user"
+					type="text"
+					placeholder={lang.navbar.search}
+					value={query}
+					onChange={(e) => setQuery(e.target.value)}
+					className="main-search-form-input"
 				/>
 				{error && <p className="main-search-error">{error}</p>}
-	 	 	</form>
-		</>
+			</form>
+		</div>
 	);
 }
 
-function Main({children = ""}) {
+function Main({children = ""}: {children?: ReactNode}) {
 	const [isOn, setIsOn] = useState(() => {
 		const savedTheme = localStorage.getItem("darkMode");
 		return savedTheme === "dark";
@@ -157,21 +159,27 @@ function Main({children = ""}) {
 		document.documentElement.classList.remove("light", "dark");
 		document.documentElement.classList.add(nextTheme);
 	}, [isOn]);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const [LanguagesClicked, setLanguages] = useState(false);
-	const [openMenu, setOpenMenu] = useState(null);
+	const [openMenu, setOpenMenu] = useState<string | null>(null);
 	const [activeTab, setActiveTab] = useState("friends");
-	const { getLang, setLang } = useLang();
+	const { setLang } = useLang();
 	const lang = useLang().getLang();
+	const [pending, setPending] = useState<any[]>([]);
 
 	const tabs = [
 		{ key: "friends", label: lang.navbar.add },
 		{ key: "pending", label: lang.navbar.pending },
 		{ key: "blocked", label: lang.navbar.block }
 	];
-	const data = {
+
+	useEffect(() => {
+		fetchPending().then(result => setPending(result || []));
+	}, []);
+
+	const data: Record<string, any[]> = {
 		friends: fetchFriends(),
-		pending: fetchPending(),
+		pending: pending,
 		blocked: []
 	};
 
