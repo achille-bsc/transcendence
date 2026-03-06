@@ -111,17 +111,6 @@ export default function Profile() {
 							</div>
 						</div>
 					</div>	
-					<div className="profile-stats-wrap">
-						<div className="profile-stats-title">
-							<p>STATS</p>
-						</div>
-						<div className="profile-stats-list">
-							<p>Games played:</p>
-							<p>Wins:</p>
-							<p>Losses:</p>
-							<p>Winrate:</p>
-						</div>
-					</div>	
 				</div>
 			</div>
 		</Main>
