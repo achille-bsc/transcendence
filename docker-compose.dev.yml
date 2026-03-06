@@ -3,15 +3,6 @@
 name: transcendence
 
 services:
-# # ========================= CERT GEN CHECK ========================
-#     caddy-cert-check:
-#         container_name: caddy-cert-check
-#         build:
-#             context: ./caddy-cert-check-service
-#             dockerfile: Dockerfile
-#         expose:
-#             - "443"
-
 # ========================= CADDY ========================
     caddy:
         container_name: caddy
@@ -25,6 +16,7 @@ services:
             - transcendence-network
         volumes:
             - caddy-volume:/data/caddy/
+            - ./certificates/public:/app/certs
         develop:
             watch:
               - action: sync+exec
@@ -44,10 +36,8 @@ services:
                 condition: service_started
             chat-service:
                 condition: service_started
-            # file-management-service:
-            #     condition: service_started
-            # kong-service:
-            #     condition: service_started
+            kong-service:
+                condition: service_started
             user-management-service:
                 condition: service_started
         restart: always
@@ -98,6 +88,9 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
+        volumes:
+            - ./certificates/private/auth-service.key:/app/certs/srv.key:ro
+            - ./certificates/public/auth-service.crt:/app/certs/srv.crt:ro
         depends_on:
             user-management-service:
                 condition: service_started
@@ -130,6 +123,9 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
+        volumes:
+            - ./certificates/private/chat-service.key:/app/certs/srv.key:ro
+            - ./certificates/public/chat-service.crt:/app/certs/srv.crt:ro
         depends_on:
             database-service:
                 condition: service_healthy
@@ -137,12 +133,6 @@ services:
             user-management-service:
                 condition: service_started
                 restart: true
-            # tournament-service:
-            #     condition: service_started
-            #     restart: true
-            # file-managment-service:
-            #     condition: service_started
-            #     restart: true
         restart: unless-stopped
         
 # ======================== DB ========================
@@ -178,109 +168,53 @@ services:
                   action: sync
         volumes:
             - avatars-volume:/app/uploads
-            - ./db_data:/app/data # ONLY FOR DEV
+            - db-volume:/app/data 
+            - ./certificates/private/database-service.key:/app/certs/db.key:ro
+            - ./certificates/public/database-service.crt:/app/certs/db.crt:ro
         networks:
             - transcendence-network
         restart: unless-stopped
         healthcheck:
-            test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"] #Probably need to put https in future
+            test: ["CMD-SHELL", "curl -f --cacert /app/certs/db.crt https://localhost:5000/health || exit 1"]
             interval: 10s
             timeout: 30s
             retries: 5
             start_period: 5s
 
-# # ======================== FILE MANAGEMENT ========================
-    # file-management-service:
-    #     build:
-    #         context: ./file-management-service
-    #         dockerfile: Dockerfile
-    #     expose: 
-    #         - 5010
-    #     secrets:
-    #         - api_pass
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     depends_on:
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #     restart: unless-stopped
-
 # ======================== KONG ========================
-#    kong-service:
-#        build:
-#            context: ./kong-service
-#            dockerfile: Dockerfile
-#        expose:
-#            - "3000"
-#        develop:
-#            watch:
-#                - path: ./**/*.tsx
-#                  action: sync+exec
-#                  target: /app
-#                  exec:
-#                    command: "./scripts/handle_file_change.sh {{ .Path }}"
-#                - path: ../shared/scripts
-#                  target: /app/scripts
-#                  action: sync
-#        restart: unless-stopped
+    kong-service:
+        build:
+            context: ./kong-service
+            dockerfile: Dockerfile
+        expose:
+            - "3000"
+        develop:
+            watch:
+              - action: sync
+                path: ./kong-service
+                target: /app
+                ignore:
+                    - Dockerfile
+                    - .dockerignore
+                    - .gitignore
+        volumes:
+            - ./certificates/private/kong-service.key:/app/certs/srv.key:ro
+            - ./certificates/public/kong-service.crt:/app/certs/srv.crt:ro
+        restart: unless-stopped
 
-# # ======================== TOURNAMENT ========================
-    # tournament-service:
-    #     build:
-    #         context: ./tournament-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - "5003" 
-    #     secrets:
-    #         - api_pass
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
-    #     depends_on:
-    #         database-service:
-    #             condition: service_healthy
-    #             restart: true
-    #         kong-service:
-    #             condition: service_started
-    #         rabbit-mq-service:
-    #             condition: service_started
-    #     restart: unless-stopped
-
-# # ======================== TOURNAMENT ========================
-    # rabbit-mq-service:
-    #     build:
-    #         context: ./rabbit-mq-service
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - "5000" 
-    #     secrets:
-    #         - api_pass
-    #     develop:
-    #         watch:
-    #             - path: ./**/*.tsx
-    #               action: sync+exec
-    #               target: /app
-    #               exec:
-    #                 command: "./scripts/handle_file_change.sh {{ .Path }}"
-    #             - path: ../shared/scripts
-    #               target: /app/scripts
-    #               action: sync
+# ======================== AVATAR FILLER ========================
+    avatar-copier:
+        image: alpine:3.22
+        volumes:
+            - ./user-management-service/default_avatars:/staging:ro
+            - avatars-volume:/app/avatars
+        command: >
+            sh -c "if [ -z \"$$(ls -A /app/data)\" ]; then 
+                echo 'Copying data...'; 
+                cp -a /staging/ /app/avatars/; 
+            else 
+                echo 'Data already exists.'; 
+            fi"
 
 # ======================== USER MANAGEMENT ========================
     user-management-service:
@@ -300,10 +234,13 @@ services:
                   target: /app
                   exec:
                     command: "./scripts/handle_file_change.sh {{ .Path }}"
-                - path: ../shared/scripts
-                  target: /app/scripts
-                  action: sync
+        volumes:
+            - avatars-volume:/app/avatars
+            - ./certificates/private/user-management-service.key:/app/certs/srv.key:ro
+            - ./certificates/public/user-management-service.crt:/app/certs/srv.crt:ro
         depends_on:
+            avatar-copier:
+                condition: service_completed_successfully
             database-service:
                 condition: service_healthy
                 restart: true
@@ -312,6 +249,7 @@ services:
 volumes:
     caddy-volume: 
     avatars-volume:
+    db-volume:
 
 networks:
     transcendence-network:
@@ -328,6 +266,3 @@ secrets:
         file: secrets/db_password
     jwt_secret:
         file: secrets/jwt_secret
-    # db_url:
-    #     environment: "DATABASE_URL" 
-
