@@ -9,7 +9,13 @@ import fs from 'fs';
 import backendGuardPlugin from '../plugins/backendGuard';
 
 async function start() {
-  const server = fastify({ logger: true });
+  const server = fastify({ 
+    logger: true,
+    https: {
+      key: fs.readFileSync('/app/certs/db.key'),
+      cert: fs.readFileSync('/app/certs/db.crt')
+    }
+  });
 
   try {
     const apiPass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
