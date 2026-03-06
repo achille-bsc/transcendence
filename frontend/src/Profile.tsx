@@ -31,6 +31,34 @@ async function getUsername()
 	}
 }
 
+async function ProfilePicture() {
+	const token = localStorage.getItem("token");
+	try
+	{
+		const res = await fetch("/api/db/useravatar", {
+			method: "GET",
+				headers: {
+					"Authorization": `Bearer ${token}`,
+					"Content-Type": "application/json"
+				}
+				
+			});
+		console.log("RESS", res);
+		if (!res.ok)
+			alert("An error occured");
+		const data = await res.json();
+		
+		console.log(data);
+		return data.avatarUrl;
+	}
+	catch (err)
+	{
+		alert("ERROR");
+		console.log(err);
+		return;
+	}
+}
+
 export default function Profile() {
 	const token = localStorage.getItem("token");
 	if (!token) {
@@ -40,6 +68,7 @@ export default function Profile() {
 	const lang = useLang().getLang();
 	const { username } = useParams();
 	const [loggedUser, setLoggedUser] = useState(null);
+	const [newProfilePicture, setNewProfilePicture] = useState(null);
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
@@ -48,6 +77,15 @@ export default function Profile() {
 		fetchUsername();
 	}, []);
 	const profileToDisplay = username || loggedUser;
+
+	useEffect(() => {
+			async function fetchProfilePicture() {
+				const avatarUrl = await ProfilePicture();
+				setNewProfilePicture(avatarUrl);
+			}
+			fetchProfilePicture();
+		}, []);
+
 	async function sendRequest()
 	{
 		if (!username)
@@ -91,7 +129,7 @@ export default function Profile() {
 				<div className="profile-main">
 					<div className="profile-card">
 						<div className="profile-avatar-wrap">
-							<Img src="/src/img/img.webp" alt={lang.Alt_text.profile_picture} className="profile-avatar"/>	
+							<Img src={newProfilePicture || "/default-avatar.png"} alt={lang.Alt_text.profile_picture} className="ring ring-[var(--default)] profile-avatar ring-2 ring-offset-4 ring-offset-[var(--background-box)]"/>	
 						</div>
 						<div className="profile-username">
 							<p>{profileToDisplay}</p>
