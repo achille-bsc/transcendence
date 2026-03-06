@@ -10,4 +10,5 @@ COPY . .
 
 EXPOSE 3000
 
-ENTRYPOINT [ "sh", "-c", "npm", "run", "dev" ]
+# ENTRYPOINT [ "sh", "-c", "npm run dev" ]
+ENTRYPOINT [ "ash" ]

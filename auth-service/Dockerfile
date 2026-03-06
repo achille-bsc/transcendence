@@ -6,6 +6,8 @@ ADD package*.json ./
 
 COPY --from=shared_ressources ./plugin ./plugin
 
+RUN npm install
+
 COPY . .
 
 EXPOSE 3001
