@@ -1,13 +1,19 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import fastifyJwt from '@fastify/jwt';
 import fp from 'fastify-plugin';
+import fs from 'fs';
 
 async function localAuthPlugin(server: FastifyInstance) {
-  await server.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET_FILE || 'fallback-secret',
-    sign: { expiresIn: '7d', algorithm: 'HS256' }, 
-    verify: { algorithms: ['HS256'] }
-  });
+  try {
+    await server.register(fastifyJwt, {
+      secret: fs.readFileSync('/run/secrets/jwt_secret', 'utf-8').trim(),
+      sign: { expiresIn: '7d', algorithm: 'HS256' }, 
+      verify: { algorithms: ['HS256'] }
+    });
+  } catch (error) {
+    console.error("Error occurred while registering JWT plugin:", error);
+    process.exit(1);
+  }
 
   server.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
     try {

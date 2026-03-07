@@ -5,8 +5,9 @@ import { createWriteStream } from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
+export default async function userRoutes(server: FastifyInstance) {
 
-  server.post('/profileuser', { onRequest: [server.authenticate] },
+  server.post('/profileuser', { onRequest: [server.authenticate]},
     async (request, reply) => {
       const user = await prisma.user.findUnique({
         where: { pseudo: request.user.pseudo },

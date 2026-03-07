@@ -15,11 +15,11 @@
 #	}
 }
 
-caddy-cert-check {
-	tls internal
-	bind caddy-cert-check
-	reverse_proxy caddy-cert-check:443
-}
+#caddy-cert-check {
+#	tls internal
+#	bind caddy-cert-check
+#	reverse_proxy caddy-cert-check:443
+#}
 
 :80 {
 	redir https://{host}:8443{uri} permanent
