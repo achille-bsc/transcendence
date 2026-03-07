@@ -1,6 +1,6 @@
 import fastify, { FastifyRequest, FastifyReply } from 'fastify';
-import localAuthPlugin from './plugins/tokens'; // Chemin vers le Fichier 1
-import authRoutes from './routes/auth'; // Chemin vers le Fichier 2
+import localAuthPlugin from './routes/tokens'; // Chemin vers le Fichier 1
+import authRoutes from './routes/register'; // Chemin vers le Fichier 2
 
 declare module 'fastify' {
   interface FastifyInstance {

@@ -1,41 +1,15 @@
-import { hashPassword, comparePassword } from './hashing.ts';
+import bcrypt from 'bcrypt'
 
-export async function checkLogin(log_name: string, password: string, reply: any) {
-	if (log_name.includes('@'))
-	{
-		if (!log_name || log_name.length === 0 || log_name.includes(' ') ||
-			  log_name.split('@').length !== 2 || !log_name.includes('.'))
-			return reply.code(404).send({ error: 'Bad email' });
-	}
-	else
-		if (!log_name || log_name.length === 0 || log_name.includes(' '))
-			return reply.code(404).send({ error: 'Bad pseudo' })
-  const user = await findProfile(log_name)
-	if (!user || await comparePassword(password, user!.password) === false) 
-	{
-    	reply.code(404).send({ error: 'User not found, check your password and your pseudo/email' })
-		return
-	}
-	else
-		return user
+const saltRounds = 10
+
+export async function hashPassword(password: string) {
+  const salt = await bcrypt.genSalt(saltRounds)
+  const hashedPassword = await bcrypt.hash(password, salt)
+  return hashedPassword
 }
-
-export async function findProfile(input: string) {
-  let whereClause = {}
-
-  if (input.includes('@'))
-  {
-    whereClause = { email: input }
-  }
-  else
-    whereClause = { pseudo: input }
-  const user = await prisma.user.findFirst({
-    where: whereClause,
-  })
-  if (user)
-   return user
-  else
-    return null
+export async function comparePassword(password: string, hashedPassword: string) {
+	const match = await bcrypt.compare(password, hashedPassword)
+	return match
 }
 
 export async function checkSignin(pseudo: string, email: string, password: string, reply: any)
@@ -61,34 +35,5 @@ export async function checkSignin(pseudo: string, email: string, password: strin
         reply.code(404).send({ error: 'Bad pseudo' })
         return false
     }
-    const existing = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { pseudo },
-        { email }
-      ]
-    }
-    });
-    if (existing)
-    {
-        reply.code(404).send({ error: 'Pseudo or email already used' })
-        return false
-    };
     return true
-}
-
-export async function createUser(pseudo: string, email: string, password: string, reply: any)
-{
-	const newUser = await prisma.user.create({
-	data: {
-		pseudo: pseudo,
-		email: email,
-		password: await hashPassword(password),
-	},
-	select: {
-      pseudo: true,
-      email: true
-    }
-	})
-	return newUser
 }

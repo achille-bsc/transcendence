@@ -1,6 +1,15 @@
 import fp from 'fastify-plugin';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { JwtPayload } from './interface';
+
+export interface JwtPayload {
+  pseudo: string;
+}
+
+declare module 'fastify' {
+  interface FastifyRequest {
+    user: JwtPayload;
+  }
+}
 
 async function authGuardPlugin(server: FastifyInstance) {
   server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
