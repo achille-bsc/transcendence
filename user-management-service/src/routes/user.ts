@@ -6,7 +6,7 @@ import path from 'path';
 import multipart from '@fastify/multipart';
 import sharp from 'sharp';
 
-
+export default async function userRoutes(server: FastifyInstance) {
 
   server.post('/profileuser', { onRequest: [server.authenticate]},
     async (request, reply) => {

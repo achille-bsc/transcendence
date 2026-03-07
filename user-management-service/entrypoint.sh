@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-MOUNT_POINT="/app/data"
+MOUNT_POINT="/app/avatars"
 
 if [ -z "$(ls -A $MOUNT_POINT)" ]; then
 	echo "Populating avatar folder with default content."
