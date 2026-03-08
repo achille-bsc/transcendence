@@ -13,6 +13,6 @@ COPY . .
 EXPOSE 3004
 
 # ###
-ENTRYPOINT [ "sh", "-c", "npm", "run", "start" ]
+ENTRYPOINT [ "sh", "-c", "npm run start" ]
 
 
