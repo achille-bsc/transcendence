@@ -91,11 +91,11 @@ export default async function friendRoutes(server: FastifyInstance) {
   }, async (request, reply) => {
     const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
     await prisma.friend.deleteMany({
-      where: { AND: [
-        { requesterId: friendPseudo, addresseeId: myPseudo, status: 'ACCEPTED' },
-        { requesterId: myPseudo, addresseeId: friendPseudo, status: 'ACCEPTED' }
-      ]}
-    });
+    where: { OR: [
+      { requesterId: friendPseudo, addresseeId: myPseudo, status: 'ACCEPTED' },
+      { requesterId: myPseudo, addresseeId: friendPseudo, status: 'ACCEPTED' }
+    ]}
+  });
     return { success: true };
   });
 
@@ -103,7 +103,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     onRequest: [server.requireBackendPass]
   }, async (request, reply) => {
     const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
-    await prisma.friend.deleteFirst({
+    await prisma.friend.deleteMany({
       where: {
         requesterId: friendPseudo, addresseeId: myPseudo, status: 'PENDING'
       }
