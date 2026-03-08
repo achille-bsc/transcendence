@@ -2,66 +2,156 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import websocket from '@fastify/websocket';
 import fp from 'fastify-plugin';
 import { WebSocket } from 'ws';
-import fs from 'fs';
 
-export const presenceClients = new Map<string, Set<WebSocket>>();
 
-const AUTH_URL = 'http://auth-service:3001';
-const DB_URL = 'http://database-service:5000';
-// On lit le pass pour parler à la BDD plus tard
-const apiPass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim(); 
+export const clients = new Map<string, Set<WebSocket>>();
 
-async function presenceWebsocketPlugin(server: FastifyInstance) {
-  await server.register(websocket, { options: { maxPayload: 1048576 } });
+async function verifyToken(token: string): Promise<{ pseudo: string } | null> {
+  try {
+    const res = await fetch(`/api/auth/validate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.pseudo ? { pseudo: data.pseudo } : null;
+  } catch {
+    return null;
+  }
+}
+
+async function friendWebsocketPlugin(server: FastifyInstance) {
+  await server.register(websocket, {
+    options: { maxPayload: 1048576 },
+  });
 
   server.get('/ws', { websocket: true }, async (socket, req: FastifyRequest) => {
     try {
       const token = (req.query as { token?: string }).token;
-      if (!token) return socket.close(1008, 'Token required');
-
-      // 1. Validation via l'auth-service
-      const authResponse = await fetch(`/api/auth/validate`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (!authResponse.ok) return socket.close(1008, 'Invalid token');
-      
-      const { pseudo } = await authResponse.json();
-
-      // 2. Enregistrement
-      if (!presenceClients.has(pseudo)) {
-        presenceClients.set(pseudo, new Set());
-        
-        // --- 🎯 TON DÉFI ICI ---
-        // Tu dois faire un fetch vers DB_URL pour récupérer la liste 
-        // d'amis de 'pseudo' (n'oublie pas le header x-backend-pass).
-        // Une fois reçue, tu utilises presenceClients pour leur envoyer
-        // un socket.send() disant que ce joueur est "online".
+      if (!token) {
+        socket.close(1008, 'Token required');
+        return;
       }
-      presenceClients.get(pseudo)!.add(socket);
 
-      socket.on('message', (data: Buffer) => {
-        const message = JSON.parse(data.toString());
-        if (message.type === 'ping') {
-          socket.send(JSON.stringify({ type: 'pong', timestamp: new Date().toISOString() }));
+      const user = await verifyToken(token);
+      if (!user) {
+        socket.close(1008, 'Invalid token');
+        return;
+      }
+      const pseudo = user.pseudo;
+      if (!clients.has(pseudo))
+        clients.set(pseudo, new Set());
+      clients.get(pseudo)!.add(socket);
+
+      socket.send(JSON.stringify({
+        type: 'connected',
+        pseudo,
+        timestamp: new Date().toISOString(),
+      }));
+
+      socket.on('message', async (data: Buffer) => {
+        let message: any;
+        try {
+          message = JSON.parse(data.toString());
+        } catch {
+          socket.send(JSON.stringify({ type: 'error', message: 'Invalid JSON format' }));
+          return;
+        }
+
+        switch (message.type) {
+          case 'ping':
+            socket.send(JSON.stringify({ type: 'pong', timestamp: new Date().toISOString() }));
+            break;
+          case 'GET_ONLINE_USERS':
+            socket.send(JSON.stringify({
+              type: 'ONLINE_USERS',
+              data: getOnlineUsers(),
+            }));
+            break;
+          default:
+            server.log.warn(`Unknown friend WS message type: ${message.type}`);
         }
       });
 
       socket.on('close', () => {
-        const userSockets = presenceClients.get(pseudo);
+        const userSockets = clients.get(pseudo);
         if (userSockets) {
           userSockets.delete(socket);
           if (userSockets.size === 0) {
-            presenceClients.delete(pseudo);
-            // --- 🎯 TON DÉFI ICI ---
-            // Même chose : prévenir les amis que le joueur est "offline".
+            clients.delete(pseudo);
           }
         }
       });
-    } catch (error) {
-      socket.close(1008, 'Connection error');
+
+      socket.on('error', () => {
+        const userSockets = clients.get(pseudo);
+        userSockets?.delete(socket);
+        if (userSockets?.size === 0) {
+          clients.delete(pseudo);
+        }
+      });
+
+    } catch {
+      socket.close(1008, 'Invalid token');
     }
   });
+
+  // Décorer le serveur pour que les routes friend puissent envoyer des events WS
+  server.decorate('sendToUser', sendToUser);
+  server.decorate('sendToUsers', sendToUsers);
+  server.decorate('sendToAll', sendToAll);
+  server.decorate('getOnlineUsers', getOnlineUsers);
 }
 
-export default fp(presenceWebsocketPlugin, { name: 'presence-websocket' });
+function sendToUser(pseudo: string, message: any): boolean {
+  const sockets = clients.get(pseudo);
+  if (!sockets || sockets.size === 0) return false;
+
+  const messageStr = JSON.stringify(message);
+  let sent = 0;
+  sockets.forEach(socket => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(messageStr);
+      sent++;
+    }
+  });
+  return sent > 0;
+}
+
+function sendToUsers(pseudos: string[], message: any): number {
+  let totalSent = 0;
+  pseudos.forEach(p => {
+    if (sendToUser(p, message)) totalSent++;
+  });
+  return totalSent;
+}
+
+function sendToAll(message: any): number {
+  const messageStr = JSON.stringify(message);
+  let totalSent = 0;
+  clients.forEach((sockets) => {
+    sockets.forEach(socket => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(messageStr);
+        totalSent++;
+      }
+    });
+  });
+  return totalSent;
+}
+
+function getOnlineUsers(): string[] {
+  return Array.from(clients.keys());
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    sendToUser(pseudo: string, message: any): boolean;
+    sendToUsers(pseudos: string[], message: any): number;
+    sendToAll(message: any): number;
+    getOnlineUsers(): string[];
+  }
+}
+
+export default fp(friendWebsocketPlugin, { name: 'friend-websocket-plugin' });

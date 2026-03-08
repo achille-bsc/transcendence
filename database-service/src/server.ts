@@ -1,21 +1,10 @@
 import fastify from 'fastify';
 import authRoutes from './routes/authRoutes';
-import friendRoutes from './routes/friend';
+import friendRoutes from './routes/friendRoutes';
 import healthRoutes from './routes/health';
-import websocketPlugin from '../plugins/websocket';
 import setupStaticFiles from '../plugins/static';
 import fs from 'fs';
 import backendGuardPlugin from '../plugins/backendGuard';
-
-const server = fastify({ logger: true });
-
-await server.register(websocketPlugin);
-await server.register(setupStaticFiles);
-
-await server.register(friendRoutes);
-await server.register(healthRoutes);
-await server.register(authRoutes);
-
 
 async function start() {
   const server = fastify({ logger: true });
@@ -23,6 +12,11 @@ async function start() {
   try {
     const apiPass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
     await server.register(backendGuardPlugin, { secret: apiPass });
+    await server.register(setupStaticFiles);
+
+    await server.register(friendRoutes);
+    await server.register(healthRoutes);
+    await server.register(authRoutes);
     server.listen({ port: 5000, host: '0.0.0.0' }, (err, address) => {
       if (err) {
         server.log.error(err);

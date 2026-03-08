@@ -1,6 +1,6 @@
 import fastify from 'fastify';
 import authGuardPlugin from '../../shared/plugin/authGuard';
-import messageRoutes from '../../chat-service/messages';
+import messageRoutes from './messages';
 import websocketPlugin from './plugins/websocket';
 
 const server = fastify({ logger: true });
