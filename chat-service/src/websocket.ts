@@ -17,7 +17,7 @@ export const clients = new Map<string, Set<WebSocket>>();
 const MAX_DM_MESSAGE_LENGTH = 1000;
 
 async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) {
-  const res = await fetch(`/api/db/conversation/create`, {
+  const res = await fetch(`/api/db/create-dm`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) 
 }
 
 async function dbNewDirectMessage(senderId: string, conversationId: string, content: string) {
-  const res = await fetch(`/api/db/message/create`, {
+  const res = await fetch(`/api/db/create-message`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -56,7 +56,6 @@ async function verifyTokenWithAuth(token: string): Promise<string | null> {
   }
 }
 
-// ── Plugin principal ──
 async function chatWebsocketPlugin(server: FastifyInstance) {
   await server.register(websocket, {
     options: { maxPayload: 1048576 },
@@ -114,7 +113,6 @@ async function chatWebsocketPlugin(server: FastifyInstance) {
         userSockets?.delete(socket);
         if (userSockets?.size === 0) clients.delete(pseudo);
       });
-
     } catch {
       socket.close(1008, 'Invalid token');
     }
@@ -127,7 +125,6 @@ async function chatWebsocketPlugin(server: FastifyInstance) {
     }
     return { users: getOnlineUsers() };
   });
-
   server.decorate('sendToUser', sendToUser);
   server.decorate('getOnlineUsers', getOnlineUsers);
 }

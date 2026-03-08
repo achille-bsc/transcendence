@@ -1,27 +1,27 @@
 import fastify from 'fastify';
-import authGuardPlugin from '../../shared/plugin/authGuard';
+import authGuardPlugin from '../plugin/authGuard';
 import messageRoutes from './messages';
-import websocketPlugin from './plugins/websocket';
+import chatWebsocketPlugin from './websocket';
 
-const server = fastify({ logger: true });
+async function start() {
+  const server = fastify({ logger: true });
 
-await server.register(authPlugin);
-await server.register(websocketPlugin);
-await server.register(setupStaticFiles);
-await server.register(friendRoutes);
-await server.register(authRoutes);
-await server.register(userRoutes);
-await server.register(healthRoutes);
-await server.register(messageRoutes);
-await server.register(inviteRoutes);
+  try {
+    await server.register(authGuardPlugin);
+    await server.register(chatWebsocketPlugin);
+    await server.register(messageRoutes);
 
-server.listen({ port: 5000, 
-  host: '0.0.0.0', }, (err, address) => {
-  console.log("Starting server...");
-  if (err) {
-    console.error(err);
+    server.listen({ port: 3004, host: '0.0.0.0' }, (err, address) => {
+      if (err) {
+        server.log.error(err);
+        process.exit(1);
+      }
+      console.log(`Chat service listening at ${address}`);
+    });
+  } catch (error) {
+    console.error('Critical Error starting chat-service:', error);
     process.exit(1);
   }
-  console.log(`Server listening at ${address}`);
-});
+}
 
+start();

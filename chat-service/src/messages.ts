@@ -1,5 +1,13 @@
-import { createDmConversation, findDmConvesation, newDirectMessage } from '../utils/utils_message';
 import { FastifyInstance } from 'fastify';
+import fs from 'fs';
+
+try {
+  fs.accessSync('/run/secrets/api_pass', fs.constants.R_OK);
+} catch (err) {
+  console.error("Error: Unable to read API password from /run/secrets/api_pass. Please ensure the file exists and has the correct permissions.");
+  process.exit(1);
+}
+const api_pass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
 
 function parsePositiveInt(value: number | string | undefined): number | undefined {
   if (typeof value === "number") {
@@ -18,31 +26,6 @@ function parsePositiveInt(value: number | string | undefined): number | undefine
 
 
 export default async function messageRoutes(server: FastifyInstance) {
-  server.post("/chat/send/dm", {
-    onRequest: [server.authenticate]
-  }, async (request, reply) => {
-    const { receiverPseudo, content } = request.body as {
-      receiverPseudo: string;
-      content: string;
-    };
-    console.log("voici :",request.user.id);
-    const senderPseudo = request.user.pseudo;
-    const conv = await createDmConversation(senderPseudo, receiverPseudo);
-    if (!conv) {
-      return reply.code(400).send({ error: 'Cannot create DM conversation' });
-    }
-    const result = await newDirectMessage(request.user.id, conv.id, content);
-    if (!result.success || !result.new_message) {
-       return reply.code(500).send({ error: 'Failed to save message' });
-    }
-    const wsPayload = {
-       type: 'NEW_MESSAGE',
-       data: result.new_message
-    });
-    server.sendToUser(result.new_message.receiverId, wsPayload);
-    console.log(result.new_message);
-    return reply.send({ data: result.new_message });
-  });
 
   server.post("/chat/find/dm", {
     onRequest: [server.authenticate]
@@ -55,13 +38,21 @@ export default async function messageRoutes(server: FastifyInstance) {
     const senderPseudo = request.user.pseudo;
     const parsedBeforeId = parsePositiveInt(beforeId);
     const parsedLimit = parsePositiveInt(limit);
-    const conv = await findDmConvesation(senderPseudo, receiverPseudo, {
-      beforeId: parsedBeforeId,
-      limit: parsedLimit,
-    });
-    if (!conv) {
-      return reply.code(408).send({ error: 'Conversation not found' });
-    }
-    return { status: "success", message: "Conversation found.", data: conv };
+    const res = await fetch("/api/db/find-dm", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+        'x-backend-pass': api_pass
+			},
+			body: JSON.stringify({
+				user1Pseudo: senderPseudo,
+				user2Pseudo: receiverPseudo,
+				options: { beforeId: parsedBeforeId, limit: parsedLimit }
+			}),
+		});
+    const data = await res.json();
+    if (!res.ok)
+      return reply.code(400).send({ error: data.error }); 
+    return { status: "success", message: "Conversation found.", data: data };
   });
 }
