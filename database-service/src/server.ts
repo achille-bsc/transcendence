@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import authRoutes from './routes/authRoutes';
 import friendRoutes from './routes/friendRoutes';
+import chatRoutes from './routes/chatRoutes';
 import healthRoutes from './routes/health';
 import setupStaticFiles from '../plugins/static';
 import fs from 'fs';
@@ -14,6 +15,7 @@ async function start() {
     await server.register(backendGuardPlugin, { secret: apiPass });
     await server.register(setupStaticFiles);
 
+    await server.register(chatRoutes);
     await server.register(friendRoutes);
     await server.register(healthRoutes);
     await server.register(authRoutes);

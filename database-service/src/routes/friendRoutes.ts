@@ -17,7 +17,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     });
     if (!friendships)
       return reply.code(411).send({ error: 'No friends found' });
-    const formattedFriends = friendships.map(relation => {
+    const formattedFriends = friendships.map((relation: typeof friendships[number]) => {
       const friend = relation.requesterId === request.userPseudo?.pseudo 
         ? relation.addressee : relation.requester;
       return { pseudo: friend.pseudo };

@@ -45,7 +45,7 @@ async function dbNewDirectMessage(senderId: string, conversationId: string, cont
 
 async function verifyTokenWithAuth(token: string): Promise<string | null> {
   try {
-    const res = await fetch(`auth/validate`, {
+    const res = await fetch(`/auth/validate`, {
       headers: { 'Authorization': `Bearer ${token}` },
     });
     if (!res.ok) return null;

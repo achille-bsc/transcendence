@@ -1,5 +1,15 @@
 import { prisma } from '../../prisma'
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import fs from 'fs';
+
+try {
+  fs.accessSync('/run/secrets/api_pass', fs.constants.R_OK);
+} catch (err) {
+  console.error("Error: Unable to read API password from /run/secrets/api_pass. Please ensure the file exists and has the correct permissions.");
+  process.exit(1);
+}
+const api_pass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
+
 
 export async function findUserByPseudo(pseudo: string) {
 	const user = await prisma.user.findUnique({
@@ -13,7 +23,7 @@ export async function findUserByPseudo(pseudo: string) {
     return user;
 }
 
-export default async function ConversationRoutes(server: FastifyInstance) {
+export default async function chatRoutes(server: FastifyInstance) {
   server.post("/create-message", {
     onRequest: [server.requireBackendPass]
   }, async (request, reply) => {
@@ -98,36 +108,55 @@ type FindDmConversationOptions = {
   server.post("/create-dm", {
     onRequest: [server.requireBackendPass]
   }, async (request, reply) => {
-    const { senderPseudo, receiverPseudo, } = request.body as {
-      senderPseudo: string;
-      receiverPseudo: string;
+    const { user1Pseudo, user2Pseudo, } = request.body as {
+      user1Pseudo: string;
+      user2Pseudo: string;
     };
-    const user1 = await findUserByPseudo(senderPseudo);
-    const user2 = await findUserByPseudo(receiverPseudo);
-    if (!user1 || !user2 || user1 === user2)
-      return reply.code(400).send({ error: 'Invalid sender or receiver' });
-    const convExists = await prisma.conversation.findFirst({
-        where: {
-            isGroup: false,
-            AND: [
-                { participants: { some: { userId: senderPseudo } } },
-                { participants: { some: { userId: receiverPseudo } } }
-            ]
-        }});
-	if (convExists)
-		return convExists;
-	const newConv = await prisma.conversation.create({
-		 data: {
-      isGroup: false,
-      participants: {
-        create: [ { userId: senderPseudo }, { userId: receiverPseudo }]}},
-    include: {
-      participants: {
-        include: {
-          user: { select: {pseudo: true } }
-        },},
-        messages: true },
-	});
-	return newConv;
+    try {
+      const res = await fetch("/api/db/find-dm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'x-backend-pass': api_pass
+        },
+        body: JSON.stringify({
+          user1Pseudo: user1Pseudo,
+          user2Pseudo: user2Pseudo,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      }
+    }
+    catch (err) {
+      const user1 = await findUserByPseudo(user1Pseudo);
+      const user2 = await findUserByPseudo(user2Pseudo);
+      if (!user1 || !user2 || user1 === user2)
+        return reply.code(400).send({ error: 'Invalid sender or receiver' });
+      const convExists = await prisma.conversation.findFirst({
+          where: {
+              isGroup: false,
+              AND: [
+                  { participants: { some: { userId: user1Pseudo } } },
+                  { participants: { some: { userId: user2Pseudo } } }
+              ]
+          }});
+    if (convExists)
+      return convExists;
+    const newConv = await prisma.conversation.create({
+      data: {
+        isGroup: false,
+        participants: {
+          create: [ { userId: user1Pseudo }, { userId: user2Pseudo }]}},
+      include: {
+        participants: {
+          include: {
+            user: { select: {pseudo: true } }
+          },},
+          messages: true },
+    });
+    return newConv;
+  }
 });
 }
