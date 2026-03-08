@@ -47,7 +47,7 @@ async function authRoutes(server: FastifyInstance) {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-        'x-backend-pass': 'ton_super_secret'
+        'x-backend-pass': api_pass
 			},
 			body: JSON.stringify({
 				log_name: log_name,
