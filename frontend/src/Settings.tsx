@@ -123,7 +123,7 @@ export default function Settings() {
 		window.location.reload();
 	};
 	const password = "********";
-	const email = "help@help.help";
+	const email = "SuperKiwiLaLegendDu7680salutCoucoucKiwilolfdsfsfesfd@help.help";
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
@@ -150,19 +150,22 @@ export default function Settings() {
 
 	return (
 		<Main>
-			<div className="overflow-y-auto flex flex-col items-center h-[calc(85vh-20px)] text-[var(--contrast)] overflow-x-hidden">
+			<div className="quantico-regular overflow-y-auto flex flex-col items-center h-[calc(85vh-20px)] text-[var(--contrast)] overflow-x-hidden">
 				<div className="my-auto bg-[var(--background-box-select)] p-5">
 					<div className="place-items-left">
 						<div onClick={() => setIsOpen(true)} className="place-items-center p-2 pb-6 px-9">
-							<Img src={newProfilePicture} alt={lang.Alt_text.profile_picture} className="ring-2 ring-offset-4 ring-offset-[var(--background-box)] ring-[var(--default)] aspect-square w-[80px] rounded-full object-cover hover:opacity-70"/>
+							<Img src={newProfilePicture} alt={lang.Alt_text.profile_picture} className="ring-2 ring-offset-4 ring-offset-[var(--background-box)] ring-[var(--default)] w-[80px] h-[80px] rounded-full object-cover object-center block mx-auto hover:opacity-70"/>
 						</div>
 						{isOpen && (
 							<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-								<div className="bg-[var(--background-box-select)] p-6 w-96">
+								<div className="bg-[var(--background-box-select)] p-6">
 									<div className="flex flex-col gap-4">
 										<div className="flex flex-row overflow-x-auto pb-2">
-											<label htmlFor="fileInput" className="size-35 hover:opacity-70 bg-[var(--background-box)] flex justify-center place-items-center cursor-pointer">
-												+
+											<label htmlFor="fileInput" className="size-35 hover:opacity-70 flex justify-center place-items-center">
+												<div className="flex flex-col justify-center items-center gap-2">
+													<Img src={newProfilePicture} alt={lang.Alt_text.profile_picture} className="w-[140px] h-[140px] rounded-full object-cover object-center block mx-auto"></Img>
+													<div className="absolute text-[35px] opacity-70">+</div>
+												</div>
 											</label>
 											<input 
 												id="fileInput"
@@ -172,7 +175,7 @@ export default function Settings() {
 												className="hidden"
 											/>
 										</div>
-										<MyButton onClick={() => setIsOpen(false)}>Fermer</MyButton>
+										<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpen(false)}>Fermer</MyButton>
 									</div>
 								</div>
 							</div>
@@ -184,7 +187,7 @@ export default function Settings() {
 									<p>{lang.Log_register_page.pseudo} :</p>
 								</div>
 								<div className="grid grid-cols-6 gap-2">
-									<div className="col-span-5">
+								<div className="col-span-5 break-words">
 										{profileToDisplay}
 									</div>
 								</div>
@@ -193,12 +196,12 @@ export default function Settings() {
 								<div className="text-[10px]">
 									<p>{lang.Log_register_page.password} :</p>
 								</div>
-								<div className="grid grid-cols-6 gap-2">
-									<div className="col-span-5">
+								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
+									<div className="break-all min-w-0">
 										<p>{password}</p>
 									</div>
-									<div className="col-span-1">
-										<MyButton className="hover:text-[var(--props)]" onClick={() => editProfile()}>edit</MyButton>
+									<div className="flex justify-end pl-1">
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>edit</MyButton>
 									</div>
 								</div>
 							</div>
@@ -206,12 +209,12 @@ export default function Settings() {
 								<div className="text-[10px]">
 									<p>{lang.Log_register_page.email} :</p>
 								</div>
-								<div className="grid grid-cols-6 gap-2">
-									<div className="col-span-5">
+								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
+									<div className="break-all min-w-0">
 										{email}
 									</div>
-									<div className="col-span-1">
-										<MyButton className="hover:text-[var(--props)]" onClick={() => editProfile()}>edit</MyButton>
+									<div className="flex justify-end pl-1">
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>edit</MyButton>
 									</div>
 								</div>
 							</div>

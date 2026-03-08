@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Le jeu de Kong",
 			"play": "JOUER",
-			"friend": "Amis :"
+			"friend": "Amis en ligne :"
 		},
 		"navbar": {
 			"search": "Rechercher quelqu'un...",
@@ -28,15 +28,6 @@
 		},
 		"Chat_page": {
 			"input": "Tapez votre message..."
-		},
-		"Stat_page": {
-			"invite": "Inviter",
-			"message": "Message",
-			"blocked": "Bloqué",
-			"stats": "Statistiques",
-			"nb_game": "Nombre de parties",
-			"win_rate": "Taux de victoires",
-			"lose_game": "Parties perdues"
 		},
 		"Game_page": {
 			"description": "Je suis la page de jeu"
@@ -53,6 +44,14 @@
 			"friend_request_reject": "Rejeter la demande d'ami",
 			"github_logo": "logo github pour connexion",
 			"send_logo": "logo envoyer pour envoyer un message"
+		},
+		"Profile_page": {
+			"edit_profile": "Modifier le profil",
+			"add_friend": "Ajouter un ami",
+			"remove_friend": "Supprimer un ami",
+			"message": "Message",
+			"member_since": "Membre depuis :",
+			"pseudo": "Pseudo :"
 		}
 	}
 }

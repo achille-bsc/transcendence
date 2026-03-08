@@ -1,4 +1,4 @@
-import menu from "./menu-icon.svg"
+import terms from "./terms_of_services.png"
 import github from "./github.png"
 import user from "./user-regular-full.svg"
 import friends from "./friends-icon.svg"
@@ -8,4 +8,4 @@ import reject from "./cross.png"
 import accept from "./check-solid-full.svg"
 import language from "./language.webp"
 
-export { menu, github, user, friends, game, notifications, accept, reject, language};
+export { terms, github, user, friends, game, notifications, accept, reject, language};

@@ -98,4 +98,38 @@ export default async function userRoutes(server: FastifyInstance) {
         avatarUrl: `/public/${user.avatar}`
       };
     });
+
+  server.post('/avatarother', { onRequest: [server.authenticate] },
+    async (request, reply) => {
+      const { pseudo } = request.body as { pseudo: string };
+      const user = await prisma.user.findUnique({
+        where: { pseudo: pseudo },
+        select: { avatar: true }
+      });
+
+      if (!user?.avatar)
+        return reply.code(404).send({ error: 'Aucun avatar trouvé' });
+
+      return {
+        success: true,
+        avatarUrl: `/public/${user.avatar}`
+      };
+    });
+
+  server.post('/userstatus', { onRequest: [server.authenticate] },
+    async (request, reply) => {
+      const { pseudo } = request.body as { pseudo?: string };
+      const targetPseudo = pseudo ?? request.user.pseudo;
+
+      if (!targetPseudo || targetPseudo.trim() === '') {
+        return reply.code(400).send({ error: 'Pseudo is required' });
+      }
+
+      const onlinePseudos = server.getOnlineUsers ? server.getOnlineUsers() : [];
+      return {
+        success: true,
+        pseudo: targetPseudo,
+        isOnline: onlinePseudos.includes(targetPseudo),
+      };
+    });
 }

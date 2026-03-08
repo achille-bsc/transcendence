@@ -32,15 +32,6 @@ export interface Translations {
 	Chat_page: {
 		input: string;
 	};
-	Stat_page: {
-		invite: string;
-		message: string;
-		blocked: string;
-		stats: string;
-		nb_game: string;
-		win_rate: string;
-		lose_game: string;
-	};
 	Game_page: {
 		description: string;
 	};
@@ -56,7 +47,15 @@ export interface Translations {
 			friend_request_reject: string;
 			github_logo: string;
 			send_logo: string;
-		}
+		};
+	Profile_page: {
+		edit_profile: string;
+		add_friend: string;
+		remove_friend: string;
+		message: string;
+		member_since: string;
+		pseudo: string;
+	}
 }
 // Load translations based on language
 export function getLanguageData(lang: string): Translations {
