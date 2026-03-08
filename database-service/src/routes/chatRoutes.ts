@@ -105,58 +105,41 @@ type FindDmConversationOptions = {
     return reply.code(400).send({ error: 'Conversation not found' });
 }});
 
-  server.post("/create-dm", {
-    onRequest: [server.requireBackendPass]
-  }, async (request, reply) => {
-    const { user1Pseudo, user2Pseudo, } = request.body as {
-      user1Pseudo: string;
-      user2Pseudo: string;
-    };
-    try {
-      const res = await fetch("/api/db/find-dm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          'x-backend-pass': api_pass
-        },
-        body: JSON.stringify({
-          user1Pseudo: user1Pseudo,
-          user2Pseudo: user2Pseudo,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return data;
-      }
+server.post("/create-dm", {
+  onRequest: [server.requireBackendPass]
+}, async (request, reply) => {
+  const { user1Pseudo, user2Pseudo } = request.body as {
+    user1Pseudo: string;
+    user2Pseudo: string;
+  };
+  const user1 = await findUserByPseudo(user1Pseudo);
+  const user2 = await findUserByPseudo(user2Pseudo);
+  if (!user1 || !user2 || user1.pseudo === user2.pseudo)
+    return reply.code(400).send({ error: 'Invalid sender or receiver' });
+
+  const convExists = await prisma.conversation.findFirst({
+    where: {
+      isGroup: false,
+      AND: [
+        { participants: { some: { userId: user1Pseudo } } },
+        { participants: { some: { userId: user2Pseudo } } }
+      ]
     }
-    catch (err) {
-      const user1 = await findUserByPseudo(user1Pseudo);
-      const user2 = await findUserByPseudo(user2Pseudo);
-      if (!user1 || !user2 || user1 === user2)
-        return reply.code(400).send({ error: 'Invalid sender or receiver' });
-      const convExists = await prisma.conversation.findFirst({
-          where: {
-              isGroup: false,
-              AND: [
-                  { participants: { some: { userId: user1Pseudo } } },
-                  { participants: { some: { userId: user2Pseudo } } }
-              ]
-          }});
-    if (convExists)
-      return convExists;
-    const newConv = await prisma.conversation.create({
-      data: {
-        isGroup: false,
-        participants: {
-          create: [ { userId: user1Pseudo }, { userId: user2Pseudo }]}},
-      include: {
-        participants: {
-          include: {
-            user: { select: {pseudo: true } }
-          },},
-          messages: true },
-    });
-    return newConv;
-  }
+  });
+  if (convExists)
+    return convExists;
+  const newConv = await prisma.conversation.create({
+    data: {
+      isGroup: false,
+      participants: {
+        create: [{ userId: user1Pseudo }, { userId: user2Pseudo }]
+      }
+    },
+    include: {
+      participants: { include: { user: { select: { pseudo: true } } } },
+      messages: true
+    },
+  });
+  return newConv;
 });
 }

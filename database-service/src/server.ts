@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import authRoutes from './routes/authRoutes';
 import friendRoutes from './routes/friendRoutes';
+import userRoutes from './routes/userRoutes';
 import chatRoutes from './routes/chatRoutes';
 import healthRoutes from './routes/health';
 import setupStaticFiles from '../plugins/static';
@@ -19,6 +20,7 @@ async function start() {
     await server.register(friendRoutes);
     await server.register(healthRoutes);
     await server.register(authRoutes);
+    await server.register(userRoutes);
     server.listen({ port: 5000, host: '0.0.0.0' }, (err, address) => {
       if (err) {
         server.log.error(err);

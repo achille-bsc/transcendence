@@ -34,4 +34,80 @@ export default async function friendRoutes(server: FastifyInstance) {
           }
       });
     return { success: true, friends: friendSend }});    
+
+    server.post('/friend/send', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
+    
+    const reverseRequest = await prisma.friend.findFirst({
+      where: { requesterId: friendPseudo, addresseeId: myPseudo }
+    });
+    if (reverseRequest) {
+      if (reverseRequest.status === 'PENDING') {
+        const accepted = await prisma.friend.updateMany({
+          where: { OR: [
+            { requesterId: friendPseudo, addresseeId: myPseudo },
+            { requesterId: myPseudo, addresseeId: friendPseudo }
+          ]},
+          data: { status: 'ACCEPTED' }
+        });
+        return { success: true, action: 'auto_accepted', data: accepted };
+      }
+      if (reverseRequest.status === 'ACCEPTED')
+        return reply.code(400).send({ error: 'Already friends' });
+    }
+    
+    const existing = await prisma.friend.findFirst({
+      where: { requesterId: myPseudo, addresseeId: friendPseudo }
+    });
+    if (existing)
+      return reply.code(400).send({ error: 'Friend request already sent' });
+
+    const newRequest = await prisma.friend.create({
+      data: { requesterId: myPseudo, addresseeId: friendPseudo }
+    });
+    return { success: true, action: 'sent', data: newRequest };
+  });
+
+  server.post('/friend/accept', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
+    const result = await prisma.friend.updateMany({
+      where: { OR: [
+        { requesterId: friendPseudo, addresseeId: myPseudo },
+        { requesterId: myPseudo, addresseeId: friendPseudo }
+      ]},
+      data: { status: 'ACCEPTED' }
+    });
+    if (!result.count)
+      return reply.code(404).send({ error: 'No friend request found' });
+    return { success: true, data: result };
+  });
+
+  server.post('/friend/remove', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
+    await prisma.friend.deleteMany({
+      where: { AND: [
+        { requesterId: friendPseudo, addresseeId: myPseudo, status: 'ACCEPTED' },
+        { requesterId: myPseudo, addresseeId: friendPseudo, status: 'ACCEPTED' }
+      ]}
+    });
+    return { success: true };
+  });
+
+  server.post('/friend/refuse', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { myPseudo, friendPseudo } = request.body as { myPseudo: string; friendPseudo: string };
+    await prisma.friend.deleteFirst({
+      where: {
+        requesterId: friendPseudo, addresseeId: myPseudo, status: 'PENDING'
+      }
+    });
+    return { success: true };
+  });
 };
