@@ -1,7 +1,6 @@
 import Button from "./TryButton.tsx";
 import { useLang } from './script/langProvider';
 import Main from './utils/Main.tsx';
-import Bottombar from "./script/Bottombar.tsx";
 
 function Home () {
 	if (!localStorage.getItem("token")) {
@@ -25,8 +24,6 @@ function Home () {
 									/>
 							</div>
 						</div>
-						<p className="home-footer">{lang.Home_page.friend}</p>
-						{/* <Bottombar className="home-bottombar" /> */}
 					</div>
 				</div>
 			</Main>

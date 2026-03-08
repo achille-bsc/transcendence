@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Kong's game",
 			"play": "PLAY",
-			"friend": "Friends :"
+			"friend": "Friends online :"
 		},
 		"navbar": {
 			"search": "Search someone...",
@@ -28,15 +28,6 @@
 		},
 		"Chat_page": {
 			"input": "Type your message..."
-		},
-		"Stat_page": {
-			"invite": "Invite",
-			"message": "Message",
-			"blocked": "Blocked",
-			"stats": "Stats",
-			"nb_game": "Number of games",
-			"win_rate": "Win rate",
-			"lose_game": "Lose game"
 		},
 		"Game_page": {
 			"description": "I am the game page"
@@ -53,6 +44,14 @@
 			"friend_request_reject": "Reject friend request",
 			"github_logo": "github logo for login",
 			"send_logo": "logo send for sending a message"
+		},
+		"Profile_page": {
+			"edit_profile": "Edit Profile",
+			"add_friend": "Add friend",
+			"remove_friend": "Remove friend",
+			"message": "Message",
+			"member_since": "Member since :",
+			"pseudo": "Pseudo :"
 		}
 	}
 }

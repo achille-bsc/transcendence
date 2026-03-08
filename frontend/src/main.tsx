@@ -21,6 +21,7 @@ import { LangProvider } from "./script/langProvider.tsx";
 import Conversation from "./Conversation.tsx";
 import Settings from "./Settings.tsx";
 import GithubCallback from "./script/GithubCallback.tsx";
+import Terms_of_Services from "./Terms_of_Services.tsx";
 
 ReactDOM.createRoot(root!).render(
 	<BrowserRouter>
@@ -30,6 +31,7 @@ ReactDOM.createRoot(root!).render(
 				<Route path="/dm" element={<ChatDm />} />
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/dm/:pseudo" element={<Conversation />} />
+				<Route path="/terms" element={<Terms_of_Services />} />
 				<Route path="/game" element={<Game />} />
 				<Route path="/" element={<Home />} />
 				<Route path="/log" element={<Log />} />

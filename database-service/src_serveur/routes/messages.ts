@@ -58,7 +58,7 @@ export default async function messageRoutes(server: FastifyInstance) {
       limit: parsedLimit,
     });
     if (!conv) {
-      return reply.code(400).send({ error: 'Conversation not found' });
+      return reply.code(408).send({ error: 'Conversation not found' });
     }
     return { status: "success", message: "Conversation found.", data: conv };
   });

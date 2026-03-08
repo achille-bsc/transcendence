@@ -15,7 +15,7 @@
 		"Home_page": {
 			"game_name": "Kongs Spiel",
 			"play": "SPIELEN",
-			"friend": "Freunde :"
+			"friend": "Freunde online :"
 		},
 		"navbar": {
 			"search": "Suche jemanden...",
@@ -28,15 +28,6 @@
 		},
 		"Chat_page": {
 			"input": "Geben Sie Ihre Nachricht ein..."
-		},
-		"Stat_page": {
-			"invite": "Einladen",
-			"message": "Nachricht",
-			"blocked": "Gesperrt",
-			"stats": "Statistiken",
-			"nb_game": "Anzahl der Spiele",
-			"win_rate": "Siegesrate",
-			"lose_game": "Verlorene Spiele"
 		},
 		"Game_page": {
 			"description": "Ich bin die Spiel-Seite"
@@ -53,6 +44,14 @@
 			"friend_request_reject": "Freundesanfrage ablehnen",
 			"github_logo": "github-Logo für die Anmeldung",
 			"send_logo": "Logo zum Senden einer Nachricht"
+		},
+		"Profile_page": {
+			"edit_profile": "Profil bearbeiten",
+			"add_friend": "Freund hinzufügen",
+			"remove_friend": "Freund entfernen",
+			"message": "Nachricht",
+			"member_since": "Mitglied seit :",
+			"pseudo": "Pseudonym :"
 		}
 	}
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
-import { menu, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
+import { terms, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
@@ -159,8 +159,31 @@ function Main({children = ""}: {children?: ReactNode}) {
 		document.documentElement.classList.remove("light", "dark");
 		document.documentElement.classList.add(nextTheme);
 	}, [isOn]);
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token)
+			return;
+
+		const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+		const ws = new WebSocket(
+			`${protocol}://${window.location.host}/api/db/ws?token=${encodeURIComponent(token)}`
+		);
+
+		const intervalId = window.setInterval(() => {
+			if (ws.readyState === WebSocket.OPEN) {
+				ws.send(JSON.stringify({ type: "ping" }));
+			}
+		}, 30000);
+
+		return () => {
+			window.clearInterval(intervalId);
+			ws.close();
+		};
+	}, []);
 	// const navigate = useNavigate();
 	const [LanguagesClicked, setLanguages] = useState(false);
+	const [TermsClicked, setTerms] = useState(false);
 	const [openMenu, setOpenMenu] = useState<string | null>(null);
 	const [activeTab, setActiveTab] = useState("friends");
 	const { setLang } = useLang();
@@ -189,9 +212,19 @@ function Main({children = ""}: {children?: ReactNode}) {
 		<div className="main-layout" >
 			<div className="main-header">
 				<div className="main-section-left">
-					<MyButton onClick={() => window.location.href = "/chat"}>
+					<MyButton onClick={() => setTerms(!TermsClicked)}>
+							<Img src={terms} alt={lang.Alt_text.menu_icon} className="main-icon" />
+						</MyButton>
+						{TermsClicked &&
+							<div className="main-menu-box">
+								<div className="main-menu-list">
+									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => window.location.href = "/terms"}>📃 Terms of Services</MyButton>
+								</div>
+							</div>
+						}
+					{/* <MyButton onClick={() => window.location.href = "/chat"}>
 						<Img src={menu} alt={lang.Alt_text.menu_icon} className="main-icon" />
-					</MyButton>
+					</MyButton> */}
 					<div >
 						<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
 							<Img src={friends} alt={lang.Alt_text.friend_icon} className="main-icon" />
