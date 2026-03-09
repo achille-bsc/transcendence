@@ -124,6 +124,7 @@ export default function Settings() {
 	};
 	const password = "********";
 	const email = "SuperKiwiLaLegendDu7680salutCoucoucKiwilolfdsfsfesfd@help.help";
+	const apiKey = "API_KEY";
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
@@ -184,7 +185,7 @@ export default function Settings() {
 						<div className="p-2 bg-[var(--background-box)]">
 							<div className="border border-b-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
-									<p>{lang.Log_register_page.pseudo} :</p>
+									<p>{lang.Settings_page.pseudo}</p>
 								</div>
 								<div className="grid grid-cols-6 gap-2">
 								<div className="col-span-5 break-words">
@@ -194,31 +195,40 @@ export default function Settings() {
 							</div>
 							<div className="border border-t-0 border-b-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
-									<p>{lang.Log_register_page.password} :</p>
+									<p>{lang.Settings_page.password}</p>
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
 										<p>{password}</p>
 									</div>
-									<div className="flex justify-end pl-1">
-										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>edit</MyButton>
-									</div>
 								</div>
 							</div>
 							<div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
-									<p>{lang.Log_register_page.email} :</p>
+									<p>{lang.Settings_page.email}</p>
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
 										{email}
 									</div>
 									<div className="flex justify-end pl-1">
-										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>edit</MyButton>
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>{lang.Settings_page.edit}</MyButton>
 									</div>
 								</div>
 							</div>
-							
+							{/* <div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
+								<div className="text-[10px]">
+									<p>{lang.Settings_page.api}</p>
+								</div>
+								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
+									<div className="break-all min-w-0">
+										{apiKey}
+									</div>
+									<div className="flex justify-end pl-1">
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>{lang.Settings_page.generate}</MyButton>
+									</div>
+								</div>
+							</div> */}
 						</div>
 					</div>
 				</div>

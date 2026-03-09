@@ -304,7 +304,11 @@ export default function Conversation() {
 					limit: PAGE_SIZE,
 				}),
 			});
-
+			console.log("fetching older messages with params:", {
+				receiverPseudo,
+				beforeId: oldestMessage.id,
+				limit: PAGE_SIZE,
+			}, "response:", response);
 			if (!response.ok) {
 				if (
 					requestToken !== olderRequestTokenRef.current ||
@@ -362,6 +366,7 @@ export default function Conversation() {
 		}
 
 		const loadConversation = async () => {
+			try {
 			const response = await fetch("/api/db/chat/find/dm", {
 				method: "POST",
 				headers: {
@@ -370,7 +375,7 @@ export default function Conversation() {
 				},
 				body: JSON.stringify({ receiverPseudo, limit: PAGE_SIZE }),
 			});
-
+			console.log("loading conversation with receiver:", receiverPseudo, "response:", response);
 			if (!response.ok) {
 				const payload = await response.json().catch(() => null);
 				const errorMessage =
@@ -382,13 +387,14 @@ export default function Conversation() {
 					setHasOlderMessages(false);
 					return;
 				}
+			}
+			} catch {
 				setMessages([]);
 				setActiveConversationId(null);
 				setHasOlderMessages(false);
 				navigate("/dm", { replace: true });
 				return;
 			}
-
 			const payload = await response.json();
 			const conversation = payload.data as DmConversation;
 			const ordered = [...conversation.messages].reverse();
