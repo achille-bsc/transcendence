@@ -1,0 +1,33 @@
+{
+  "name": "kongGameFront",
+  "version": "1.0.0",
+  "description": "Kong game front-end module",
+  "type": "module",
+  "main": "./dist/kong-game.umd.cjs",
+  "module": "./dist/kong-game.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/kong-game.js",
+      "require": "./dist/kong-game.umd.cjs"
+    },
+    "./style.css": "./dist/kongGameFront.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.9.3",
+    "vite": "^6.1.0",
+    "vite-plugin-dts": "^4.5.0"
+  }
+}

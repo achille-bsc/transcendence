@@ -1,0 +1,72 @@
+{
+	admin :2019 {
+		origins localhost
+		enforce_origin
+	}
+	debug
+	log default {
+		output stdout
+		# output file /var/caddy/log
+		format console
+		#format json
+	}
+}
+
+:80 {
+	redir https://{host}:8443{uri} permanent
+}
+
+:443 {
+	tls internal {
+		on_demand
+	}
+	handle /api/auth/* {
+		uri strip_prefix /api/auth
+		reverse_proxy auth-service:3001
+	}
+	handle /api/user/* {
+		uri strip_prefix /api/user
+		reverse_proxy user-management-service:3003
+	}
+	handle /api/db/* {
+		uri strip_prefix /api/db
+		reverse_proxy database-service:5000
+	}
+	handle /public/* {
+        reverse_proxy database-service:5000
+    }
+	handle /api/chat/* {
+		uri strip_prefix /api/chat
+		reverse_proxy chat-service:3004
+	}
+	handle /api/aow/* {
+		uri strip_prefix /api/aow
+		reverse_proxy age-of-war-service:5002
+	}
+	handle /api/kong/* {
+		uri strip_prefix /api/kong
+		reverse_proxy kong-service:5001
+	}
+	handle /api/fm/* {
+		uri strip_prefix /api/fm
+		reverse_proxy file-management-service:5010
+	}
+	handle /api/tournament/* {
+		uri strip_prefix /api/tournament
+		reverse_proxy tournament-service:5003
+	}
+	handle /api/analytics/* {
+		uri strip_prefix /api/analytics
+		reverse_proxy user-analytics-service:5000
+	}
+	handle /api/rmq/* {
+		uri strip_prefix /api/rmq
+		reverse_proxy rabbit-mq-service:5000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
+
+# NOTE: caddy stores certificates and other important assets in a data directory
+# $XDG_CONFIG_HOME/caddy (I'll set XDG_CONFIG_HOME=/app/data probably)

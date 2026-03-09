@@ -1,0 +1,118 @@
+{
+	"language": "de-DE",
+	"appName": "Transcendence",
+	"translations": {
+		"Log_register_page": {
+			"login": "Anmelden",
+			"register": "Registrieren",
+			"pseudo": "Pseudo",
+			"password": "Passwort",
+			"confirm_password": "Passwort bestätigen",
+			"submit": "Absenden",
+			"email": "E-Mail",
+			"pseudo_email": "Pseudo oder E-Mail"
+		},
+		"Home_page": {
+			"game_name": "Kongs Spiel",
+			"play": "SPIELEN",
+			"friend": "Freunde online :"
+		},
+		"navbar": {
+			"search": "Suche jemanden...",
+			"add": "Hinzufügen",
+			"pending": "Ausstehend",
+			"block": "Gesperrt",
+			"profile": "👤 Profil",
+			"settings": "⚙️ Einstellungen",
+			"deconnexion": "➜] Abmelden"
+		},
+		"Chat_page": {
+			"input": "Geben Sie Ihre Nachricht ein..."
+		},
+		"Game_page": {
+			"description": "Ich bin die Spiel-Seite"
+		},
+		"Alt_text": {
+			"menu_icon": "Menü-Symbol",
+			"friend_icon": "Freundes-Symbol",
+			"game_icon": "Spiel-Symbol",
+			"language_icon": "Sprachen-Symbol",
+			"dm_icon": "Direktnachrichten-Symbol",
+			"profile_icon": "Profil-Symbol",
+			"profile_picture": "Profilbild",
+			"friend_request_accept": "Freundesanfrage akzeptieren",
+			"friend_request_reject": "Freundesanfrage ablehnen",
+			"github_logo": "github-Logo für die Anmeldung",
+			"send_logo": "Logo zum Senden einer Nachricht"
+		},
+		"Profile_page": {
+			"edit_profile": "Profil bearbeiten",
+			"add_friend": "Freund hinzufügen",
+			"remove_friend": "Freund entfernen",
+			"message": "Nachricht",
+			"member_since": "Mitglied seit :",
+			"pseudo": "Pseudonym :"
+		},
+		"Settings_page": {
+			"pseudo": "Pseudonym :",
+			"password": "Passwort :",
+			"email": "E-Mail :",
+			"api": "API-Schlüssel :",
+			"edit": "bearbeiten",
+			"generate": "generieren"
+		},
+		"Terms_page": {
+			"title": "Allgemeine Geschäftsbedingungen",
+			"last_updated": "Zuletzt aktualisiert: 9. März 2026",
+			"terms_1": "1. Annahme der Bedingungen",
+			"terms_1_0": "Willkommen bei unserem Service. Durch den Zugriff auf unsere Plattform oder deren Nutzung erklären Sie sich mit diesen Nutzungsbedingungen (Bedingungen) einverstanden. Wenn Sie diesen Bedingungen nicht zustimmen, nutzen Sie unseren Service bitte nicht.",
+			"terms_1_1": "Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern. Änderungen treten sofort nach ihrer Veröffentlichung in Kraft. Ihre fortgesetzte Nutzung des Dienstes nach Änderungen gilt als Annahme der geänderten Bedingungen.",
+			"terms_2": "2. Registrierung des Kontos",
+			"terms_2_0": "Um bestimmte Funktionen unseres Dienstes nutzen zu können, müssen Sie ein Konto registrieren. Sie erklären sich damit einverstanden:",
+			"terms_2_1": "Bei der Registrierung genaue, aktuelle und vollständige Angaben zu machen",
+			"terms_2_2": "Ihre Kontoinformationen stets aktuell zu halten",
+			"terms_2_3": "Die Sicherheit Ihres Passworts und Ihres Kontos zu gewährleisten",
+			"terms_2_4": "Die Verantwortung für alle Aktivitäten zu übernehmen, die unter Ihrem Konto erfolgen",
+			"terms_2_5": "Uns unverzüglich über jede unbefugte Nutzung Ihres Kontos zu informieren",
+			"terms_2_6": "Sie müssen mindestens 13 Jahre alt sein, um ein Konto zu erstellen. Wenn Sie unter 18 Jahre alt sind, benötigen Sie die Zustimmung eines Elternteils oder Erziehungsberechtigten.",
+			"terms_3": "3. Nutzerverhalten",
+			"terms_3_0": "Sie erklären sich damit einverstanden, unseren Service nicht zu nutzen, um:",
+			"terms_3_1": "Gegen geltende Gesetze oder Vorschriften zu verstoßen",
+			"terms_3_2": "Rechte Dritter, einschließlich geistiger Eigentumsrechte, zu verletzen",
+			"terms_3_3": "Viren, Malware oder bösartigen Code hochzuladen oder zu übertragen",
+			"terms_3_4": "Andere Nutzer zu belästigen, zu missbrauchen, zu bedrohen oder einzuschüchtern",
+			"terms_3_5": "Spam, Werbung oder unaufgeforderte Nachrichten zu versenden",
+			"terms_3_6": "Sich als eine andere Person oder Organisation auszugeben",
+			"terms_3_7": "Zu versuchen, unbefugten Zugriff auf unsere Systeme oder andere Nutzerkonten zu erlangen",
+			"terms_3_8": "Den Dienst oder die Server zu stören oder zu unterbrechen",
+			"terms_3_9": "Automatisierte Systeme (Bots, Skripte) ohne unsere Erlaubnis zu verwenden",
+			"terms_4": "4. Inhalt und geistiges Eigentum",
+			"terms_4_1": "Sie behalten das Eigentum an den von Ihnen eingereichten Inhalten. Durch das Einreichen gewähren Sie uns eine weltweite, nicht-exklusive, lizenzgebührenfreie Lizenz zur Nutzung, Vervielfältigung, Änderung und Veröffentlichung dieser Inhalte im Zusammenhang mit dem Dienst.",
+			"terms_5": "5. Datenschutz",
+			"terms_5_0": "Ihre Nutzung des Dienstes unterliegt auch unserer Datenschutzrichtlinie. Durch die Nutzung des Dienstes stimmen Sie der darin beschriebenen Datenverarbeitung zu.",
+			"terms_6": "6. Gaming und virtuelle Gegenstände",
+			"terms_6_1": "Virtuelle Gegenstände haben keinen realen Geldwert",
+			"terms_6_2": "Wir behalten uns das Recht vor, virtuelle Gegenstände jederzeit zu ändern oder zu entfernen",
+			"terms_6_3": "Virtuelle Gegenstände sind nicht übertragbar und nicht erstattungsfähig",
+			"terms_6_4": "Sie besitzen keine virtuellen Gegenstände; Ihnen wird eine begrenzte Lizenz zu deren Nutzung gewährt",
+			"terms_7": "7. Chat- und Kommunikationsfunktionen",
+			"terms_7_0": "Unser Dienst umfasst Chat-Funktionen. Sie stimmen zu, diese verantwortungsbewusst zu nutzen. Wir behalten uns das Recht vor, die Kommunikation zur Einhaltung der Bedingungen zu überwachen.",
+			"terms_8": "8. Kündigung",
+			"terms_8_0": "Wir können Ihr Konto jederzeit ohne Vorankündigung sperren oder kündigen, wenn Ihr Verhalten gegen diese Bedingungen verstößt oder schädlich für andere ist.",
+			"terms_8_4": "Sie können Ihr Konto jederzeit kündigen, indem Sie uns kontaktieren.",
+			"terms_9": "9. Haftungsausschluss",
+			"terms_9_0": "DER DIENST WIRD OHNE MÄNGELGEWÄHR („AS IS“) UND OHNE JEGLICHE GARANTIE ZUR VERFÜGUNG GESTELLT.",
+			"terms_10": "10. Haftungsbeschränkung",
+			"terms_10_0": "SOWEIT GESETZLICH ZULÄSSIG, HAFTEN WIR NICHT FÜR INDIREKTE SCHÄDEN, ENTGANGENEN GEWINN ODER DATENVERLUST.",
+			"terms_10_1": "Unsere Gesamthaftung übersteigt nicht den Betrag, den Sie in den letzten zwölf Monaten an uns gezahlt haben, oder 100 $, je nachdem, welcher Betrag höher ist.",
+			"terms_12": "12. Streitbeilegung",
+			"terms_12_0": "Streitigkeiten werden durch ein verbindliches Schiedsverfahren beigelegt.",
+			"terms_12_1": "Sie verzichten auf das Recht auf ein Schwurgerichtsverfahren oder die Teilnahme an einer Sammelklage.",
+			"terms_14": "14. Salvatorische Klausel",
+			"terms_14_0": "Sollte eine Bestimmung dieser Bedingungen unwirksam sein, bleiben die übrigen Bestimmungen davon unberührt.",
+			"terms_15": "15. Kontaktinformationen",
+			"terms_15_1": "E-Mail: support@transcendance.com",
+			"terms_15_2": "Durch die Nutzung unseres Dienstes bestätigen Sie, dass Sie diese Nutzungsbedingungen gelesen und verstanden haben."
+		}
+	}
+}

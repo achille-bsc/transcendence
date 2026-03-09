@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@layer base{
+	:root {
+		--default: #6E3CA3;
+		--background-dark: #1A1A1A;
+		--background-light: #FFFFFF;
+		--background-header-dark: #141414;
+		--background-header-light: #E4CCFF;
+		--select-header-dark: #1C1C1C;
+		--select-header-light: #E1C5FF;
+		--background-box-dark: #3A3A3A;
+		--background-box-light: #EFE0FF;
+		--background-box-select-dark: #282828;
+		--background-box-select-light: #E5CDFF;
+		--not-selected-items-dark: #202020;
+		--not-selected-items-light: #F0E2FF;
+		--props: #9B9B9B;
+		--change-theme: #D1D5DB;
+		--white: #FFFFFF;
+		--black: #000000;
+		--button-dark: linear-gradient(90deg, #6E3CA3, #A82828);
+		--button-light: linear-gradient(90deg, #B78EE3, #E46868);
+	};
+	.dark {
+		--background: var(--background-dark);
+		--background-header: var(--background-header-dark);
+		--select-header: var(--select-header-dark);
+		--background-box: var(--background-box-dark);
+		--background-box-select: var(--background-box-select-dark);
+		--button: var(--button-dark);
+		--contrast: var(--white);
+		--not-selected-items: var(--not-selected-items-dark);
+	};
+	.light {
+		--background: var(--background-light);
+		--background-header: var(--background-header-light);
+		--select-header: var(--select-header-light);
+		--background-box: var(--background-box-light);
+		--background-box-select: var(--background-box-select-light);
+		--button: var(--button-light);
+		--contrast: var(--black);
+		--not-selected-items: var(--not-selected-items-light);
+	};
+}
+
+/* body {
+	animation:
+		truc 3s ease-in 1s,
+		bgrandom 3s ease-in 1s;
+}
+
+@keyframes truc {
+	0% {
+		transform: skew(0px, 0px);
+	}
+	25% {
+		transform: skew(-150deg, -500deg);
+	}
+	50% {
+		transform: skew(360deg, 1000deg);
+	}
+	75% {
+		transform: skew(150deg, 500deg);
+	}
+	100% {
+		transform: skew(0px, 0px);
+	}
+}
+
+@keyframes bgrandom {
+	0%   { background: red; }
+	10%  { background: blue; }
+	20%  { background: green; }
+	30%  { background: purple; }
+	40%  { background: linear-gradient(45deg, red, blue); }
+	50%  { background: linear-gradient(90deg, yellow, pink); }
+	60%  { background: black; }
+	70%  { background: linear-gradient(135deg, cyan, magenta); }
+	80%  { background: orange; }
+	100% { background: linear-gradient(60deg, lime, purple); }
+} */

@@ -1,0 +1,10 @@
+node_modules
+*/node_modules
+.env
+.vscode
+secrets
+db_data
+.sw*
+my-react-app
+dist
+user_management

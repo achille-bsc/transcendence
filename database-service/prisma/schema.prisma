@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  pseudo      String    @id
+  email       String    @unique
+  password    String
+  avatar      String?   @default("default.png")
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+
+  participants  ConversationParticipant[]
+  sentMessages  Message[]
+  globalHistory GlobalChat[]
+  friendRequestsSent     Friend[] @relation("UserAsRequester")
+  friendRequestsReceived Friend[] @relation("UserAsAddressee")
+  blocksInitiated Block[] @relation("UserBlocker")
+  blockedBy       Block[] @relation("UserBlocked")
+}
+
+model Conversation {
+  id           Int      @id @default(autoincrement())
+  name         String?  
+  isGroup      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt 
+
+  participants ConversationParticipant[]
+  messages     Message[]
+}
+
+model ConversationParticipant {
+  id             Int      @id @default(autoincrement())
+  conversationId Int
+  userId         String
+  
+  role           String   @default("member")
+  joinedAt       DateTime @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [pseudo])
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+
+  conversationId Int
+  senderId       String
+  
+  content        String
+  createdAt      DateTime @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [pseudo])
+}
+
+model Block {
+  id        Int      @id @default(autoincrement())
+
+  blockerId String      
+  blocker   User     @relation("UserBlocker", fields: [blockerId], references: [pseudo])
+  
+  blockedId String 
+  blocked   User     @relation("UserBlocked", fields: [blockedId], references: [pseudo])
+
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model Friend {
+  id          Int      @id @default(autoincrement())
+
+  requesterId String
+  requester   User     @relation("UserAsRequester", fields: [requesterId], references: [pseudo])
+
+  addresseeId String      
+  addressee   User     @relation("UserAsAddressee", fields: [addresseeId], references: [pseudo])
+
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  @@unique([requesterId, addresseeId]) 
+}
+
+model GlobalChat {
+  id        Int      @id @default(autoincrement()) 
+  
+  userId    String
+  
+  message   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [pseudo])
+}
