@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:46:01 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/01 03:35:33 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/08 15:18:32 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,21 @@ export const games:             Map<string, Game>
 //////////
 // Kong //
 //////////
-export const persoKongHeight	= 10;
+export const persoKongHeight	= 5;
 export const persoKongWidth		= 5;
 export const kongPlayerSpeed	= 25;
 export const kongMaxHeight		= 650;
 export const kongMaxLength		= 1600;
 export const GRAVITY			= 25;
-export const JUMP_FORCE			= -90;
-export const MOVE_SPEED			= 25;
+export const JUMP_FORCE			= -80;
+export const MOVE_SPEED			= 3;
+export const BARREL_FALL_SPEED  = 15;
+export const IMMOBILIZED_TIME   = 1000;
+export const PLAYER_HALF_W		= 3;
+export const PLAYER_HALF_H		= 4;
+export const BARREL_HALF_SIZE	= 3;
+export const DIST_FOR_WIN       = 30;
+export const SECONDS_BEFORE_START   = 8;
 
 //////////
 // MAPS //
