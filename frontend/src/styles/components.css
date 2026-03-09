@@ -250,15 +250,15 @@
   }
 
   .main-header {
-    @apply relative flex min-h-20 items-center justify-between border-b-2 border-solid bg-[var(--background-header)] px-2 md:px-10;
+    @apply flex items-center justify-between px-4 py-2 flex-wrap md:flex-nowrap;
   }
 
   .main-section-left {
-    @apply flex items-center space-x-4;
+    @apply flex items-center gap-2 md:gap-3;
   }
 
   .main-icon {
-    @apply h-auto w-8 md:w-10;
+    @apply w-6 h-6 md:w-7 md:h-7;
   }
 
   .main-friends-menu {
@@ -315,7 +315,7 @@
   }
 
   .main-title {
-    @apply text-[25px] font-bold text-[var(--default)] md:text-[50px];
+    @apply flex-1 flex justify-center;
     font-family: "Quantico", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -326,11 +326,11 @@
   }
 
   .main-section-right {
-    @apply flex items-start space-x-4;
+    @apply flex items-center gap-2 md:gap-3;
   }
 
   .main-icon-wrap {
-    @apply h-auto w-8 md:w-10;
+    @apply relative;
   }
 
   .main-menu-box {

@@ -71,19 +71,6 @@ async function fetchPending(){
 		else
 			return [];
 	}
-// async function fetchFriends() {
-
-// 	if (!localStorage.getItem("token"))
-// 		return;
-// 	const token = localStorage.getItem("token");
-// 	const res = await fetch('/api/db/profileuser', {
-// 		method: "POST",
-// 		headers: {
-// 			"Authorization": `Bearer ${token}` 
-// 		}
-// 	});
-// 	const data = await res.json();
-// 	return data.user.pseudo;
 }
 
 function isUser(username: string){
@@ -129,20 +116,20 @@ function SearchBar() {
     	setError("");
   		window.location.href = `/profile/${query}`
   	};
-		return (
-			<>
-		 	 	<form onSubmit={handleSubmit} aria-label="Search user form">
-		 	 	  	<input
-		 	 	    	aria-label="Search user"
-		 	 	    	type="text"
-		 	 	    	placeholder={lang.navbar.search}
-		 	 	    	value={query}
-	 	 	    	onChange={(e) => setQuery(e.target.value)}
-	 	 	    	className="main-search-form-input"
+	return (
+		<div>
+	 	 	<form onSubmit={handleSubmit} aria-label="Search user form">
+	 	 	  	<input
+	 	 	    	aria-label="Search user"
+	 	 	    	type="text"
+	 	 	    	placeholder={lang.navbar.search}
+	 	 	    	value={query}
+	 	    	onChange={(e) => setQuery(e.target.value)}
+	 	    	className="main-search-form-input"
 				/>
-				{error && <p className="main-search-error">{error}</p>}
-	 	 	</form>
-		</>
+			{error && <p className="main-search-error">{error}</p>}
+	 	</form>
+	</div>
 	);
 }
 
