@@ -6,15 +6,15 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/02/27 19:16:05 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/08 14:21:06 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ClientState, Game, WSMessage, PlayerDatas }	from "../utils/types";
-import { WebSocket }									from "@fastify/websocket";
-import { error }										from "../utils/utils";
-import { games, persoKongHeight, persoKongWidth }		from "../utils/const";
-import { handleGame, startGame }						from "./gamesHandler";
+import { ClientState, Game, WSMessage, PlayerDatas, Baril }	from "../utils/types";
+import { WebSocket }										from "@fastify/websocket";
+import { error }											from "../utils/utils";
+import { games, persoKongHeight, persoKongWidth }			from "../utils/const";
+import { handleGame, sendGameState, startGame }				from "./gamesHandler";
 
 export function kongHandler(
 	webSocket: WebSocket,
@@ -23,7 +23,6 @@ export function kongHandler(
 	clients: Map<WebSocket, ClientState>
 ): void
 {
-	console.log(msg);
 	if (!state.isAuthenticated)
 		return (error('unauth'));
 
@@ -36,25 +35,36 @@ export function kongHandler(
 			createGame(clients, webSocket, msg, state);
 		if (msg.payload.datas[0] === 'joinGame')
 			joinGame(msg, webSocket, state);
+		if (msg.payload.datas[0] === 'startGame')
+		{
+			const game = games.get(state.gameId!);
+			if (!game)
+				return (error('gameNotFound'));
+			if (game.host !== state.id)
+				return (error('notHost'));
+			startGame(game);
+		}
 
 	}
 	else if (msg.payload.type === 'gameAction')
-	{
-		handleGame(state, msg.payload.datas)
-	}
+		handleGame(state, msg.payload.datas, msg.payload.Localuser)
 }
 
 function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): void
 {
-	console.log("try connecting to game");
+	let exit = 0;
+	games.forEach((game) => {
+		game.players.forEach((player) => {
+			if (player.id == msg.userID)
+				exit = 1;
+		});	
+	})
+	if (exit == 1) return ;
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
-		console.log("try connecting to game with id : " + msg.payload.datas[1]);
-		console.log("games ids: " + Array.from(games.keys()).join(', '));
 		const game = games.get(msg.payload.datas[1]);
-		if (!game)
+		if (!game || game.isFinish || game.players.size >= 4 || game.isLocal)
 		{
-			console.log("game not found");
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
 		}
@@ -68,8 +78,8 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 		}
 		game.players.set(player.id, player);
 		state.gameId = game.id.toString();
-		console.log(`Player ${player.id} joined game ${game.host}`);
-		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: game.host }))
+		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: game.id }));
+		sendGameState(game, true);
 	}
 }
 
@@ -79,7 +89,15 @@ function createGame(
 	msg: WSMessage,
 	state: ClientState
 ) {
-	if (msg.type !== 'kong') return ;
+	let exit = 0;
+	games.forEach((game) => {
+		game.players.forEach((player) => {
+			if (player.id == msg.userID)
+				exit = 1;
+		});	
+	})
+	// console.log("try creating game with id : " + (games.size + 1).toString());
+	if (msg.type !== 'kong' || exit == 1) return ;
 	// A REACTIVER QUAND LES TESTS DE GAME SERONT FINIS
 	// if (games.get(msg.userID) !== undefined)
 	// {
@@ -89,15 +107,27 @@ function createGame(
 	const game: Game = {
 		host: msg.userID,
 		id: games.size + 1,
-		barils: [],
+		barils: new Map<string, Baril>(),
 		difficulty: msg.payload.datas[2],
 		players_count: 1,
 		players: new Map<string, PlayerDatas>(),
 		isFinish: false,
-		isStarted: false
+		isStarted: false,
+		// todo: later
+		isLocal: msg.payload.datas[3] === 'local' ? true : false,
 	}
 	const owner: PlayerDatas = {
-		id: msg.userID,
+		id:  game.isLocal ? "1" : msg.userID,
+		x: persoKongWidth	/ 2,
+		y: persoKongHeight	/ 2,
+		velocityY: 0,
+		isGoingLeft: false,
+		isGoingRight: false,
+		isOnGround: false,
+		socket: webSocket
+	}
+	const localPlayer: PlayerDatas = {
+		id: game.isLocal ? "2" : msg.userID,
 		x: persoKongWidth	/ 2,
 		y: persoKongHeight	/ 2,
 		velocityY: 0,
@@ -107,8 +137,11 @@ function createGame(
 		socket: webSocket
 	}
 	game.players.set(owner.id, owner);
+	if (game.isLocal)
+		game.players.set(localPlayer.id, localPlayer);
 	state.gameId = game.id.toString();
 	webSocket.send(JSON.stringify({ type: 'gameCreated', gameId: game.id }));
 	games.set(game.id.toString(), game);
+	
 	startGame(game);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abosc <abosc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 22:20:21 by marvin            #+#    #+#             */
-/*   Updated: 2026/01/23 12:07:18 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/03 14:37:58 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ export function error(
 		| 'unauth'
 		| 'wrongType'
 		| 'UserAllreadyHostGame'
+		| 'notHost'
+		| 'gameNotFound'
 		| undefined,
 	message?: string
 ) {
@@ -40,6 +42,14 @@ export function error(
 
 		case 'wrongType':
 			console.log(`Error: The provided type is not valid. Please provide a valide type`);
+			break;
+
+		case 'notHost':
+			console.log(`Error: The user is not the host of the game. Only the host can start the game`);
+			break;
+		
+		case 'gameNotFound':
+			console.log(`Error: The game you are trying to start is not found. Please check the game id and try again`);
 			break;
 
 		default:
