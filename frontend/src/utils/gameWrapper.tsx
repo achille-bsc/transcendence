@@ -35,13 +35,9 @@ type KongEventHandlers = {
 export interface KongGameComponentProps
 	extends Omit<KongGameConfig, "canvasWidth" | "canvasHeight">,
 		KongEventHandlers {
-	/** Largeur du canvas (défaut : 800) */
 	width?: number;
-	/** Hauteur du canvas (défaut : 600) */
 	height?: number;
-	/** Classes CSS supplémentaires sur le conteneur */
 	className?: string;
-	/** Démarrage automatique (défaut : true) */
 	autoStart?: boolean;
 }
 
@@ -71,7 +67,6 @@ export function KongGameComponent({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gameRef = useRef<KongGame | null>(null);
 
-	/* Initialisation + cleanup */
 	useEffect(() => {
 		const container = containerRef.current;
 		if (!container) return;
@@ -90,7 +85,6 @@ export function KongGameComponent({
 		const game = new KongGame(container, config);
 		gameRef.current = game;
 
-		/* Brancher les événements */
 		if (onConnected) game.on("connected", onConnected);
 		if (onDisconnected) game.on("disconnected", onDisconnected);
 		if (onReconnecting) game.on("reconnecting", onReconnecting);
@@ -109,24 +103,8 @@ export function KongGameComponent({
 			game.destroy();
 			gameRef.current = null;
 		};
-		// On ne dépend que de la config de connexion pour ne pas recréer le jeu
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+
 	}, [wsUrl, userToken, userId, width, height]);
-
-	/* Méthodes impératives exposées via ref (optionnel) */
-	// const createGame = useCallback(
-	// 	(gameId: string, difficulty?: "easy" | "medium" | "hard") => {
-	// 		gameRef.current?.createGame(gameId, difficulty);
-	// 	},
-	// 	[],
-	// );
-
-	// const joinGame = useCallback(
-	// 	(gameId: string, difficulty?: "easy" | "medium" | "hard") => {
-	// 		gameRef.current?.joinGame(gameId, difficulty);
-	// 	},
-	// 	[],
-	// );
 
 	return (
 		<div
@@ -137,7 +115,6 @@ export function KongGameComponent({
 	);
 }
 
-/* Pour un usage impératif via React.forwardRef, on peut aussi exporter le hook */
 export function useKongGame() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gameRef = useRef<KongGame | null>(null);

@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:34 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/08 14:14:52 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/09 14:10:31 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ export class KongGame {
 			</div>
 			<button class="kong-btn kong-btn--create" data-action="create">Créer une partie</button>
 			<div class="kong-join-group">
-				<input class="kong-input" type="text" placeholder="ID de la partie" data-input="gameId" />
 				<button class="kong-btn kong-btn--join" data-action="join">Rejoindre</button>
 			</div>
 			<select class="kong-select" data-input="difficulty">
@@ -143,12 +142,6 @@ export class KongGame {
 				<option value="medium" selected>Normal</option>
 				<option value="hard">Difficile</option>
 			</select>
-			<div class="kong-dev-group">
-				<label class="kong-dev-group__label">🔑 Dev</label>
-				<input class="kong-input kong-input--dev" type="text" placeholder="Token alternatif" data-input="devToken" />
-				<input class="kong-input kong-input--dev" type="text" placeholder="User ID" data-input="devUserId" />
-				<button class="kong-btn kong-btn--dev" data-action="applyDev">Appliquer</button>
-			</div>
 		`;
 		this.container.appendChild(this.controlsEl);
 		this.setupControlEvents();
@@ -264,7 +257,6 @@ export class KongGame {
 		this.config = { ...this.config, gameMode: mode };
 		this.network.setGameMode(mode);
 
-		// Recréer le GameInput avec le bon mode
 		this.input.destroy();
 		const playerIds = mode === "local"
 			? [this.config.userId, this.config.localPlayer2Id ?? this.config.userId + "_local"]
@@ -300,7 +292,6 @@ export class KongGame {
 		}
 	}
 
-	// game loop
 	private startRenderLoop(): void {
 		let lastTime = performance.now();
 
@@ -308,7 +299,7 @@ export class KongGame {
 		const loop = (now: number) => {
 			if (!this.isRunning) return;
 
-			const dt = (now - lastTime) / 1000; // delta en secondes
+			const dt = (now - lastTime) / 1000;
 			lastTime = now;
 			this.input.update();
 
@@ -333,7 +324,6 @@ export class KongGame {
 		}
 	}
 
-	// status bar
 	private setStatus(
 		text: string,
 		level: "info" | "success" | "warning" | "error",
