@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 13:43:26 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/08 14:09:41 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/09 16:41:02 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ export class GameRenderer {
 	private ctx: CanvasRenderingContext2D;
 	private width: number;
 	private height: number;
-	private playerImage: HTMLImageElement;
+	private playerImages: HTMLImageElement[];
 	private barilImage: HTMLImageElement;
+	private gateImage: HTMLImageElement;
 	
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
@@ -37,11 +38,20 @@ export class GameRenderer {
 		this.width = canvas.width;
 		this.height = canvas.height;
 		
-		this.playerImage = new Image();
-		this.playerImage.src = "/assets/face.png";
+		this.playerImages = [];
+		this.playerImages[0] = new Image();
+		this.playerImages[0].src = "/assets/face1.png";
+		this.playerImages[1] = new Image();
+		this.playerImages[1].src = "/assets/face2.png";
+		this.playerImages[2] = new Image();
+		this.playerImages[2].src = "/assets/face3.png";
+		this.playerImages[3] = new Image();
+		this.playerImages[3].src = "/assets/face4.png";
 		
 		this.barilImage = new Image();
 		this.barilImage.src = "/assets/baril.png";
+		this.gateImage = new Image();
+		this.gateImage.src = "/assets/gate.png";
 	}
 
 	resize(width: number, height: number): void {
@@ -123,17 +133,13 @@ export class GameRenderer {
 
 	private drawPlayers(players: RenderPlayer[]): void {
 		players.forEach((player, index) => {
-			this.drawPlayer(player, PLAYER_COLORS[index % PLAYER_COLORS.length], );
+			this.drawPlayer(player, index % 4, );
 		});
 	}
 
-	private drawPlayer(player: RenderPlayer, color: string): void {
-		if (this.playerImage.complete && this.playerImage.naturalWidth > 0) {
-			this.ctx.drawImage(this.playerImage, player.displayX, player.displayY - 20, PLAYER_SIZE, PLAYER_SIZE);
-		} else {
-			// Fallback rectangle si l'image n'est pas encore chargée
-			this.ctx.fillStyle = color;
-			this.ctx.fillRect(player.displayX, player.displayY, PLAYER_SIZE, PLAYER_SIZE);
+	private drawPlayer(player: RenderPlayer, color: number): void {
+		if (this.playerImages[color].complete && this.playerImages[color].naturalWidth > 0) {
+			this.ctx.drawImage(this.playerImages[color], player.displayX, player.displayY - 20, PLAYER_SIZE, PLAYER_SIZE);
 		}
 		
 		// this.ctx.fillRect(player.displayX, player.displayY, PLAYER_SIZE, PLAYER_SIZE);
@@ -151,10 +157,14 @@ export class GameRenderer {
 	}
 
 	private drawGoalPoint(point: { x: number, y: number }): void {
-		this.ctx.beginPath();
-		this.ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
-		this.ctx.fillStyle = "#2ecc71";
-		this.ctx.fill();
+		if (this.gateImage.complete && this.gateImage.naturalWidth > 0) {
+			this.ctx.drawImage(this.gateImage, point.x - 20, point.y - 40, 40, 40);
+		} else {
+			this.ctx.beginPath();
+			this.ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+			this.ctx.fillStyle = "#2ecc71";
+			this.ctx.fill();
+		}
 		this.ctx.closePath();
 	}
 
