@@ -26,7 +26,7 @@ certs:
 						-keyout "./certificates/private/$$service.key" \
 						-out "./certificates/public/$$service.crt" \
 						-subj "/CN=$$service" \
-						-addext "subjectAltName=DNS:$$service, DNS:localhost"; \
+						-addext "subjectAltName=DNS:$$service,DNS:localhost"; \
 		fi \
 	done
 

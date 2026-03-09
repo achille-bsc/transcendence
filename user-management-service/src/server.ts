@@ -3,9 +3,16 @@ import multipart from '@fastify/multipart';
 import authGuardPlugin from '../plugin/authGuard';  // 'plugin' pas 'plugins'
 import friendRoutes from './routes/friend';
 import userRoutes from './routes/user';
+import fs from 'fs';
 
 async function start() {
-  const server = fastify({ logger: true });
+  const server = fastify({ 
+    logger: true,
+    https: {
+      key: fs.readFileSync('/app/certs/srv.key'),
+      cert: fs.readFileSync('/app/certs/srv.crt')
+    }
+  });
 
   try {
     await server.register(authGuardPlugin);

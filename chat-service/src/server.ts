@@ -2,9 +2,16 @@ import fastify from 'fastify';
 import authGuardPlugin from '../plugin/authGuard';
 import messageRoutes from './messages';
 import chatWebsocketPlugin from './websocket';
+import fs from 'fs';
 
 async function start() {
-  const server = fastify({ logger: true });
+  const server = fastify({ 
+    logger: true,
+    https: {
+      key: fs.readFileSync('/app/certs/srv.key'),
+      cert: fs.readFileSync('/app/certs/srv.crt')
+    }
+  });
 
   try {
     await server.register(authGuardPlugin);
