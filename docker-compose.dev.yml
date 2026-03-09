@@ -38,18 +38,18 @@ services:
         depends_on:
             frontend:
                 condition: service_started
-#            database-service:
-#                condition: service_healthy
+            database-service:
+                condition: service_healthy
             auth-service:
                 condition: service_started
-#            chat-service:
-#                condition: service_started
+            chat-service:
+                condition: service_started
             # file-management-service:
             #     condition: service_started
             # kong-service:
             #     condition: service_started
-#            user-management-service:
-#                condition: service_started
+            user-management-service:
+                condition: service_started
         restart: always
 
 # ======================== FRONT ========================
@@ -98,13 +98,13 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
-#        depends_on:
-#            user-management-service:
-#                condition: service_started
-#                restart: true
-#            database-service:
-#                condition: service_healthy
-#                restart: true
+        depends_on:
+            user-management-service:
+                condition: service_started
+                restart: true
+            database-service:
+                condition: service_healthy
+                restart: true
         restart: unless-stopped
 
 # ======================== CHAT ========================

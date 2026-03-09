@@ -125,6 +125,7 @@ async function chatWebsocketPlugin(server: FastifyInstance) {
     }
     return { users: getOnlineUsers() };
   });
+  
   server.decorate('sendToUser', sendToUser);
   server.decorate('getOnlineUsers', getOnlineUsers);
 }

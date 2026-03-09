@@ -27,7 +27,7 @@ function parsePositiveInt(value: number | string | undefined): number | undefine
 
 export default async function messageRoutes(server: FastifyInstance) {
 
-  server.post("/chat/find/dm", {
+  server.post("/find-dm", {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { receiverPseudo, beforeId, limit } = request.body as {
