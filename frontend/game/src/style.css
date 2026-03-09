@@ -1,0 +1,167 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   style.css                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/22 14:35:33 by abosc             #+#    #+#             */
+/*   Updated: 2026/02/22 14:35:36 by abosc            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+.kong-game-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0;
+	width: fit-content;
+	font-family: monospace;
+}
+
+.kong-canvas {
+	display: block;
+	border: 2px solid #16213e;
+	border-radius: 4px 4px 0 0;
+	background: #1a1a2e;
+}
+
+.kong-status {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 6px 12px;
+	font-size: 13px;
+	text-align: center;
+	border-radius: 0 0 4px 4px;
+	border: 2px solid #16213e;
+	border-top: none;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.kong-status--info {
+	background: #16213e;
+	color: #a0b4d0;
+}
+
+.kong-status--success {
+	background: #0a3d2a;
+	color: #2ecc71;
+}
+
+.kong-status--warning {
+	background: #3d3a0a;
+	color: #f1c40f;
+}
+
+.kong-status--error {
+	background: #3d0a0a;
+	color: #e74c3c;
+}
+
+/* ── Panneau de contrôle ──────────────────────────────────────────────────── */
+
+.kong-controls {
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background: #16213e;
+	border: 2px solid #16213e;
+	border-radius: 4px 4px 0 0;
+}
+
+.kong-controls + .kong-canvas {
+	border-radius: 0;
+}
+
+.kong-join-group {
+	display: flex;
+	gap: 4px;
+}
+
+.kong-btn {
+	padding: 6px 14px;
+	border: none;
+	border-radius: 3px;
+	font-family: monospace;
+	font-size: 13px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.kong-btn--create {
+	background: #2ecc71;
+	color: #0a3d2a;
+}
+
+.kong-btn--create:hover {
+	background: #27ae60;
+}
+
+.kong-btn--join {
+	background: #3498db;
+	color: #0a2a3d;
+}
+
+.kong-btn--join:hover {
+	background: #2980b9;
+}
+
+.kong-input {
+	padding: 5px 8px;
+	border: 1px solid #2a3a5e;
+	border-radius: 3px;
+	background: #0f0f23;
+	color: #a0b4d0;
+	font-family: monospace;
+	font-size: 13px;
+	width: 140px;
+}
+
+.kong-input::placeholder {
+	color: #4a5a7e;
+}
+
+.kong-select {
+	padding: 5px 8px;
+	border: 1px solid #2a3a5e;
+	border-radius: 3px;
+	background: #0f0f23;
+	color: #a0b4d0;
+	font-family: monospace;
+	font-size: 13px;
+	cursor: pointer;
+	margin-left: auto;
+}
+
+.kong-dev-group {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding-left: 8px;
+	border-left: 1px solid #2a3a5e;
+	margin-left: 4px;
+}
+
+.kong-dev-group__label {
+	font-family: monospace;
+	font-size: 11px;
+	color: #e67e22;
+	white-space: nowrap;
+}
+
+.kong-input--dev {
+	width: 110px;
+	border-color: #e67e22;
+}
+
+.kong-btn--dev {
+	background: #e67e22;
+	color: #1a1a2e;
+}
+
+.kong-btn--dev:hover {
+	background: #d35400;
+}
