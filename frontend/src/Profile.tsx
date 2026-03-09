@@ -43,12 +43,9 @@ async function ProfilePicture() {
 				"Content-Type": "application/json"
 			}
 		});
-		console.log("RESS", res);
 		if (!res.ok)
 			alert("An error occured");
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl;
 	}
 	catch (err)
@@ -71,12 +68,9 @@ async function getOtherUserAvatar(pseudo: string) {
 			},
 			body: JSON.stringify({pseudo: pseudo})
 		});
-		console.log("RESS", res);
 		if (!res.ok)
 			return "/default-avatar.png";
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl || "/default-avatar.png";
 	}
 	catch (err)
@@ -220,11 +214,9 @@ export default function Profile() {
 				},
 				body: JSON.stringify({friendPseudo : username}),
 			});
-			console.log("RESS", res);
 			if (!res.ok)
 				alert("An error occured");
 			const data = await res.json()
-			console.log(data);
 			alert("Friend request sent!");
 			setIsFriend(true);
 		}
@@ -273,7 +265,6 @@ export default function Profile() {
 			return;
 		}
 	}
-
 	return (
 		<Main> 
 			<div className="flex flex-row h-[calc(100dvh-5rem)] quantico-regular">

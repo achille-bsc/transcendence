@@ -13,11 +13,11 @@ import { useLang } from "../script/langProvider.tsx";
 // 	return
 // }
 
-function fetchFriends() {
-	return ([{name: "David" }, 
-		{name: "EST" },
-		{name: "OUAIS" }
-	]);
+// function fetchFriends() {
+// 	return ([{name: "David" }, 
+// 		{name: "EST" },
+// 		{name: "OUAIS" }
+// 	]);
 	// try
 	// {
 	// 	const token = localStorage.getItem("token");
@@ -51,7 +51,7 @@ function fetchFriends() {
 	// 	console.error("Invalid token:", error);
 	// 	return false;
 	// }
-}
+// }
 
 async function fetchPending(){
 	const token = localStorage.getItem("token");
@@ -88,10 +88,28 @@ async function fetchPending(){
 // 	return data.user.pseudo;
 }
 
-function isUser(username: string){
-	if (username != "tigre")
+async function isUser(username: string)
+{
+	const token = localStorage.getItem("token");
+	if (!token)
+	{
+		console.error("Token not found");
 		return false;
-	return true;
+	}
+	const res = await fetch('/api/db/profileother', {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body : JSON.stringify({ pseudo: username })
+	});
+	console.log("isUser RES:", res);
+	const data = await res.json();
+	console.log("isUser data:", data);
+	if (data.user.pseudo === username)
+		return true;
+	return false;
 }
 
 function Profile() {
@@ -121,10 +139,15 @@ function SearchBar() {
 	const lang = useLang().getLang();
 	const [query, setQuery] = useState("");
 	const [error, setError] = useState("");
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!query.trim() || !isUser(query))
+		if (!query.trim())
 		{
+			setError("Cannot find user");
+			return;
+		}
+		const exists = await isUser(query);
+		if (!exists) {
 			setError("Cannot find user");
 			return;
 		}
@@ -201,7 +224,7 @@ function Main({children = ""}: {children?: ReactNode}) {
 	}, []);
 
 	const data: Record<string, any[]> = {
-		friends: fetchFriends(),
+		friends: [],
 		pending: pending,
 		blocked: []
 	};
@@ -243,10 +266,11 @@ function Main({children = ""}: {children?: ReactNode}) {
 									))}
 								</div>
 								<ul className="main-friends-list">
-									{data[activeTab] && data[activeTab].length > 0 ? (
-										data[activeTab].map(({ id, pseudo }) => (
-											<Friend key={id}>{pseudo}</Friend>))
-									) : (<li className="main-empty-item"> No friends found</li> )}
+									{activeTab !== "friends" && (
+										(data[activeTab]?.length ?? 0) > 0 
+											? data[activeTab].map(({ id, pseudo }) => <Friend key={id}>{pseudo}</Friend>)
+											: <li className="main-empty-item">No users found</li>
+									)}
 								</ul>
 								<div className="main-search-wrap">
 									<SearchBar/>

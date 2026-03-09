@@ -260,11 +260,11 @@
   }
 
   .main-section-left {
-    @apply flex items-center space-x-4;
+    @apply flex items-center space-x-2 md:space-x-4;
   }
 
   .main-icon {
-    @apply h-auto w-8 md:w-10;
+    @apply w-8 h-8 flex-shrink-0;
   }
 
   .main-friends-menu {
@@ -321,7 +321,7 @@
   }
 
   .main-title {
-    @apply text-[25px] font-bold text-[var(--default)] md:text-[50px];
+    @apply text-[15px] font-bold text-[var(--default)] md:text-[50px];
   }
 
   .main-title-click {
@@ -329,7 +329,7 @@
   }
 
   .main-section-right {
-    @apply flex items-start space-x-4;
+    @apply flex items-center space-x-2 md:space-x-4;
   }
 
   .main-icon-wrap {
