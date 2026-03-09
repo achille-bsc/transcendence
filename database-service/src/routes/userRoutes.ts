@@ -41,7 +41,7 @@ export default async function userRoutes(server: FastifyInstance) {
   });
 
   server.post('/user/exists', {
-    onRequest: [server.requireBackendPass]
+    onRequest: [server.requireKey]
   }, async (request, reply) => {
     const { pseudo } = request.body as { pseudo: string };
     const user = await prisma.user.findUnique({
@@ -74,5 +74,45 @@ export default async function userRoutes(server: FastifyInstance) {
     }
   });
 
+  server.put('/user/update-apikey', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { pseudo, apiKey } = request.body as { pseudo: string; apiKey: string };
+    
+    try {
+      const user = await prisma.user.update({
+        where: { pseudo },
+        data: { apiKey }
+      });      
+      return { success: true, user: { pseudo: user.pseudo } };
+    } catch (error: any) {
+      server.log.error(error);
+      return reply.code(500).send({ error: "Error recording API key" });
+    }
+  });
+
+  server.post('/user/verify-apikey', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { apiKey } = request.body as { apiKey: string };
+
+    if (!apiKey || typeof apiKey !== 'string') {
+      return reply.code(400).send({ error: 'API Key is required' });
+    }
+
+    try {
+      const user = await prisma.user.findFirst({
+        where: { apiKey: apiKey },
+        select: { pseudo: true} 
+      });
+      if (!user) {
+        return reply.code(401).send({ error: 'Invalid API Key' });
+      }
+      return { success: true, user: user };
+    } catch (error) {
+      server.log.error(error);
+      return reply.code(500).send({ error: 'Internal server error verifying API key' });
+    }
+  });
   
 }
