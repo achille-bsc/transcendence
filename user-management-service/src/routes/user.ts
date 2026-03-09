@@ -158,6 +158,35 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(500).send({ error: "Error updating email" });
     }
   });
+  
+  server.put('/apikey', {
+    onRequest: [server.authenticate]
+  }, async (request, reply) => {
+    
+    
+    const newApiKey = 'sk_' + crypto.randomBytes(24).toString('hex');
+
+    try {
+      const res = await fetch("/api/db/user/update-apikey", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ 
+          pseudo: (request.user as any).pseudo, 
+          apiKey: newApiKey 
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) return reply.code(res.status).send(data);
+      return { 
+        success: true, 
+        message: "New key generated successfully",
+        apiKey: newApiKey 
+      };
+    } catch (err) {
+      server.log.error(err);
+      return reply.code(500).send({ error: "Error generating API key" });
+    }
+  });
 
   
   }
