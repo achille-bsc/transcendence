@@ -12,9 +12,7 @@ export default function Log () {
 	const lang = useLang().getLang();
 
 	async function handleGithubLogin() {
-		console.log("function called")
 		const githubId = process.env.GITHUB_CLIENT_ID; //temporary
-		console.log ("GITHUB CLIENT ID :", githubId);
 		if (!githubId)
 		{
 			alert("Missing github application id");
