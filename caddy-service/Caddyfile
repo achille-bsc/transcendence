@@ -33,9 +33,8 @@
 		uri strip_prefix /auth
 		reverse_proxy https://auth-service:3001 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/auth-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/auth-service.crt
 			}
 		}
 	}
@@ -43,9 +42,8 @@
 		uri strip_prefix /user
 		reverse_proxy https://user-management-service:3003 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/user-management-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/user-management-service.crt
 			}
 		}
 	}
@@ -53,17 +51,16 @@
 		uri strip_prefix /api/db
 		reverse_proxy https://database-service:5000 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/database-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/database-service.crt
 			}
 		}
+	}
 	handle /public/* {
         reverse_proxy https://database-service:5000 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/database-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/database-service.crt
 			}
 		}
     }
@@ -71,9 +68,8 @@
 		uri strip_prefix /chat
 		reverse_proxy https://chat-service:3004 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/chat-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/chat-service.crt
 			}
 		}
 	}
@@ -81,9 +77,8 @@
 		uri strip_prefix /kong
 		reverse_proxy https://kong-service:3000 {
 			transport http {
-				tls {
-					tls_trusted_ca_certs /app/certs/kong-service.crt
-				}
+				tls
+				tls_trust_pool file /app/certs/kong-service.crt
 			}
 		}
 	}

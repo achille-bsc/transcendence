@@ -12,6 +12,6 @@ COPY . .
 
 EXPOSE 3003
 
-ENTRYPOINT [ "sh", "-c", "npm run dev" ]
+ENTRYPOINT [ "sh", "-c", "npm run start" ]
 
 # CMD ["sh", "-c", "npm run dev" ]

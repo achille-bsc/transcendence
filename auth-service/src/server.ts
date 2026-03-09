@@ -1,6 +1,7 @@
 import fastify, { FastifyRequest, FastifyReply } from 'fastify';
 import localAuthPlugin from './routes/tokens'; // Chemin vers le Fichier 1
 import authRoutes from './routes/register'; // Chemin vers le Fichier 2
+import fs from 'fs';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -15,7 +16,13 @@ declare module '@fastify/jwt' {
 }
 
 async function start() {
-  const server = fastify({ logger: true });
+  const server = fastify({ 
+    logger: true,
+    https: {
+      key: fs.readFileSync('/app/certs/srv.key'),
+      cert: fs.readFileSync('/app/certs/srv.crt')
+    }
+  });
 
   await server.register(localAuthPlugin);
   
