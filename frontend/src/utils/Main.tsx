@@ -1,7 +1,7 @@
 import React from "react";
 import MyButton from "./Button.tsx"
 import Img from "./Img.tsx"
-import { terms, user, friends, game, notifications, language} from "../../icons/Icons.tsx"
+import { terms, user, friends, game, notifications, language, accept, reject} from "../../icons/Icons.tsx"
 import SwitchButton from "./SwitchButton.tsx"
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
@@ -73,6 +73,48 @@ async function fetchPending(){
 		else
 			return [];
 	}
+	return [];
+}
+
+async function acceptFriendRequest(userId: number) {
+	const token = localStorage.getItem("token");
+	if (!token) return false;
+	
+	try {
+		const res = await fetch('/api/db/friend/accept', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ friendId: userId })
+		});
+		return res.ok;
+	} catch (error) {
+		console.error("Error accepting friend request:", error);
+		return false;
+	}
+}
+
+async function rejectFriendRequest(userId: number) {
+	const token = localStorage.getItem("token");
+	if (!token) return false;
+	
+	try {
+		const res = await fetch('/api/db/friend/reject', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ friendId: userId })
+		});
+		return res.ok;
+	} catch (error) {
+		console.error("Error rejecting friend request:", error);
+		return false;
+	}
+}
 // async function fetchFriends() {
 
 // 	if (!localStorage.getItem("token"))
@@ -86,7 +128,7 @@ async function fetchPending(){
 // 	});
 // 	const data = await res.json();
 // 	return data.user.pseudo;
-}
+// }
 
 async function isUser(username: string)
 {
@@ -215,18 +257,41 @@ function Main({children = ""}: {children?: ReactNode}) {
 
 	const tabs = [
 		{ key: "friends", label: lang.navbar.add },
-		{ key: "pending", label: lang.navbar.pending },
-		{ key: "blocked", label: lang.navbar.block }
+		{ key: "pending", label: lang.navbar.pending }
 	];
 
 	useEffect(() => {
 		fetchPending().then(result => setPending(result || []));
+		
+		// Rafraîchir les demandes en attente toutes les 5 secondes
+		const interval = setInterval(() => {
+			fetchPending().then(result => setPending(result || []));
+		}, 5000);
+		
+		return () => clearInterval(interval);
 	}, []);
+
+	const handleAcceptFriend = async (userId: number) => {
+		const success = await acceptFriendRequest(userId);
+		if (success) {
+			// Rafraîchir la liste immédiatement
+			const result = await fetchPending();
+			setPending(result || []);
+		}
+	};
+
+	const handleRejectFriend = async (userId: number) => {
+		const success = await rejectFriendRequest(userId);
+		if (success) {
+			// Rafraîchir la liste immédiatement
+			const result = await fetchPending();
+			setPending(result || []);
+		}
+	};
 
 	const data: Record<string, any[]> = {
 		friends: [],
-		pending: pending,
-		blocked: []
+		pending: pending
 	};
 
 	const [profile, setprofile] = useState(false);
@@ -241,13 +306,10 @@ function Main({children = ""}: {children?: ReactNode}) {
 						{TermsClicked &&
 							<div className="main-menu-box">
 								<div className="main-menu-list">
-									<MyButton className="main-menu-btn main-menu-btn-bordered" onClick={() => window.location.href = "/terms"}>📃 Terms of Services</MyButton>
+									<MyButton className="main-menu-btn main-menu-btn-bordered border-b-0" onClick={() => window.location.href = "/terms"}>{lang.navbar.terms_of_services}</MyButton>
 								</div>
 							</div>
 						}
-					{/* <MyButton onClick={() => window.location.href = "/chat"}>
-						<Img src={menu} alt={lang.Alt_text.menu_icon} className="main-icon" />
-					</MyButton> */}
 					<div >
 						<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
 							<Img src={friends} alt={lang.Alt_text.friend_icon} className="main-icon" />
@@ -268,7 +330,22 @@ function Main({children = ""}: {children?: ReactNode}) {
 								<ul className="main-friends-list">
 									{activeTab !== "friends" && (
 										(data[activeTab]?.length ?? 0) > 0 
-											? data[activeTab].map(({ id, pseudo }) => <Friend key={id}>{pseudo}</Friend>)
+											? data[activeTab].map(({ id, pseudo }) => (
+												<Friend
+													key={id}
+													userId={id}
+												>
+													<div className="grid grid-cols-3 gap-2">
+														{pseudo}
+														<MyButton onClick={() => handleAcceptFriend(id)} className="p-0 bg-none border-none">
+															<Img src={accept} alt={lang.Alt_text.friend_request_accept} className="size-5" />
+														</MyButton>
+														<MyButton onClick={() => handleRejectFriend(id)} className="p-0 bg-none border-none">
+															<Img src={reject} alt={lang.Alt_text.friend_request_reject} className="size-5" />
+														</MyButton>
+													</div>
+												</Friend>
+											))
 											: <li className="main-empty-item">No users found</li>
 									)}
 								</ul>

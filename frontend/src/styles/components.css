@@ -268,16 +268,16 @@
   }
 
   .main-friends-menu {
-    @apply absolute z-98 top-full bg-[var(--background-box-select)] text-[var(--default)];
+    @apply absolute z-98 top-full border-t-2 border-1 bg-[var(--background-box-select)] text-[var(--default)];
     width: 17.5rem;
   }
 
   .main-tabs {
-    @apply mb-3 grid grid-cols-3;
+    @apply mb-3 grid grid-cols-2;
   }
 
   .main-tab {
-    @apply px-2 py-1;
+    @apply px-2 py-2 text-center;
   }
 
   .main-tab-light-active {
@@ -297,7 +297,7 @@
   }
 
   .main-friends-list {
-    @apply mb-3 space-y-2;
+    @apply mb-3 space-y-2 px-2;
   }
 
   .main-empty-item {
@@ -305,11 +305,11 @@
   }
 
   .main-search-wrap {
-    @apply flex justify-center p-2;
+    @apply flex justify-center px-2 py-2;
   }
 
   .main-search-form-input {
-    @apply rounded border p-2;
+    @apply border p-2 focus:outline-hidden bg-[var(--background-box)] placeholder-[var(--props)] text-[var(--contrast)] border-[var(--default)];
   }
 
   .main-search-error {
@@ -350,11 +350,11 @@
   }
 
   .main-menu-btn {
-    @apply cursor-pointer border-[var(--default)] p-1 px-3 text-left text-[var(--contrast)] hover:bg-[var(--props)];
+    @apply border-[var(--default)] p-1 px-3 text-left text-[var(--contrast)] hover:bg-[var(--props)];
   }
 
   .main-menu-btn-bordered {
-    @apply border-b;
+    @apply border-b-1;
   }
 
   .dm-sidebar-root {

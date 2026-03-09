@@ -24,7 +24,8 @@
 			"block": "Bloqués",
 			"profile": "👤 Profil",
 			"settings": "⚙️ Paramètres",
-			"deconnexion": "➜] Déconnexion"
+			"deconnexion": "➜] Déconnexion",
+			"terms_of_services": "📃 Conditions d'utilisation"
 		},
 		"Chat_page": {
 			"input": "Tapez votre message..."

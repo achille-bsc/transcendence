@@ -24,7 +24,8 @@
 			"block": "Blocked",
 			"profile": "👤 Profile",
 			"settings": "⚙️ Settings",
-			"deconnexion": "➜] Logout"
+			"deconnexion": "➜] Logout",
+			"terms_of_services": "📃 Terms of Services"
 		},
 		"Chat_page": {
 			"input": "Type your message..."
