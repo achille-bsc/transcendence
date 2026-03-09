@@ -9,7 +9,7 @@ export default async function userRoutes(server: FastifyInstance) {
     const { pseudo } = request.body as { pseudo: string };
     const user = await prisma.user.findUnique({
       where: { pseudo },
-      select: { pseudo: true, createdAt: true, lastLoginAt: true, avatar: true }
+      select: { pseudo: true, createdAt: true, avatar: true }
     });
     if (!user)
       return reply.code(404).send({ error: 'User not found' });
@@ -27,6 +27,19 @@ export default async function userRoutes(server: FastifyInstance) {
     return { success: true, user };
   });
 
+  server.post('/user/avatar', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { pseudo } = request.body as { pseudo: string };
+    const user = await prisma.user.findUnique({
+      where: { pseudo },
+      select: { avatar: true }
+    });
+    if (!user?.avatar)
+      return reply.code(404).send({ error: 'Avatar not found' });
+    return { avatarUrl: `/public/${user.avatar}` };
+  });
+
   server.post('/user/exists', {
     onRequest: [server.requireBackendPass]
   }, async (request, reply) => {
@@ -39,5 +52,27 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(404).send({ error: 'User not found' });
     return user;
   });
+
+  server.put('/user/update-email', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { pseudo, email } = request.body as { pseudo: string; email: string };
+    
+    try {
+      const user = await prisma.user.update({
+        where: { pseudo },
+        data: { email }
+      });
+      return { success: true, user: { pseudo: user.pseudo, email: user.email } };
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        return reply.code(409).send({ error: 'This email is already used by another account' });
+      }
+      
+      server.log.error(error);
+      return reply.code(500).send({ error: 'Error updating email' });
+    }
+  });
+
   
 }

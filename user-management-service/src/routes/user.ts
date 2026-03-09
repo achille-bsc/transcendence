@@ -9,7 +9,7 @@ const api_pass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
 
 export default async function userRoutes(server: FastifyInstance) {
 
-  server.post('/profileuser', {
+  server.get('/profile', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const res = await fetch("/api/db/user/profile", {
@@ -63,4 +63,101 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(500).send({ error: "Error saving image" });
     }
   });
-}
+  server.get('/useravatar', { onRequest: [server.authenticate] },
+    async (request, reply) => {
+      const res = await fetch("/api/db/user/avatar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ pseudo: request.user.pseudo })
+      });
+      const data = await res.json();
+      if (!res.ok)
+        return reply.code(res.status).send(data);
+      const user = data;
+      if (!user?.avatar)
+        return reply.code(404).send({ error: 'Aucun avatar trouvé' });
+      return {
+        success: true,
+        avatarUrl: `/public/${user.avatar}`
+      };
+    });
+
+  server.post('/avatarother', { onRequest: [server.authenticate] },
+    async (request, reply) => {
+      const { pseudo } = request.body as { pseudo: string };
+      const res = await fetch("/api/db/user/avatar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ pseudo : pseudo})
+      });
+      const data = await res.json();
+      if (!res.ok)
+        return reply.code(res.status).send(data);
+      const user = data;
+      if (!user?.avatar)
+        return reply.code(404).send({ error: 'Aucun avatar trouvé' });
+
+      return { success: true, avatarUrl: `/public/${user.avatar}`};
+    });
+
+  server.post('/userstatus', { onRequest: [server.authenticate] },
+      async (request, reply) => {
+    const { pseudo } = request.body as { pseudo?: string };
+    const targetPseudo = pseudo ?? (request.user as any).pseudo;
+    if (!targetPseudo || targetPseudo.trim() === '') {
+      return reply.code(400).send({ error: 'Pseudo is required' });
+    }
+    try {
+      const res = await fetch("/api/chat/online-users", {
+        method: "GET",
+        headers: { 'x-backend-pass': api_pass }
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return reply.code(res.status).send(data);
+      }
+      const onlinePseudos: string[] = data.users || [];
+      return {
+        success: true,
+        pseudo: targetPseudo,
+        isOnline: onlinePseudos.includes(targetPseudo),
+      };
+    } catch (err) {
+      server.log.error(err);
+      return reply.code(500).send({ error: "Erreur de communication avec le chat-service" });
+    }
+  });
+  server.put('/email', {
+    onRequest: [server.authenticate]
+  }, async (request, reply) => {
+    const { email } = request.body as { email?: string };
+
+    if (!email || email.trim() === '') {
+      return reply.code(408).send({ error: "The new email is required" });
+    }
+    else if (!email || email.length === 0 || email.includes(' ') ||
+        email.split('@').length !== 2 || !email.includes('.'))
+    {
+        return reply.code(408).send({ error: "Enter a valid email address" })
+    }
+    try {
+      const res = await fetch("/api/db/user/update-email", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ 
+          pseudo: (request.user as any).pseudo, 
+          email: email 
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) 
+        return reply.code(res.status).send(data);
+      return { success: true, message: "Email updated successfully" };
+    } catch (err) {
+      server.log.error(err);
+      return reply.code(500).send({ error: "Error updating email" });
+    }
+  });
+
+  
+  }
