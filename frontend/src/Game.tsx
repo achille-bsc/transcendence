@@ -67,12 +67,12 @@ export default function Game() {
       <Main>
         <div className="game-content">
           <KongGameComponent
-            wsUrl="ws://localhost:3000/ws"  // URL de votre serveur WebSocket
+            wsUrl="ws://localhost:3000/ws"
             userToken={token}
-            userId="user-123"  // Récupérer l'ID utilisateur réel
+            userId="user-123"
             width={800}
             height={600}
-            onConnected={() => console.log("Connecté au jeu")}
+            onConnected={() => {}}
             onError={(err) => console.error("Erreur:", err)}
           />
         </div>
