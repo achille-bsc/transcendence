@@ -345,7 +345,7 @@ secrets:
     github_oauth_secret:
         file: secrets/github_oauth_secret
     api_pass:
-        file: secrets/api_pass
+        file: secrets/api_internal_key
     db_password:
         file: secrets/db_password
     jwt_secret:
