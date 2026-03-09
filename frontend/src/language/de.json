@@ -30,7 +30,16 @@
 			"input": "Geben Sie Ihre Nachricht ein..."
 		},
 		"Game_page": {
-			"description": "Ich bin die Spiel-Seite"
+			"creation_partie": "Party erstellen",
+			"rejoindre_partie": "Party beitreten",
+			"easy": "Einfach",
+			"medium": "Mittel",
+			"hard": "Schwer",
+			"online": "Online",
+			"local": "Lokal (2 Spieler)",
+			"disconnect": "Trennen",
+			"tentative": "Versuch, erneut zu verbinden...",
+			"reconnect": "Erneut verbinden"
 		},
 		"Alt_text": {
 			"menu_icon": "Menü-Symbol",

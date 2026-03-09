@@ -33,7 +33,16 @@ export interface Translations {
 		input: string;
 	};
 	Game_page: {
-		description: string;
+		creation_partie: string;
+		rejoindre_partie: string;
+		easy: string;
+		medium: string;
+		hard: string;
+		online: string;
+		local: string;
+		disconnect: string;
+		tentative: string;
+		reconnect: string
 	};
 	Alt_text: {
 		menu_icon: string;

@@ -30,7 +30,16 @@
 			"input": "Tapez votre message..."
 		},
 		"Game_page": {
-			"description": "Je suis la page de jeu"
+			"creation_partie": "Créer une partie",
+			"rejoindre_partie": "Rejoindre une partie",
+			"easy": "Facile",
+			"medium": "Moyen",
+			"hard": "Difficile",
+			"online": "En ligne",
+			"local": "Local (2 joueurs)",
+			"disconnect": "Déconnecter",
+			"tentative": "Tentative de reconnexion...",
+			"reconnect": "Reconnecter"
 		},
 		"Alt_text": {
 			"menu_icon": "Icone de menu",

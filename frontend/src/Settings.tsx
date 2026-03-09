@@ -1,11 +1,9 @@
 import MyButton from "./utils/Button.tsx"
 import Img from "./utils/Img.tsx"
 import Main from "./utils/Main.tsx"
-import { use, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useLang } from "./script/langProvider.tsx";
 import "./styles/index.css";
-import RegisterInput from "./RegisterInput.tsx";
 
 async function getUsername()
 {
@@ -28,7 +26,7 @@ async function getUsername()
 	catch (error)
 	{
 		console.error("Invalid token:", error);
-		return false;
+		return null;
 	}
 }
 
@@ -57,6 +55,54 @@ async function ProfilePicture() {
 		alert("ERROR");
 		console.log(err);
 		return;
+	}
+}
+
+async function getApiKey() {
+	const token = localStorage.getItem("token");
+	if (!token)
+		return "";
+
+	try {
+		const res = await fetch("/api/db/apikey", {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		});
+
+		if (!res.ok)
+			return "";
+
+		const data = await res.json();
+		return data.apiKey ?? "";
+	} catch (error) {
+		console.error("Failed to fetch API key:", error);
+		return "";
+	}
+}
+
+async function generateApiKey() {
+	const token = localStorage.getItem("token");
+	if (!token)
+		return "";
+
+	try {
+		const res = await fetch("/api/db/apikey/generate", {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		});
+
+		if (!res.ok)
+			return "";
+
+		const data = await res.json();
+		return data.apiKey ?? "";
+	} catch (error) {
+		console.error("Failed to generate API key:", error);
+		return "";
 	}
 }
 
@@ -106,11 +152,20 @@ export default function Settings() {
 	}
 	const [isOpen, setIsOpen] = useState(false);
 	const lang = useLang().getLang();
-	const navigate = useNavigate();
-	const { username } = useParams();
-	const [loggedUser, setLoggedUser] = useState(null);
+	const username = window.location.pathname.startsWith("/profile/")
+		? decodeURIComponent(window.location.pathname.replace("/profile/", ""))
+		: null;
+	const [loggedUser, setLoggedUser] = useState<string | null>(null);
 	const profileToDisplay = username || loggedUser;
 	const [newProfilePicture, setNewProfilePicture] = useState("");
+	const [apiKey, setApiKey] = useState("");
+
+	async function handleGenerateApiKey() {
+		const newKey = await generateApiKey();
+		if (newKey)
+			setApiKey(newKey);
+	}
+
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (!file) return;
@@ -124,11 +179,11 @@ export default function Settings() {
 	};
 	const password = "********";
 	const email = "SuperKiwiLaLegendDu7680salutCoucoucKiwilolfdsfsfesfd@help.help";
-	const apiKey = "API_KEY";
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
-			setLoggedUser(name);
+			if (name)
+				setLoggedUser(name);
 		}
 		fetchUsername();
 	}, []);
@@ -141,6 +196,14 @@ export default function Settings() {
 		fetchProfilePicture();
 	}, []);
 
+	useEffect(() => {
+		async function fetchApiKey() {
+			const key = await getApiKey();
+			setApiKey(key);
+		}
+		fetchApiKey();
+	}, []);
+
 	// function onInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 	// 	if (e.key === "Enter") {
 	// 		localStorage.setItem("profile_img", (e.target as HTMLInputElement).value);
@@ -151,7 +214,7 @@ export default function Settings() {
 
 	return (
 		<Main>
-			<div className="quantico-regular overflow-y-auto flex flex-col items-center h-[calc(85vh-20px)] text-[var(--contrast)] overflow-x-hidden">
+			<div className="overflow-y-auto flex flex-col items-center h-[calc(85vh-20px)] text-[var(--contrast)] overflow-x-hidden">
 				<div className="my-auto bg-[var(--background-box-select)] p-5">
 					<div className="place-items-left">
 						<div onClick={() => setIsOpen(true)} className="place-items-center p-2 pb-6 px-9">
@@ -203,7 +266,7 @@ export default function Settings() {
 									</div>
 								</div>
 							</div>
-							<div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
+							<div className="border border-t-0 border-b-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
 									<p>{lang.Settings_page.email}</p>
 								</div>
@@ -216,19 +279,19 @@ export default function Settings() {
 									</div>
 								</div>
 							</div>
-							{/* <div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
+							<div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
 									<p>{lang.Settings_page.api}</p>
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
-										{apiKey}
+										{apiKey || "Aucune clé API générée"}
 									</div>
 									<div className="flex justify-end pl-1">
-										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>{lang.Settings_page.generate}</MyButton>
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => { void handleGenerateApiKey(); }}>{lang.Settings_page.generate}</MyButton>
 									</div>
 								</div>
-							</div> */}
+							</div>
 						</div>
 					</div>
 				</div>

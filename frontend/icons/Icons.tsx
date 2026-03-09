@@ -8,4 +8,4 @@ import reject from "./cross.png"
 import accept from "./check-solid-full.svg"
 import language from "./language.webp"
 
-export { terms, github, user, friends, game, notifications, accept, reject, language};
+export { terms, github, user, friends, game, notifications, accept, reject, language };
