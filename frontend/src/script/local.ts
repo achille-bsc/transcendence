@@ -28,6 +28,7 @@ export interface Translations {
 		profile: string;
 		settings: string;
 		deconnexion: string;
+		terms_of_services: string;
 	};
 	Chat_page: {
 		input: string;

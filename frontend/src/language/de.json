@@ -24,7 +24,8 @@
 			"block": "Gesperrt",
 			"profile": "👤 Profil",
 			"settings": "⚙️ Einstellungen",
-			"deconnexion": "➜] Abmelden"
+			"deconnexion": "➜] Abmelden",
+			"terms_of_services": "📃 Nutzungsbedingungen"
 		},
 		"Chat_page": {
 			"input": "Geben Sie Ihre Nachricht ein..."
