@@ -5,13 +5,13 @@ import { WebSocket } from 'ws';
 import fs from 'fs';
 
 
-let API_INTERNAL_KEY = '';
 try {
-  API_INTERNAL_KEY = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
-} catch {
-  console.error('Critical Error: Cannot read API internal key');
+  fs.accessSync('/run/secrets/api_pass', fs.constants.R_OK);
+} catch (err) {
+  console.error("Error: Unable to read API password from /run/secrets/api_pass. Please ensure the file exists and has the correct permissions.");
   process.exit(1);
 }
+const api_pass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
 
 export const clients = new Map<string, Set<WebSocket>>();
 const MAX_DM_MESSAGE_LENGTH = 1000;
@@ -21,24 +21,28 @@ async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) 
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-backend-pass': API_INTERNAL_KEY,
+      'x-backend-pass': api_pass,
     },
     body: JSON.stringify({ user1Pseudo, user2Pseudo }),
   });
-  if (!res.ok) return null;
+
+  console.log(`\nBidule Reeeeeeceived CREATE_CONV from`, await res.json());
+  // if (!res.ok) return null;
   const data = await res.json() as any;
-  return data?.conversation ?? null;
+  console.log("\n\n\n\ndata:", data);
+  return data;
 }
 
-async function dbNewDirectMessage(senderId: string, conversationId: string, content: string) {
+async function dbNewDirectMessage(senderId: string, conversationId: number, content: string) {
   const res = await fetch(`https://database-service:5000/create-message`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-backend-pass': API_INTERNAL_KEY,
+      'x-backend-pass': api_pass,
     },
     body: JSON.stringify({ senderId, conversationId, content }),
   });
+  console.log(`\nBidule Reeeeeeceived SEND_DM from`, await res.json());
   if (!res.ok) return { success: false };
   return await res.json() as any;
 }
@@ -120,7 +124,7 @@ async function chatWebsocketPlugin(server: FastifyInstance) {
 
   server.get('/online-users', async (request: FastifyRequest, reply: FastifyReply) => {
     const key = request.headers['x-backend-pass'] as string;
-    if (!key || key !== API_INTERNAL_KEY) {
+    if (!key || key !== api_pass) {
       return reply.code(403).send({ error: 'Forbidden' });
     }
     return { users: getOnlineUsers() };
@@ -148,7 +152,7 @@ async function handleClientMessage(
       const receiverPseudo = message?.data?.receiverPseudo;
       const content = message?.data?.content;
       const trimmedContent = typeof content === 'string' ? content.trim() : '';
-
+      console.log(`\n\n\n\n\nReeeeeeceived SEND_DM from ${pseudo} to ${receiverPseudo}: "${content}"`);
       if (
         typeof receiverPseudo !== 'string' ||
         typeof content !== 'string' ||
@@ -165,14 +169,17 @@ async function handleClientMessage(
         }));
         return;
       }
-
+      console.log(`\n\n\n\n\nReeeeeeceived SEND_DM from ${pseudo} to ${receiverPseudo}: "${content}"`);
       const conv = await dbCreateDmConversation(pseudo, receiverPseudo);
-      if (!conv) {
+      console.error(`Caca2`);
+      if (!(conv?.id ?? null)) {
+        console.error(`Caca3`);
         socket.send(JSON.stringify({ type: 'error', message: 'Cannot create DM conversation' }));
         return;
       }
-
+      console.log("\n\n\ntest:", conv);
       const result = await dbNewDirectMessage(pseudo, conv.id, content);
+      console.log("\n\n\ntest:", conv);
       if (!result.success || !result.new_message) {
         socket.send(JSON.stringify({ type: 'error', message: 'Failed to save message' }));
         return;
