@@ -261,8 +261,7 @@ function Main({children = ""}: {children?: ReactNode}) {
 
 	useEffect(() => {
 		fetchPending().then(result => setPending(result || []));
-		
-		// Rafraîchir les demandes en attente toutes les 5 secondes
+		console.log("Pending friends:", pending);		
 		const interval = setInterval(() => {
 			fetchPending().then(result => setPending(result || []));
 		}, 5000);
