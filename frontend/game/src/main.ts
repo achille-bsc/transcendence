@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 14:33:57 by abosc             #+#    #+#             */
-/*   Updated: 2026/02/22 14:46:05 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/10 19:07:42 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ if (!container) {
 }
 
 const game = new KongGame(container, {
-	wsUrl: "ws://localhost:3000/ws",
+	wsUrl: "wss://kong-service:3000/ws",
 	userToken: localStorage.getItem("token") || "42token",
 	userId: "dev-user",
 	canvasWidth: 800,

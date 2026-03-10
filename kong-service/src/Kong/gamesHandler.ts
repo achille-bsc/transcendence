@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gamesHandler.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jguelen <jguelen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/10 10:25:56 by jguelen          ###   ########.fr       */
+/*   Updated: 2026/03/10 21:17:58 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,8 @@ async function gameLoop(game: Game)
 		}
 		handlePlayersPhysics(game);
 		if (game.isStarted) {
-			checkForBarilCollisions(game);
+			// TODO: view if this optimization is really useful
+			// checkForBarilCollisions(game);
 			checkForWin(game);
 		}
 		sendGameState(game);
@@ -226,15 +227,15 @@ function checkPlayerCollisionsWithBarils(player: PlayerDatas, game: Game)
 	});
 }
 
-function checkForBarilCollisions(game: Game)
-{
-	game.barils.forEach((baril) => {
-		game.players.forEach((player) => {
-			if (isCollidingWithBaril(player, baril))
-				respawnPlayer(player, game);
-		});
-	});
-}
+// function checkForBarilCollisions(game: Game)
+// {
+// 	game.barils.forEach((baril) => {
+// 		game.players.forEach((player) => {
+// 			if (isCollidingWithBaril(player, baril))
+// 				respawnPlayer(player, game);
+// 		});
+// 	});
+// }
 
 function checkForWin(game: Game)
 {
@@ -258,15 +259,16 @@ function checkForWin(game: Game)
 
 function barilsGeneration(game: Game)
 {
+	const date = Date.now();
 	if (!game.map)
 		return;
 	
-	if (game.barils.size >= 28)
+	if (game.barils.size >= 20)
 		return;
-	game.barils.set(`baril_${Date.now()}`, {
+	game.barils.set(`baril_${date}`, {
 		x: game.map.spawnPoint.x -500,
 		y: 0,
-		id: `baril_${Date.now()}`
+		id: `baril_${date}`
 	});
 }
 
@@ -345,6 +347,8 @@ function handleBarilsPhysics(game: Game)
 		if ((baril.x > platformUnderBaril.endX - 50) || (baril.x < platformUnderBaril.startX + 50))
 			baril.y += 10;
 	});
+	for (let i = 0; i < toDelete.length; i++)
+		game.barils.delete(toDelete[i] || '');
 }
 
 function handlePlayersPhysics(game: Game)

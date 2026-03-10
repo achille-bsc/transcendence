@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/02/26 23:22:00 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/10 19:21:41 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,16 @@ import WebSocket from '@fastify/websocket';
 import { PORT, HANDLERS, clients, games } from './utils/const';
 import { ClientState, WSMessage } from './utils/types';
 import { parseMessage } from './utils/utils';
+import fd from 'fs';
 
 const fastify = Fastify({
   logger: false,
+  https: {
+    key: fd.readFileSync('/app/certs/private/kong-service.key'),
+    cert: fd.readFileSync('/app/certs/public/kong-service.crt'),
+  }
 });
+
 fastify.register(WebSocket);
 
 fastify.register(async function (fastify) {
@@ -35,6 +41,7 @@ fastify.register(async function (fastify) {
 
     socket.on('message', (raw: string | Buffer)  => {
       const msg: WSMessage | null = parseMessage(raw);
+      console.log(msg);
       if (!msg) {
         socket.send(JSON.stringify({ type: 'error', error: 'Invalid message format' }));
         return;
@@ -70,7 +77,7 @@ fastify.register(async function (fastify) {
   });
 });
 
-fastify.listen({ port: PORT as number }, (err) => {
+fastify.listen({ port: PORT as number, host: '0.0.0.0' }, (err) => {
   if (err) throw err;
   console.log(`Server listening at port ${PORT}`);
 });
