@@ -12,7 +12,7 @@ export default async function userRoutes(server: FastifyInstance) {
   server.get('/profile', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const res = await fetch("/api/db/user/profile", {
+    const res = await fetch("https://database-service:5000/user/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ pseudo: request.user.pseudo })
@@ -26,7 +26,7 @@ export default async function userRoutes(server: FastifyInstance) {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { pseudo } = request.body as { pseudo: string };
-    const res = await fetch("/api/db/user/profile", {
+    const res = await fetch("https://database-service:5000/user/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ pseudo })
@@ -52,7 +52,7 @@ export default async function userRoutes(server: FastifyInstance) {
 
     try {
       await pipeline(data.file, resizer, createWriteStream(uploadPath));
-      await fetch("/api/db/user/update-avatar", {
+      await fetch("https://database-service:5000/user/update-avatar", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
         body: JSON.stringify({ pseudo: request.user.pseudo, avatar: fileName })
@@ -65,7 +65,7 @@ export default async function userRoutes(server: FastifyInstance) {
   });
   server.get('/useravatar', { onRequest: [server.authenticate] },
     async (request, reply) => {
-      const res = await fetch("/api/db/user/avatar", {
+      const res = await fetch("https://database-service:5000/user/avatar", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
         body: JSON.stringify({ pseudo: request.user.pseudo })
@@ -85,7 +85,7 @@ export default async function userRoutes(server: FastifyInstance) {
   server.post('/avatarother', { onRequest: [server.authenticate] },
     async (request, reply) => {
       const { pseudo } = request.body as { pseudo: string };
-      const res = await fetch("/api/db/user/avatar", {
+      const res = await fetch("https://database-service:5000/user/avatar", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
         body: JSON.stringify({ pseudo : pseudo})
@@ -141,7 +141,7 @@ export default async function userRoutes(server: FastifyInstance) {
         return reply.code(408).send({ error: "Enter a valid email address" })
     }
     try {
-      const res = await fetch("/api/db/user/update-email", {
+      const res = await fetch("https://database-service:5000/user/update-email", {
         method: "PUT",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
         body: JSON.stringify({ 
@@ -167,7 +167,7 @@ export default async function userRoutes(server: FastifyInstance) {
     const newApiKey = 'sk_' + crypto.randomBytes(24).toString('hex');
 
     try {
-      const res = await fetch("/api/db/user/update-apikey", {
+      const res = await fetch("https://database-service:5000/user/update-apikey", {
         method: "PUT",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
         body: JSON.stringify({ 

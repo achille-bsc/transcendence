@@ -17,7 +17,7 @@ export const clients = new Map<string, Set<WebSocket>>();
 const MAX_DM_MESSAGE_LENGTH = 1000;
 
 async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) {
-  const res = await fetch(`/api/db/create-dm`, {
+  const res = await fetch(`https://database-service:5000/create-dm`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) 
 }
 
 async function dbNewDirectMessage(senderId: string, conversationId: string, content: string) {
-  const res = await fetch(`/api/db/create-message`, {
+  const res = await fetch(`https://database-service:5000/create-message`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

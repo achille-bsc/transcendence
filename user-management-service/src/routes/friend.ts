@@ -14,7 +14,7 @@ export default async function friendRoutes(server: FastifyInstance) {
   server.get('/friend', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const res = await fetch("/api/db/friend", {
+    const res = await fetch("https://database-service:5000/friend", {
       method: "GET",
       headers: {
         'x-backend-pass': api_pass,
@@ -30,7 +30,7 @@ export default async function friendRoutes(server: FastifyInstance) {
   server.get('/receive', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const res = await fetch("/api/db/friend/receive", {
+    const res = await fetch("https://database-service:5000/friend/receive", {
       method: "GET",
       headers: {
         'x-backend-pass': api_pass,
@@ -51,7 +51,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     if (myPseudo === friendPseudo)
       return reply.code(400).send({ error: "You can't add yourself" });
 
-    const existsRes = await fetch("/api/db/user/exists", {
+    const existsRes = await fetch("https://database-service:5000/user/exists", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ pseudo: friendPseudo })
@@ -59,7 +59,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     if (!existsRes.ok)
       return reply.code(400).send({ error: "This account doesn't exist" });
 
-    const res = await fetch("/api/db/friend/send", {
+    const res = await fetch("https://database-service:5000/friend/send", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ myPseudo, friendPseudo })
@@ -74,7 +74,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { friendPseudo } = request.body as { friendPseudo: string };
-    const res = await fetch("/api/db/friend/accept", {
+    const res = await fetch("https://database-service:5000/friend/accept", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ myPseudo: request.user.pseudo, friendPseudo })
@@ -89,7 +89,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { friendPseudo } = request.body as { friendPseudo: string };
-    const res = await fetch("/api/db/friend/remove", {
+    const res = await fetch("https://database-service:5000/friend/remove", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ myPseudo: request.user.pseudo, friendPseudo })
@@ -104,7 +104,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     const { friendPseudo } = request.body as { friendPseudo: string };
-    const res = await fetch("/api/db/friend/refuse", {
+    const res = await fetch("https://database-service:5000/friend/refuse", {
       method: "POST",
       headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
       body: JSON.stringify({ myPseudo: request.user.pseudo, friendPseudo })

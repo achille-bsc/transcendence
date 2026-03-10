@@ -32,7 +32,7 @@ async function backendGuardPlugin(server: FastifyInstance, options: BackendGuard
       return reply.code(401).send({ error: 'Unauthorized Access: Backend Pass or API Key required' });
     }
     try {
-      const res = await fetch("/api/db/user/verify-apikey", {
+      const res = await fetch("https://database-service:5000/user/verify-apikey", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json", 

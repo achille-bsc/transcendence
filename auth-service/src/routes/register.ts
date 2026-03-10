@@ -44,7 +44,7 @@ async function authRoutes(server: FastifyInstance) {
 		log_name: string,
 		password: string
 	};
-    const res = await fetch("/api/db/finduser", {
+    const res = await fetch("https://database-service:5000/finduser", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
