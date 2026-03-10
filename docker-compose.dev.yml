@@ -56,8 +56,8 @@ services:
             - "3000"
         environment:
             NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
-        # env_file:
-        #     - .env
+        env_file:
+            - .env
         volumes:
             - ./certificates/public:/app/certs/public:ro
             - ./certificates/private/frontend.key:/app/certs/private/frontend.key
@@ -85,8 +85,8 @@ services:
             - "3001"
         environment:
             NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
-        # env_file:
-        #     - .env
+        env_file:
+            - .env
         secrets:
             - api_pass
             - jwt_secret
@@ -95,8 +95,10 @@ services:
         develop:
             watch:
                 - path: ./auth-service
-                  action: sync
+                  action: sync+exec
                   target: /app
+                  exec:
+                    command: "./handle_file_change.sh {{ .Path }}"
                   ignore:
                     - .git
                     - .dockerignore
@@ -127,8 +129,8 @@ services:
             - "3004"
         environment:
             NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
-        # env_file:
-        #     - .env
+        env_file:
+            - .env
         secrets:
             - api_pass
             - jwt_secret
@@ -137,8 +139,10 @@ services:
         develop:
             watch:
                 - path: ./chat-service
-                  action: sync
+                  action: sync+exec
                   target: /app
+                  exec:
+                    command: "./handle_file_change.sh {{ .Path }}"
                   ignore:
                     - .git
                     - .dockerignore
@@ -188,7 +192,7 @@ services:
                   action: sync+exec
                   target: /app
                   exec:
-                    command: "./scripts/handle_file_change.sh {{ .Path }}"
+                    command: "./handle_file_change.sh {{ .Path }}"
                 - path: shared/scripts
                   target: /app/scripts
                   action: sync
@@ -218,8 +222,8 @@ services:
             - "3000"
         environment:
             NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
-        # env_file:
-        #     - .env
+        env_file:
+            - .env
         develop:
             watch:
               - action: sync
@@ -263,8 +267,8 @@ services:
             - "3003"
         environment:
             NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
-        # env_file:
-        #     - .env
+        env_file:
+            - .env
         secrets:
             - api_pass
         develop:
@@ -273,7 +277,7 @@ services:
                   action: sync+exec
                   target: /app
                   exec:
-                    command: "./scripts/handle_file_change.sh {{ .Path }}"
+                    command: "./handle_file_change.sh {{ .Path }}"
         networks:
             - transcendence-network
         volumes:

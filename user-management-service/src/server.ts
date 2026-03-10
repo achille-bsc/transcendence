@@ -3,6 +3,7 @@ import multipart from '@fastify/multipart';
 import authGuardPlugin from '../plugin/authGuard';  // 'plugin' pas 'plugins'
 import friendRoutes from './routes/friend';
 import userRoutes from './routes/user';
+import setupStaticFiles from '../plugins/statics';
 import fs from 'fs';
 
 async function start() {
@@ -19,7 +20,7 @@ async function start() {
     await server.register(multipart);
     await server.register(friendRoutes);
     await server.register(userRoutes);
-
+    await server.register(setupStaticFiles);
     server.listen({ port: 3003, host: '0.0.0.0' }, (err, address) => {
       if (err) {
         server.log.error(err);

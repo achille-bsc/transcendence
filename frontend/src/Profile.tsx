@@ -40,12 +40,12 @@ async function ProfilePicture() {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
-				"Content-Type": "application/json"
 			}
 		});
+		const data = await res.json();
+		console.log("Profile picture response:", data.avatarUrl);
 		if (!res.ok)
 			alert("An error occured");
-		const data = await res.json();
 		return data.avatarUrl;
 	}
 	catch (err)

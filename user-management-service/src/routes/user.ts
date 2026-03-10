@@ -74,11 +74,10 @@ export default async function userRoutes(server: FastifyInstance) {
       if (!res.ok)
         return reply.code(res.status).send(data);
       const user = data;
-      if (!user?.avatar)
-        return reply.code(404).send({ error: 'Aucun avatar trouvé' });
+      console.log("\n\n\n\n\nUser cool :", user);
       return {
         success: true,
-        avatarUrl: `/public/${user.avatar}`
+        avatarUrl: user.avatarUrl
       };
     });
 
@@ -108,7 +107,7 @@ export default async function userRoutes(server: FastifyInstance) {
       return reply.code(400).send({ error: 'Pseudo is required' });
     }
     try {
-      const res = await fetch("/api/chat/online-users", {
+      const res = await fetch("/https://chat-service:3004/online-users", {
         method: "GET",
         headers: { 'x-backend-pass': api_pass }
       });
