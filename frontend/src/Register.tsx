@@ -22,7 +22,7 @@ export default function Register () {
 			return ;
 		}
 
-		const res = await fetch("https/auth-service:3001/signin", {
+		const res = await fetch("/auth/signin", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

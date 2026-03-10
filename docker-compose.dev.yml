@@ -101,6 +101,8 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
+        networks:
+            - transcendence-network
         volumes:
             - ./certificates/private/auth-service.key:/app/certs/private/srv.key:ro
             - ./certificates/public/auth-service.crt:/app/certs/public/srv.crt:ro
@@ -141,6 +143,8 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
+        networks:
+            - transcendence-network
         volumes:
             - ./certificates/private/chat-service.key:/app/certs/private/srv.key:ro
             - ./certificates/public/chat-service.crt:/app/certs/public/srv.crt:ro
@@ -188,13 +192,13 @@ services:
                 - path: shared/scripts
                   target: /app/scripts
                   action: sync
+        networks:
+            - transcendence-network
         volumes:
             - db-volume:/app/data 
             - ./certificates/private/database-service.key:/app/certs/private/db.key:ro
             - ./certificates/public/database-service.crt:/app/certs/public/db.crt:ro
             - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
-        networks:
-            - transcendence-network
         restart: unless-stopped
         healthcheck:
             test: ["CMD-SHELL", "curl -f --cacert /app/certs/public/db.crt https://localhost:5000/health || exit 1"]
@@ -225,6 +229,8 @@ services:
                     - Dockerfile
                     - .dockerignore
                     - .gitignore
+        networks:
+            - transcendence-network
         volumes:
             - ./certificates/private/kong-service.key:/app/certs/private/srv.key:ro
             - ./certificates/public/kong-service.crt:/app/certs/public/srv.crt:ro
@@ -268,6 +274,8 @@ services:
                   target: /app
                   exec:
                     command: "./scripts/handle_file_change.sh {{ .Path }}"
+        networks:
+            - transcendence-network
         volumes:
             - avatars-volume:/app/avatars
             - ./certificates/private/user-management-service.key:/app/certs/private/srv.key:ro

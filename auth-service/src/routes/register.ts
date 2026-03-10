@@ -20,7 +20,7 @@ async function authRoutes(server: FastifyInstance) {
     if (!await checkSignin(pseudo, email, password, reply))
       return;
     const hashedPassword = await hashPassword(password);
-    const res = await fetch("/api/db/createuser", {
+    const res = await fetch("https://database-service:5000/createuser", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
