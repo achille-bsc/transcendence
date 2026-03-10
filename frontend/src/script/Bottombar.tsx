@@ -14,8 +14,8 @@ async function fetchFriends(): Promise<Friend[]> {
 		return [];
 	}
 
-	const response = await fetch("/api/db/friend/list", {
-		method: "POST",
+	const response = await fetch("/user/friend", {
+		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},

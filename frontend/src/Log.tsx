@@ -30,7 +30,7 @@ export default function Log () {
 		console.log("P = ", pseudo, " PASS = ", password,);
 		e.preventDefault();
 
-		const res = await fetch("/api/db/login", {
+		const res = await fetch("/auth/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

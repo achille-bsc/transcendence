@@ -57,10 +57,10 @@
 		}
 	}
 	handle /public/* {
-        reverse_proxy https://database-service:5000 {
+        reverse_proxy https://user-management-service:3003 {
 			transport http {
 				tls
-				tls_trust_pool file /app/certs/database-service.crt
+				tls_trust_pool file /app/certs/user-management-service.crt
 			}
 		}
     }

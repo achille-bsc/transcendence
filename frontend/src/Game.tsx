@@ -63,8 +63,8 @@ async function getUsername()
 			console.error("Token not found");
 			return false;
 		}
-		const res = await fetch('/api/db/profileuser', {
-			method: "POST",
+		const res = await fetch('/user/profile', {
+			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}` 
 			}

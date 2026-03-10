@@ -48,7 +48,7 @@ export default async function userRoutes(server: FastifyInstance) {
       .png();
     const extension = path.extname(data.filename);
     const fileName = `${request.user.pseudo}${extension}`;
-    const uploadPath = path.join('/app/uploads', fileName);
+    const uploadPath = path.join('/app/avatars', fileName);
 
     try {
       await pipeline(data.file, resizer, createWriteStream(uploadPath));
