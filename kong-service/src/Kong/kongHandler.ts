@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kongHandler.ts                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jguelen <jguelen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 10:27:13 by jguelen          ###   ########.fr       */
+/*   Updated: 2026/03/10 21:18:05 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,24 +62,29 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 	if (exit == 1) return ;
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
-		const game = games.get(msg.payload.datas[1]);
-		if (!game || game.isFinish || game.players.size >= 4 || game.isLocal)
+		let gamePlayer;
+		for (const game of games) {
+			if (game[1].players_count < 4 && !game[1].isFinish && !game[1].isLocal && !game[1].isStarted)
+				gamePlayer = game[1];
+		}
+
+		if (!gamePlayer)
 		{
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
 		}
 		const player: PlayerDatas = {
 			id: msg.userID,
-			x: game.map!.spawnPoint.x,
-			y: game.map!.spawnPoint.y,
+			x: gamePlayer.map!.spawnPoint.x,
+			y: gamePlayer.map!.spawnPoint.y,
 			velocityY: 0,
 			isOnGround: false,
 			socket: webSocket
 		}
-		game.players.set(player.id, player);
-		state.gameId = game.id.toString();
-		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: game.id }));
-		sendGameState(game, true);
+		gamePlayer.players.set(player.id, player);
+		state.gameId = gamePlayer.id.toString();
+		webSocket.send(JSON.stringify({ type: 'gameJoined', gameId: gamePlayer.id }));
+		sendGameState(gamePlayer, true);
 	}
 }
 
