@@ -5,7 +5,7 @@ import fp from 'fastify-plugin';
 
 async function setupStaticFiles(server: FastifyInstance) {
   server.register(fastifyStatic, {
-    root: '/app/avatars',
+    root: '/app/default_avatars',
     prefix: '/public/',
   });
 }

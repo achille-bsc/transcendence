@@ -18,7 +18,7 @@ async function authGuardPlugin(server: FastifyInstance) {
       return reply.code(401).send({ error: 'Unauthorized' });
     }
     try {
-      const response = await fetch('api/auth/validate', {
+      const response = await fetch("https://auth-service:3001/validate", {
         method: 'GET',
         headers: {
           'Authorization': authHeader

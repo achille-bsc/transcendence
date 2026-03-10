@@ -9,9 +9,10 @@ RUN npm install \
     && apk add --no-cache curl openssl 
 
 COPY --from=shared_ressources ./plugin ./plugin
-COPY --from=shared_ressources ./scripts/entrypoint.sh ./
+COPY --from=shared_ressources ./scripts/* ./
 
-RUN chmod +x entrypoint.sh
+
+RUN chmod +x entrypoint.sh && chmod +x handle_file_change.sh
 
 COPY . .
 
