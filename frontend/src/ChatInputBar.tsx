@@ -29,6 +29,7 @@ export default function ChatInputBar ({ receiverPseudo, socket }: ChatInputBarPr
 		msg.length <= MAX_DM_MESSAGE_LENGTH;
 	
 	function sendMessage() {
+		console.log("Sending message:", msg);
 		if (
 			msg.trim() === "" ||
 			receiverPseudo.trim() === "" ||
@@ -40,7 +41,7 @@ export default function ChatInputBar ({ receiverPseudo, socket }: ChatInputBarPr
 		if (!socket || socket.readyState !== WebSocket.OPEN) {
 			return;
 		}
-
+		console.log("Sending message via WebSocket:", msg);
 		socket.send(JSON.stringify({
 			type: "SEND_DM",
 			data: {

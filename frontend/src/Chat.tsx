@@ -422,7 +422,7 @@ export default function Chat_Global() {
 
 		const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 		const ws = new WebSocket(
-			`${protocol}://${window.location.host}/api/db/ws?token=${encodeURIComponent(token)}`
+    		`${protocol}://${window.location.host}/chat/ws?token=${encodeURIComponent(token)}`
 		);
 		setSocket(ws);
 
