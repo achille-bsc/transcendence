@@ -7,51 +7,6 @@ import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
-// import { useNavigate } from "react-router-dom";
-
-// function DisplayMenu(){
-// 	return
-// }
-
-// function fetchFriends() {
-// 	return ([{name: "David" }, 
-// 		{name: "EST" },
-// 		{name: "OUAIS" }
-// 	]);
-	// try
-	// {
-	// 	const token = localStorage.getItem("token");
-	// 	if (!token) {
-	// 		console.error("Token not found");
-	// 		return false;
-	// 	}
-	// 	console.log(token);
-	// 	const res = await fetch('/api/db/profileuser', {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Authorization": `Bearer ${token}`,
-	// 		}
-	// 	});
-	// 	console.log(res);
-	// 	if (!res.ok)
-	// 	{
-	// 		console.error("Server error:", res.status);
-	// 		const text = await res.text();
-	// 		console.error("Response body:", text);
-	// 		return false;
-	// 	}
-	// 	console.log(res.status);
-	// 	console.log(res.ok);
-	// 	const data = await res.json();
-	// 	console.log(data);
-	// 	return data.user.pseudo;
-	// }
-	// catch (error)
-	// {
-	// 	console.error("Invalid token:", error);
-	// 	return false;
-	// }
-// }
 
 async function fetchPending(){
 	const token = localStorage.getItem("token");

@@ -44,12 +44,9 @@ async function ProfilePicture() {
 				}
 				
 			});
-		console.log("RESS", res);
 		if (!res.ok)
 			alert("An error occured");
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl;
 	}
 	catch (err)
@@ -77,14 +74,11 @@ async function changeProfilePicture(file: File) {
 			},
 			body: formData
 		});
-		console.log("RESS", res);
 		if (!res.ok) {
 			alert("An error occured");
 			return;
 		}
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl;
 	}
 	catch (err)

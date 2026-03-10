@@ -309,7 +309,7 @@
   }
 
   .main-search-form-input {
-    @apply rounded border p-2;
+    @apply focus:outline-hidden border p-2;
   }
 
   .main-search-error {

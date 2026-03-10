@@ -58,11 +58,9 @@ async function fetchFriends(): Promise<FriendsResponse | undefined>
 				"Authorization": `Bearer ${token}`,
 			},
 		});
-		console.log("Res friendlist", res);
 		if (!res.ok)
 			alert("An error occured");
 		const data = await res.json()
-		console.log(data);
 		return data;
 	}
 	catch (err)

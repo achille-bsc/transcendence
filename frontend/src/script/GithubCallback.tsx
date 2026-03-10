@@ -17,7 +17,6 @@ export default function GithubCallback() {
             });
             const data = await res.json();
             localStorage.setItem("token", data.access_token);
-            console.log(data);
             //call register here
             if (!data.access_token) {
                 console.error("No token returned from backend");

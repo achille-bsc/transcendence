@@ -98,7 +98,6 @@ async function checkIfFriend(friendPseudo: string)
 		if (!res.ok)
 			return false;
 		const data = await res.json()
-		console.log("Friend list data:", data);
 		if (!data.friends || !Array.isArray(data.friends))
 			return false;
 		return data.friends.some((friend: any) => friend.pseudo === friendPseudo);
@@ -250,11 +249,9 @@ export default function Profile() {
 				},
 				body: JSON.stringify({friendPseudo : username}),
 			});
-			console.log("RESS", res);
 			if (!res.ok)
 				alert("An error occured");
 			const data = await res.json()
-			console.log(data);
 			alert("Friend removed!");
 			setIsFriend(false);
 		}

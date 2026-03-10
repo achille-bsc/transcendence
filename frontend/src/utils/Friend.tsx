@@ -18,7 +18,6 @@ async function rejectRequest(username: string){
 		},
 		body : JSON.stringify({ friendPseudo: username })
 	});
-	console.log(res);
 	if (!res.ok)
 		return alert("Error rejecting request");
 	return alert("Request rejected")
@@ -39,7 +38,6 @@ async function acceptRequest(username: string){
 		},
 		body : JSON.stringify({ friendPseudo: username })
 	});
-	console.log(res);
 	if (!res.ok)
 		return alert("Error accepting request");
 	return alert("Request accepted")
