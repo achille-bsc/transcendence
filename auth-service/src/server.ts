@@ -19,8 +19,8 @@ async function start() {
   const server = fastify({ 
     logger: true,
     https: {
-      key: fs.readFileSync('/app/certs/srv.key'),
-      cert: fs.readFileSync('/app/certs/srv.crt')
+      key: fs.readFileSync('/app/certs/private/srv.key'),
+      cert: fs.readFileSync('/app/certs/public/srv.crt')
     }
   });
 

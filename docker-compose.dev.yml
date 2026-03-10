@@ -9,6 +9,8 @@ services:
         build:
             context: ./caddy-service
             dockerfile: Dockerfile
+        env_file:
+            - .env
         ports:
             - "8443:443"
             - "8080:80"
@@ -52,6 +54,13 @@ services:
                 shared_ressources: ./shared
         expose:
             - "3000"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        # env_file:
+        #     - .env
+        volumes:
+            - ./certificates/public:/app/certs/public:ro
+            - ./certificates/private/frontend.key:/app/certs/private/frontend.key
         develop:
             watch:
                 - path: ./frontend
@@ -74,6 +83,10 @@ services:
                 shared_ressources: ./shared
         expose:
             - "3001"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        # env_file:
+        #     - .env
         secrets:
             - api_pass
             - jwt_secret
@@ -89,8 +102,9 @@ services:
                     - .dockerignore
                     - Dockerfile
         volumes:
-            - ./certificates/private/auth-service.key:/app/certs/srv.key:ro
-            - ./certificates/public/auth-service.crt:/app/certs/srv.crt:ro
+            - ./certificates/private/auth-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/database-service.crt:/app/certs/public/database-service.crt:ro
         depends_on:
             user-management-service:
                 condition: service_started
@@ -109,6 +123,10 @@ services:
                 shared_ressources: ./shared
         expose:
             - "3004"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        # env_file:
+        #     - .env
         secrets:
             - api_pass
             - jwt_secret
@@ -124,8 +142,10 @@ services:
                     - .dockerignore
                     - Dockerfile
         volumes:
-            - ./certificates/private/chat-service.key:/app/certs/srv.key:ro
-            - ./certificates/public/chat-service.crt:/app/certs/srv.crt:ro
+            - ./certificates/private/chat-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/chat-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/database-service.crt:/app/certs/database-service.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/auth-service.crt:ro
         depends_on:
             database-service:
                 condition: service_healthy
@@ -138,7 +158,6 @@ services:
 # ======================== DB ========================
     database-service:
         container_name: database-service
-        env_file: .env
         build:
             context: ./database-service
             dockerfile: Dockerfile
@@ -148,7 +167,10 @@ services:
             - "5555:5555"  # ONLY TO CHECK DB FROM OUTSIDE, SO ONLY FOR DEV
         expose: 
             - "5000"
+        env_file:
+            - .env
         environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
             DATABASE_URL: ${DATABASE_URL}
             DB_USER: "user"
             DB_PASS_FILE: /run/secrets/db_password
@@ -168,13 +190,14 @@ services:
                   action: sync
         volumes:
             - db-volume:/app/data 
-            - ./certificates/private/database-service.key:/app/certs/db.key:ro
-            - ./certificates/public/database-service.crt:/app/certs/db.crt:ro
+            - ./certificates/private/database-service.key:/app/certs/private/db.key:ro
+            - ./certificates/public/database-service.crt:/app/certs/public/db.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
         networks:
             - transcendence-network
         restart: unless-stopped
         healthcheck:
-            test: ["CMD-SHELL", "curl -f --cacert /app/certs/db.crt https://localhost:5000/health || exit 1"]
+            test: ["CMD-SHELL", "curl -f --cacert /app/certs/public/db.crt https://localhost:5000/health || exit 1"]
             interval: 10s
             timeout: 30s
             retries: 5
@@ -185,8 +208,14 @@ services:
         build:
             context: ./kong-service
             dockerfile: Dockerfile
+            additional_contexts: 
+                shared_ressources: ./shared
         expose:
             - "3000"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        # env_file:
+        #     - .env
         develop:
             watch:
               - action: sync
@@ -197,8 +226,10 @@ services:
                     - .dockerignore
                     - .gitignore
         volumes:
-            - ./certificates/private/kong-service.key:/app/certs/srv.key:ro
-            - ./certificates/public/kong-service.crt:/app/certs/srv.crt:ro
+            - ./certificates/private/kong-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/kong-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
+            - ./certificates/public/frontend.crt:/app/certs/public/frontend.crt:ro
         restart: unless-stopped
 
 # ======================== AVATAR FILLER ========================
@@ -224,6 +255,10 @@ services:
                 shared_ressources: ./shared
         expose:
             - "3003"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        # env_file:
+        #     - .env
         secrets:
             - api_pass
         develop:
@@ -235,8 +270,8 @@ services:
                     command: "./scripts/handle_file_change.sh {{ .Path }}"
         volumes:
             - avatars-volume:/app/avatars
-            - ./certificates/private/user-management-service.key:/app/certs/srv.key:ro
-            - ./certificates/public/user-management-service.crt:/app/certs/srv.crt:ro
+            - ./certificates/private/user-management-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/:/app/certs/public:ro
         depends_on:
             avatar-copier:
                 condition: service_completed_successfully
