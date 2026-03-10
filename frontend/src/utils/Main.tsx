@@ -104,10 +104,8 @@ async function isUser(username: string)
 		},
 		body : JSON.stringify({ pseudo: username })
 	});
-	console.log("isUser RES:", res);
 	const data = await res.json();
-	console.log("isUser data:", data);
-	if (data.user.pseudo === username)
+	if (data?.user?.pseudo === username)
 		return true;
 	return false;
 }
@@ -245,9 +243,6 @@ function Main({children = ""}: {children?: ReactNode}) {
 								</div>
 							</div>
 						}
-					{/* <MyButton onClick={() => window.location.href = "/chat"}>
-						<Img src={menu} alt={lang.Alt_text.menu_icon} className="main-icon" />
-					</MyButton> */}
 					<div >
 						<MyButton onClick={() => setOpenMenu(openMenu === "friends" ? null : "friends")}>
 							<Img src={friends} alt={lang.Alt_text.friend_icon} className="main-icon" />

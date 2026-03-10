@@ -3,12 +3,46 @@ import Img from "./Img"
 import {accept, reject} from "../../icons/Icons.tsx"
 import { useLang } from "../script/langProvider.tsx";
 
-function Jsp(){
-	return alert("test")
+async function rejectRequest(username: string){
+	const token = localStorage.getItem("token");
+	if (!token)
+	{
+		console.error("Token not found");
+		return false;
+	}
+	const res = await fetch('/api/db/friend/refuse', {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body : JSON.stringify({ friendPseudo: username })
+	});
+	console.log(res);
+	if (!res.ok)
+		return alert("Error rejecting request");
+	return alert("Request rejected")
 }
 
-function sendRequest(){
-	return alert("Request sent")
+async function acceptRequest(username: string){
+	const token = localStorage.getItem("token");
+	if (!token)
+	{
+		console.error("Token not found");
+		return false;
+	}
+	const res = await fetch('/api/db/friend/accept', {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body : JSON.stringify({ friendPseudo: username })
+	});
+	console.log(res);
+	if (!res.ok)
+		return alert("Error accepting request");
+	return alert("Request accepted")
 }
 
 export function Friend({ children }) {
@@ -20,14 +54,14 @@ export function Friend({ children }) {
 				{children}
 			</span>
 			<div className="friend-actions">
-				<MyButton onClick={() => sendRequest()}>
+				<MyButton onClick={() => acceptRequest(children)}>
 					<Img
 						src={accept}
 						alt={lang.Alt_text.friend_request_accept}
 						className="friend-icon-accept"
 					/>
 				</MyButton>
-				<MyButton onClick={() => Jsp()}>
+				<MyButton onClick={() => rejectRequest(children)}>
 					<Img
 						src={reject}
 						alt={lang.Alt_text.friend_request_reject}
