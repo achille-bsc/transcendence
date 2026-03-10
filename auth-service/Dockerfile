@@ -5,13 +5,16 @@ WORKDIR /app
 ADD package*.json ./
 
 COPY --from=shared_ressources ./plugin ./plugin
+COPY --from=shared_ressources ./scripts/entrypoint.sh ./
 
-RUN npm install
+# RUN npm install
 
 COPY . .
 
-RUN npm install
+RUN npm install && chmod +x entrypoint.sh
 
 EXPOSE 3001
 
-ENTRYPOINT [ "sh", "-c", "npm run start" ]
+ENTRYPOINT [ "sh", "entrypoint.sh" ]
+
+CMD [ "npm", "run", "start" ]

@@ -3,6 +3,7 @@ DEV = docker-compose.dev.yml
 PROD = docker-compose.yml
 
 SERVICES = \
+frontend \
 database-service \
 kong-service \
 auth-service \
