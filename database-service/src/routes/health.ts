@@ -4,7 +4,7 @@ import { prisma } from '../../prisma';
 export default async function healthRoutes(server: FastifyInstance) {
   server.get('/health', async () => {
     console.log("test");
-    /*if (!prisma) {
+    if (!prisma) {
       return { status: 'error' };
     }
     const dbStatus = await prisma.user.findFirst(
@@ -27,7 +27,7 @@ export default async function healthRoutes(server: FastifyInstance) {
     const test = await prisma.user.findFirst({ where: { id: tester.id } });
     if (test!.pseudo !== 'healt@hcheck')
       return { status: 'error' };
-    await prisma.user.deleteMany({ where: { pseudo: tester.pseudo } });*/
+    await prisma.user.deleteMany({ where: { pseudo: tester.pseudo } });
     return { status: 'ok' };
   });
 }
