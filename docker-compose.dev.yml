@@ -167,7 +167,6 @@ services:
                   target: /app/scripts
                   action: sync
         volumes:
-            - avatars-volume:/app/uploads
             - db-volume:/app/data 
             - ./certificates/private/database-service.key:/app/certs/db.key:ro
             - ./certificates/public/database-service.crt:/app/certs/db.crt:ro

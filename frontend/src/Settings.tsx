@@ -14,8 +14,8 @@ async function getUsername()
 			console.error("Token not found");
 			return false;
 		}
-		const res = await fetch('/api/db/profileuser', {
-			method: "POST",
+		const res = await fetch('/user/profile', {
+			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}` 
 			}
@@ -34,7 +34,7 @@ async function ProfilePicture() {
 	const token = localStorage.getItem("token");
 	try
 	{
-		const res = await fetch("/api/db/useravatar", {
+		const res = await fetch("/user/useravatar", {
 			method: "GET",
 				headers: {
 					"Authorization": `Bearer ${token}`,
@@ -116,7 +116,7 @@ async function changeProfilePicture(file: File) {
 		}
 		const formData = new FormData();
 		formData.append("file", file);
-		const res = await fetch("/api/db/avatar", {
+		const res = await fetch("/user/update-avatar", {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`

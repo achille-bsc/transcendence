@@ -16,6 +16,7 @@ async function authRoutes(server: FastifyInstance) {
 		pseudo: string,
 		email: string,
 		password: string };
+    console.log("test\n\n\n")
     if (!await checkSignin(pseudo, email, password, reply))
       return;
     const hashedPassword = await hashPassword(password);

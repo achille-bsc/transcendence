@@ -56,8 +56,8 @@ import { useLang } from "../script/langProvider.tsx";
 async function fetchPending(){
 	const token = localStorage.getItem("token");
 	if (localStorage.getItem("token")) {
-		const res = await fetch('/api/db/friend/receive', {
-			method: "POST",
+		const res = await fetch('/user/receive', {
+			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
 			}
@@ -81,7 +81,7 @@ async function acceptFriendRequest(userId: number) {
 	if (!token) return false;
 	
 	try {
-		const res = await fetch('/api/db/friend/accept', {
+		const res = await fetch('/user/accept', {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -101,7 +101,7 @@ async function rejectFriendRequest(userId: number) {
 	if (!token) return false;
 	
 	try {
-		const res = await fetch('/api/db/friend/reject', {
+		const res = await fetch('/user/refuse', {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -138,7 +138,7 @@ async function isUser(username: string)
 		console.error("Token not found");
 		return false;
 	}
-	const res = await fetch('/api/db/profileother', {
+	const res = await fetch('/user/profileother', {
 		method: "POST",
 		headers: {
 			"Authorization": `Bearer ${token}`,

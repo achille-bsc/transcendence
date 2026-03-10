@@ -52,8 +52,8 @@ async function fetchFriends(): Promise<FriendsResponse | undefined>
 	}
 	try
 	{
-		const res = await fetch("/api/db/friend/list", {
-		method: "POST",
+		const res = await fetch("/user/friend", {
+		method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
 			},
@@ -76,7 +76,7 @@ async function getOtherUserAvatar(pseudo: string) {
 	const token = localStorage.getItem("token");
 	try
 	{
-		const res = await fetch("/api/db/avatarother", {
+		const res = await fetch("/user/avatarother", {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -100,7 +100,7 @@ async function getUserAvatar() {
 	const token = localStorage.getItem("token");
 	try
 	{
-		const res = await fetch("/api/db/useravatar", {
+		const res = await fetch("/user/useravatar", {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -128,7 +128,7 @@ async function getUserStatus(pseudo: string)
 	}
 	try
 	{
-		const res = await fetch("/api/db/userstatus", {
+		const res = await fetch("/user/userstatus", {
 		method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,

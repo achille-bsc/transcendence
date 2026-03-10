@@ -1,7 +1,7 @@
 export async function verifToken(token: string): Promise<boolean> {
 	try {
-		const res = await fetch('/api/db/checktoken', {
-			method: "POST",
+		const res = await fetch('/auth/validate', {
+			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}` 
 			}

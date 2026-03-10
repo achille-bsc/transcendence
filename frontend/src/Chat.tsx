@@ -55,8 +55,8 @@ async function fetchFriends(): Promise<Friend[]> {
 		return [];
 	}
 
-	const response = await fetch("/api/db/friend/list", {
-		method: "POST",
+	const response = await fetch("/user/friend", {
+		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -292,7 +292,7 @@ export default function Chat_Global() {
 		isPrependingRef.current = true;
 
 		try {
-			const response = await fetch("/api/db/chat/find/dm", {
+			const response = await fetch("/chat/find-dm", {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -362,7 +362,7 @@ export default function Chat_Global() {
 		}
 
 		const loadConversation = async () => {
-			const response = await fetch("/api/db/chat/find/dm", {
+			const response = await fetch("/chat/find-dm", {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${token}`,

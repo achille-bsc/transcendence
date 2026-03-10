@@ -16,8 +16,8 @@ async function getUsername()
 			console.error("Token not found");
 			return false;
 		}
-		const res = await fetch('/api/db/profileuser', {
-			method: "POST",
+		const res = await fetch('/user/profile', {
+			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}` 
 			}
@@ -36,7 +36,7 @@ async function ProfilePicture() {
 	const token = localStorage.getItem("token");
 	try
 	{
-		const res = await fetch("/api/db/useravatar", {
+		const res = await fetch("/user/useravatar", {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -60,7 +60,7 @@ async function getOtherUserAvatar(pseudo: string) {
 	const token = localStorage.getItem("token");
 	try
 	{
-		const res = await fetch("/api/db/avatarother", {
+		const res = await fetch("/user/avatarother", {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -89,8 +89,8 @@ async function checkIfFriend(friendPseudo: string)
 	}
 	try
 	{
-		const res = await fetch("/api/db/friend/list", {
-		method: "POST",
+		const res = await fetch("/user/friend", {
+		method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
 			},
@@ -119,7 +119,7 @@ async function getUserStatus(pseudo: string)
 	}
 	try
 	{
-		const res = await fetch("/api/db/userstatus", {
+		const res = await fetch("/user/userstatus", {
 		method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -206,7 +206,7 @@ export default function Profile() {
 		}
 		try
 		{
-			const res = await fetch("/api/db/friend/send", {
+			const res = await fetch("/user/send", {
 				method: "POST",
 				headers: {
 					"Authorization": `Bearer ${token}`,
@@ -242,7 +242,7 @@ export default function Profile() {
 		}
 		try
 		{
-			const res = await fetch("/api/db/friend/remove", {
+			const res = await fetch("/user/remove", {
 				method: "POST",
 				headers: {
 					"Authorization": `Bearer ${token}`,
