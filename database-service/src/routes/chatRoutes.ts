@@ -29,24 +29,27 @@ export default async function chatRoutes(server: FastifyInstance) {
   }, async (request, reply) => {
     const { senderId, conversationId, content } = request.body as {
       senderId: string;
-      conversationId: string;
+      conversationId: number;
       content: string
     };
-	const participant = await prisma.conversationParticipant.findFirst({
+	console.log("lolololololool\n\n\n\n\n\n\n\n\n");
+  const parsedConversationId = typeof conversationId === 'string' ? parseInt(conversationId, 10) : conversationId;
+  const participant = await prisma.conversationParticipant.findFirst({
 		where: {
 			userId: senderId,
 			conversation: {
-				id: conversationId,
+				id: parsedConversationId,
 			},
 		},
 		include: {
 			conversation: { include: { participants: true }}}});
 	if (!participant)
 		return { success: false, error: 'Sender is not a participant of the conversation' };
+  console.error(`Caca2`);
 	const new_message = await prisma.message.create({
 		data: {
 			senderId: senderId,
-			conversationId: conversationId,
+			conversationId: parsedConversationId,
 			content: content
 		},
 		include: {
@@ -112,11 +115,12 @@ server.post("/create-dm", {
     user1Pseudo: string;
     user2Pseudo: string;
   };
+  console.log("1\n\n\n\n\n\n\n\n\n");
   const user1 = await findUserByPseudo(user1Pseudo);
   const user2 = await findUserByPseudo(user2Pseudo);
   if (!user1 || !user2 || user1.pseudo === user2.pseudo)
     return reply.code(400).send({ error: 'Invalid sender or receiver' });
-
+  console.log("2\n\n\n\n\n\n\n\n\n");
   const convExists = await prisma.conversation.findFirst({
     where: {
       isGroup: false,
@@ -126,8 +130,11 @@ server.post("/create-dm", {
       ]
     }
   });
+  console.log("3\n\n\n\n\n\n\n\n\n");
+  console.log("Existing conversation:", convExists);
   if (convExists)
-    return convExists;
+    return { success: true, conversation: convExists };
+  console.log("4\n\n\n\n\n\n\n\n\n");
   const newConv = await prisma.conversation.create({
     data: {
       isGroup: false,
@@ -140,6 +147,7 @@ server.post("/create-dm", {
       messages: true
     },
   });
-  return newConv;
+  console.log("5\n\n\n\n\n\n\n\n\n");
+  return { success: true, conversation: newConv.id };
 });
 }
