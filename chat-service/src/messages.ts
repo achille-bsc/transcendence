@@ -38,7 +38,7 @@ export default async function messageRoutes(server: FastifyInstance) {
     const senderPseudo = request.user.pseudo;
     const parsedBeforeId = parsePositiveInt(beforeId);
     const parsedLimit = parsePositiveInt(limit);
-    const res = await fetch("/api/db/find-dm", {
+    const res = await fetch("https://database-service:5000/find-dm", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

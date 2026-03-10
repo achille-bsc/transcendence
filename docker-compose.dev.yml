@@ -279,7 +279,8 @@ services:
         volumes:
             - avatars-volume:/app/avatars
             - ./certificates/private/user-management-service.key:/app/certs/private/srv.key:ro
-            - ./certificates/public/:/app/certs/public:ro
+            - ./certificates/public/user-management-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/ca-bundle.crt:/app/certs/ca-bundle.crt:ro
         depends_on:
             avatar-copier:
                 condition: service_completed_successfully
