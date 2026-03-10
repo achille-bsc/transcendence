@@ -22,6 +22,7 @@ import Conversation from "./Conversation.tsx";
 import Settings from "./Settings.tsx";
 import GithubCallback from "./script/GithubCallback.tsx";
 import Terms_of_Services from "./Terms_of_Services.tsx";
+import NotFound from "./404.tsx";
 
 ReactDOM.createRoot(root!).render(
 	<BrowserRouter>
@@ -30,6 +31,7 @@ ReactDOM.createRoot(root!).render(
 				<Route path="/oauth/callback" element={<GithubCallback />} />
 				<Route path="/dm" element={<ChatDm />} />
 				<Route path="/settings" element={<Settings />} />
+				<Route path="*" element={<NotFound />} />
 				<Route path="/dm/:pseudo" element={<Conversation />} />
 				<Route path="/terms" element={<Terms_of_Services />} />
 				<Route path="/game" element={<Game />} />

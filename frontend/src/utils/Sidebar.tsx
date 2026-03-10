@@ -16,33 +16,6 @@ interface SidebarProps {
 	children?: string | null;
 }
 
-// async function fetchFriends() {
-// 	return [
-// 		{
-// 			id: 1,
-// 			username: "Alice",
-// 			picture: "/src/img/img.webp",
-// 			author: "Alice",
-// 			last_message: "Hey, how are you?"
-// 		},
-// 		{
-// 			id: 2,
-// 			username: "Bob",
-// 			picture: "/src/img/img.webp",
-// 			author: "You",
-// 			last_message: "Let's play tonight!"
-// 		},
-// 		{
-// 			id: 3,
-// 			username: "Charlie",
-// 			picture: "/src/img/img.webp",
-// 			author: "You",
-// 			last_message: "See you tomorrow 👋"
-// 		},
-		
-// 	];
-//}
-
 async function fetchFriends(): Promise<FriendsResponse | undefined>
 {
 	const token = localStorage.getItem("token");
@@ -58,11 +31,9 @@ async function fetchFriends(): Promise<FriendsResponse | undefined>
 				"Authorization": `Bearer ${token}`,
 			},
 		});
-		console.log("Res friendlist", res);
 		if (!res.ok)
 			alert("An error occured");
 		const data = await res.json()
-		console.log(data);
 		return data;
 	}
 	catch (err)
@@ -148,43 +119,43 @@ async function getUserStatus(pseudo: string)
 	}
 }
 
-function Sidebar({children}: SidebarProps)
+export default function Sidebar({children}: SidebarProps)
 {
 	const lang = useLang().getLang();
 	const [friends, setFriends] = useState<Friend[]>([]);
 	const [friendAvatars, setFriendAvatars] = useState<Record<string, string>>({});
 	const [friendStatuses, setFriendStatuses] = useState<Record<string, boolean>>({});
-    const [userAvatar, setUserAvatar] = useState("/src/img/img.webp");
-    const [userIsOnline, setUserIsOnline] = useState(false);
-    useEffect(() => {
-        getUserAvatar().then(avatar => {
-            setUserAvatar(avatar);
-        });
-    }, []);
-    useEffect(() => {
+	const [userAvatar, setUserAvatar] = useState("/src/img/img.webp");
+	const [userIsOnline, setUserIsOnline] = useState(false);
+	useEffect(() => {
+		getUserAvatar().then(avatar => {
+			setUserAvatar(avatar);
+		});
+	}, []);
+	useEffect(() => {
 		if (typeof children !== "string" || children.trim() === "")
 			return;
 		getUserStatus(children).then((isOnline) => {
 			setUserIsOnline(isOnline);
 		});
 	}, [children]);
-    useEffect(() => {
-        fetchFriends().then(data => {
-            setFriends((data && data.friends) || []);
-            if (data && data.friends) {
-                const avatarPromises = data.friends.map((friend: Friend) => 
-                    getOtherUserAvatar(friend.pseudo).then(avatar => ({
-                        pseudo: friend.pseudo,
-                        avatar: avatar
-                    }))
-                );
-                Promise.all(avatarPromises).then(avatars => {
-                    const avatarMap: Record<string, string> = {};
-                    avatars.forEach(({pseudo, avatar}) => {
-                        avatarMap[pseudo] = avatar;
-                    });
-                    setFriendAvatars(avatarMap);
-                });
+	useEffect(() => {
+		fetchFriends().then(data => {
+			setFriends((data && data.friends) || []);
+			if (data && data.friends) {
+				const avatarPromises = data.friends.map((friend: Friend) => 
+					getOtherUserAvatar(friend.pseudo).then(avatar => ({
+						pseudo: friend.pseudo,
+						avatar: avatar
+					}))
+				);
+				Promise.all(avatarPromises).then(avatars => {
+					const avatarMap: Record<string, string> = {};
+					avatars.forEach(({pseudo, avatar}) => {
+						avatarMap[pseudo] = avatar;
+					});
+					setFriendAvatars(avatarMap);
+				});
 
 				const statusPromises = data.friends.map((friend: Friend) =>
 					getUserStatus(friend.pseudo).then(isOnline => ({
@@ -199,16 +170,16 @@ function Sidebar({children}: SidebarProps)
 					});
 					setFriendStatuses(statusMap);
 				});
-            }
-        });
-    }, [children]);
+			}
+		});
+	}, [children]);
 	const navigate = useNavigate();
 	const openConversation = (pseudo: string) => {
 		navigate(`/profile/${encodeURIComponent(pseudo)}`);
 	}
 
-    return (
-        <div className="sidebar-root">
+	return (
+		<div className="sidebar-root">
 				{children && (
 					<MyButton className="sidebar-btn" onClick={() => navigate('/profile')}>
 						<div className="sidebar-item">
@@ -224,23 +195,21 @@ function Sidebar({children}: SidebarProps)
 						</div>
 					</MyButton>
 				)}
-		    	{friends.map((friend) => (
+				{friends.map((friend) => (
 	  				<MyButton key={friend.pseudo} className="sidebar-btn" onClick={() => openConversation(friend.pseudo)}>
-			    	<div className="sidebar-item">
+					<div className="sidebar-item">
 						<div className="sidebar-avatar-wrap">
-			        		<img
-			        	    	src={friendAvatars[friend.pseudo] || "/src/img/img.webp"}
-			        	    	alt={lang.Alt_text.profile_picture}
-			        	    	className="sidebar-avatar"
-			        		/>
-			        		<span className={`sidebar-status-dot ${friendStatuses[friend.pseudo] ? "sidebar-status-online" : "sidebar-status-offline"}`}></span>
+							<img
+								src={friendAvatars[friend.pseudo] || "/src/img/img.webp"}
+								alt={lang.Alt_text.profile_picture}
+								className="sidebar-avatar"
+							/>
+							<span className={`sidebar-status-dot ${friendStatuses[friend.pseudo] ? "sidebar-status-online" : "sidebar-status-offline"}`}></span>
 						</div>
-				        	<span className="sidebar-name">{friend.pseudo}</span>
-			    	</div>
+							<span className="sidebar-name">{friend.pseudo}</span>
+					</div>
 				</MyButton>
 			))}
-	    </div>
-    )
+		</div>
+	)
 }
-
-export default Sidebar

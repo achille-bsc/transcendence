@@ -25,7 +25,8 @@
 			"profile": "👤 Profile",
 			"settings": "⚙️ Settings",
 			"deconnexion": "➜] Logout",
-			"terms_of_services": "📃 Terms of Services"
+			"terms_of_services": "📃 Terms of Services",
+			"users_not_found": "No users found"
 		},
 		"Chat_page": {
 			"input": "Type your message..."
@@ -70,6 +71,11 @@
 			"api": "API key :",
 			"edit": "edit",
 			"generate": "generate"
+		},
+		"not_found": {
+			"title": "Page Not Found",
+			"message": "The page you are looking for doesn't exist or has been moved.",
+			"home_button": "Go Home"
 		},
 		"Terms_page": {
 			"title": "Terms and Conditions",

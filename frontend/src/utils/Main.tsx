@@ -76,7 +76,7 @@ async function fetchPending(){
 	return [];
 }
 
-async function acceptFriendRequest(userId: number) {
+async function acceptFriendRequest(pseudo: string) {
 	const token = localStorage.getItem("token");
 	if (!token) return false;
 	
@@ -87,7 +87,7 @@ async function acceptFriendRequest(userId: number) {
 				"Authorization": `Bearer ${token}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ friendId: userId })
+			body: JSON.stringify({ friendPseudo: pseudo })
 		});
 		return res.ok;
 	} catch (error) {
@@ -96,7 +96,7 @@ async function acceptFriendRequest(userId: number) {
 	}
 }
 
-async function rejectFriendRequest(userId: number) {
+async function rejectFriendRequest(pseudo: string) {
 	const token = localStorage.getItem("token");
 	if (!token) return false;
 	
@@ -107,7 +107,7 @@ async function rejectFriendRequest(userId: number) {
 				"Authorization": `Bearer ${token}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ friendId: userId })
+			body: JSON.stringify({ friendPseudo: pseudo })
 		});
 		return res.ok;
 	} catch (error) {
@@ -215,12 +215,12 @@ function SearchBar() {
 
 function Main({children = ""}: {children?: ReactNode}) {
 	const [isOn, setIsOn] = useState(() => {
-		const savedTheme = localStorage.getItem("darkMode");
+		const savedTheme = localStorage.getItem("Theme");
 		return savedTheme === "dark";
 	});
 	useEffect(() => {
 		const nextTheme = isOn ? "dark" : "light";
-		localStorage.setItem("darkMode", nextTheme);
+		localStorage.setItem("Theme", nextTheme);
 		document.documentElement.classList.remove("light", "dark");
 		document.documentElement.classList.add(nextTheme);
 	}, [isOn]);
@@ -246,7 +246,6 @@ function Main({children = ""}: {children?: ReactNode}) {
 			ws.close();
 		};
 	}, []);
-	// const navigate = useNavigate();
 	const [LanguagesClicked, setLanguages] = useState(false);
 	const [TermsClicked, setTerms] = useState(false);
 	const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -271,8 +270,8 @@ function Main({children = ""}: {children?: ReactNode}) {
 		return () => clearInterval(interval);
 	}, []);
 
-	const handleAcceptFriend = async (userId: number) => {
-		const success = await acceptFriendRequest(userId);
+	const handleAcceptFriend = async (pseudo: string) => {
+		const success = await acceptFriendRequest(pseudo);
 		if (success) {
 			// Rafraîchir la liste immédiatement
 			const result = await fetchPending();
@@ -280,8 +279,8 @@ function Main({children = ""}: {children?: ReactNode}) {
 		}
 	};
 
-	const handleRejectFriend = async (userId: number) => {
-		const success = await rejectFriendRequest(userId);
+	const handleRejectFriend = async (pseudo: string) => {
+		const success = await rejectFriendRequest(pseudo);
 		if (success) {
 			// Rafraîchir la liste immédiatement
 			const result = await fetchPending();
@@ -330,23 +329,23 @@ function Main({children = ""}: {children?: ReactNode}) {
 								<ul className="main-friends-list">
 									{activeTab !== "friends" && (
 										(data[activeTab]?.length ?? 0) > 0 
-											? data[activeTab].map(({ id, pseudo }) => (
+											? data[activeTab].map(({ id, pseudo }, index) => (
 												<Friend
-													key={id}
+													key={id ?? index}
 													userId={id}
 												>
 													<div className="grid grid-cols-3 gap-2">
 														{pseudo}
-														<MyButton onClick={() => handleAcceptFriend(id)} className="p-0 bg-none border-none">
-															<Img src={accept} alt={lang.Alt_text.friend_request_accept} className="size-5" />
-														</MyButton>
-														<MyButton onClick={() => handleRejectFriend(id)} className="p-0 bg-none border-none">
+															<MyButton onClick={() => handleAcceptFriend(pseudo)} className="p-0 bg-none border-none">
+																<Img src={accept} alt={lang.Alt_text.friend_request_accept} className="size-5" />
+															</MyButton>
+															<MyButton onClick={() => handleRejectFriend(pseudo)} className="p-0 bg-none border-none">
 															<Img src={reject} alt={lang.Alt_text.friend_request_reject} className="size-5" />
 														</MyButton>
 													</div>
 												</Friend>
 											))
-											: <li className="main-empty-item">No users found</li>
+											: <li className="main-empty-item">{lang.navbar.users_not_found}</li>
 									)}
 								</ul>
 								<div className="main-search-wrap">

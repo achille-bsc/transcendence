@@ -23,7 +23,7 @@ async function getUsername()
 			}
 		});
 		const data = await res.json();
-		return data.user.pseudo;
+		return { pseudo: data.user.pseudo, createdAt: data.user.createdAt };
 	}
 	catch (error)
 	{
@@ -149,6 +149,7 @@ export default function Profile() {
 	const navigate = useNavigate();
 	const { username } = useParams();
 	const [loggedUser, setLoggedUser] = useState<string | null>(null);
+	const [createdAt, setCreatedAt] = useState<string | null>(null);
 	const [profilePicture, setProfilePicture] = useState<string>("");
 	const [isFriend, setIsFriend] = useState<boolean>(false);
 	const [isOnline, setIsOnline] = useState<boolean>(false);
@@ -158,7 +159,8 @@ export default function Profile() {
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
-			setLoggedUser(name);
+			setLoggedUser(name.pseudo);
+			setCreatedAt(name.createdAt);
 		}
 		fetchUsername();
 	}, []);
@@ -217,7 +219,6 @@ export default function Profile() {
 			if (!res.ok)
 				alert("An error occured");
 			const data = await res.json()
-			alert("Friend request sent!");
 			setIsFriend(true);
 		}
 		catch (err)
@@ -298,7 +299,7 @@ export default function Profile() {
 										<p>{lang.Profile_page.member_since}</p>
 									</div>
 									<div className="py-1">
-										January 2026
+										{createdAt?.slice(0, 10)}
 									</div>
 								</div>
 							</div>
