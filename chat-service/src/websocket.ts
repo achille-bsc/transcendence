@@ -26,9 +26,9 @@ async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) 
     body: JSON.stringify({ user1Pseudo, user2Pseudo }),
   });
 
-  console.log(`\nBidule Reeeeeeceived CREATE_CONV from`, await res.json());
+  const data = await res.json();
+  console.log(`\nBidule Reeeeeeceived CREATE_CONV from`, data);
   // if (!res.ok) return null;
-  const data = await res.json() as any;
   console.log("\n\n\n\ndata:", data);
   return data;
 }
@@ -42,9 +42,10 @@ async function dbNewDirectMessage(senderId: string, conversationId: number, cont
     },
     body: JSON.stringify({ senderId, conversationId, content }),
   });
-  console.log(`\nBidule Reeeeeeceived SEND_DM from`, await res.json());
+  const data = await res.json()
+  console.log(`\nBidule Reeeeeeceived SEND_DM from`, data);
   if (!res.ok) return { success: false };
-  return await res.json() as any;
+  return data;
 }
 
 async function verifyTokenWithAuth(token: string): Promise<string | null> {
