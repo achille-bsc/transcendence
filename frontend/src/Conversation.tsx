@@ -367,42 +367,52 @@ export default function Conversation() {
 
 		const loadConversation = async () => {
 			try {
-			const response = await fetch("/chat/find-dm", {
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ receiverPseudo, limit: PAGE_SIZE }),
-			});
-			console.log("loading conversation with receiver:", receiverPseudo, "response:", response);
-			if (!response.ok) {
-				const payload = await response.json().catch(() => null);
-				const errorMessage =
-					typeof payload?.error === "string" ? payload.error : "";
-				if (errorMessage === "Conversation not found") {
-					shouldScrollToBottomRef.current = true;
-					setMessages([]);
-					setActiveConversationId(null);
-					setHasOlderMessages(false);
-					return;
+				const response = await fetch("/chat/find-dm", {
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ receiverPseudo, limit: PAGE_SIZE }),
+				});
+				
+				console.log("loading conversation with receiver:", receiverPseudo, "response:", response);
+				
+				if (!response.ok) {
+					const payload = await response.json().catch(() => null);
+					const errorMessage =
+						typeof payload?.error === "string" ? payload.error : "";
+					if (errorMessage === "Conversation not found") {
+						shouldScrollToBottomRef.current = true;
+						setMessages([]);
+						setActiveConversationId(null);
+						setHasOlderMessages(false);
+						return;
+					}
+					// Si c'est une autre erreur, on peut lever une exception pour aller dans le catch
+					throw new Error("Erreur lors de la récupération des messages");
 				}
-			}
+
+				// On a une réponse OK, on peut parser le JSON et mettre à jour le state ici !
+				const payload = await response.json();
+				const conversation = payload.data as DmConversation;
+				const ordered = [...conversation.messages].reverse();
+				console.log("loaded conversation:", conversation);
+				shouldScrollToBottomRef.current = true;
+				setMessages(ordered);
+				setHasOlderMessages(conversation.messages.length === PAGE_SIZE);
+				setActiveConversationId(conversation.id ?? null);
+
 			} catch {
+				console.log("Failed to load conversation, resetting state and navigating away");
+				// Le catch s'occupe des erreurs réseau ou des exceptions levées dans le try
 				setMessages([]);
 				setActiveConversationId(null);
 				setHasOlderMessages(false);
 				navigate("/dm", { replace: true });
 				return;
 			}
-			const payload = await response.json();
-			const conversation = payload.data as DmConversation;
-			const ordered = [...conversation.messages].reverse();
-			shouldScrollToBottomRef.current = true;
-			setMessages(ordered);
-			setHasOlderMessages(conversation.messages.length === PAGE_SIZE);
-			setActiveConversationId(conversation.id ?? null);
-		};
+			};
 
 		loadConversation();
 	}, [isReceiverAllowed, isReceiverGuardReady, navigate, receiverPseudo]);
@@ -428,7 +438,7 @@ export default function Conversation() {
 
 		const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 		const ws = new WebSocket(
-			`${protocol}://${window.location.host}/api/db/ws?token=${encodeURIComponent(token)}`
+    		`${protocol}://${window.location.host}/chat/ws?token=${encodeURIComponent(token)}`
 		);
 		setSocket(ws);
 
