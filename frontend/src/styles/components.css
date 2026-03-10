@@ -9,6 +9,10 @@
     @apply w-full;
   }
 
+  .not-found-page {
+    @apply bg-[var(--background)] text-[var(--contrast)];
+  }
+
   .home-root {
     @apply bg-[var(--background)] text-[var(--contrast)];
   }

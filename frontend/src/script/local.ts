@@ -29,6 +29,7 @@ export interface Translations {
 		settings: string;
 		deconnexion: string;
 		terms_of_services: string;
+		users_not_found: string;
 	};
 	Chat_page: {
 		input: string;
@@ -72,7 +73,12 @@ export interface Translations {
 		email: string;
 		api: string;
 		edit: string;
-		generate: string
+		generate: string;
+	},
+	not_found: {
+		title: string;
+		message: string;
+		home_button: string;
 	},
 	Terms_page: {
 		title: string;

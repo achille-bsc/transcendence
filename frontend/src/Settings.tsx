@@ -2,8 +2,10 @@ import MyButton from "./utils/Button.tsx"
 import Img from "./utils/Img.tsx"
 import Main from "./utils/Main.tsx"
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLang } from "./script/langProvider.tsx";
 import "./styles/index.css";
+import RegisterInput from "./RegisterInput.tsx";
 
 async function getUsername()
 {
@@ -42,12 +44,9 @@ async function ProfilePicture() {
 				}
 				
 			});
-		console.log("RESS", res);
 		if (!res.ok)
 			alert("An error occured");
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl;
 	}
 	catch (err)
@@ -123,14 +122,11 @@ async function changeProfilePicture(file: File) {
 			},
 			body: formData
 		});
-		console.log("RESS", res);
 		if (!res.ok) {
 			alert("An error occured");
 			return;
 		}
 		const data = await res.json();
-		
-		console.log(data);
 		return data.avatarUrl;
 	}
 	catch (err)

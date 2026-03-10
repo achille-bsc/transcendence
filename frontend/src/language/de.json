@@ -25,7 +25,8 @@
 			"profile": "👤 Profil",
 			"settings": "⚙️ Einstellungen",
 			"deconnexion": "➜] Abmelden",
-			"terms_of_services": "📃 Nutzungsbedingungen"
+			"terms_of_services": "📃 Nutzungsbedingungen",
+			"users_not_found": "Keine Benutzer gefunden"
 		},
 		"Chat_page": {
 			"input": "Geben Sie Ihre Nachricht ein..."
@@ -70,6 +71,11 @@
 			"api": "API-Schlüssel :",
 			"edit": "bearbeiten",
 			"generate": "generieren"
+		},
+		"not_found": {
+			"title": "Seite nicht gefunden",
+			"message": "Die Seite, die Sie suchen, existiert nicht oder wurde verschoben.",
+			"home_button": "Zur Startseite"
 		},
 		"Terms_page": {
 			"title": "Allgemeine Geschäftsbedingungen",

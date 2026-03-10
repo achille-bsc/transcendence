@@ -402,7 +402,6 @@ export default function Conversation() {
 				setMessages(ordered);
 				setHasOlderMessages(conversation.messages.length === PAGE_SIZE);
 				setActiveConversationId(conversation.id ?? null);
-
 			} catch {
 				console.log("Failed to load conversation, resetting state and navigating away");
 				// Le catch s'occupe des erreurs réseau ou des exceptions levées dans le try
@@ -410,7 +409,6 @@ export default function Conversation() {
 				setActiveConversationId(null);
 				setHasOlderMessages(false);
 				navigate("/dm", { replace: true });
-				return;
 			}
 			};
 

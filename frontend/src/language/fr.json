@@ -25,7 +25,8 @@
 			"profile": "👤 Profil",
 			"settings": "⚙️ Paramètres",
 			"deconnexion": "➜] Déconnexion",
-			"terms_of_services": "📃 Conditions d'utilisation"
+			"terms_of_services": "📃 Conditions d'utilisation",
+			"users_not_found": "Aucun utilisateur trouvé"
 		},
 		"Chat_page": {
 			"input": "Tapez votre message..."
@@ -70,6 +71,11 @@
 			"api": "Clef API :",
 			"edit": "éditer",
 			"generate": "générer"
+		},
+		"not_found": {
+			"title": "Page non trouvée",
+			"message": "La page que vous recherchez n'existe pas ou a été déplacée.",
+			"home_button": "Aller à l'accueil"
 		},
 		"Terms_page": {
 			"title": "Conditions Générales d'Utilisation",
