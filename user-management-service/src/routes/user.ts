@@ -93,7 +93,7 @@ export default async function userRoutes(server: FastifyInstance) {
       if (!res.ok)
         return reply.code(res.status).send(data);
       const user = data;
-      if (!user?.avatar)
+      if (!user?.avatarUrl)
         return reply.code(404).send({ error: 'Aucun avatar trouvé' });
 
       return { success: true, avatarUrl: user.avatarUrl};
