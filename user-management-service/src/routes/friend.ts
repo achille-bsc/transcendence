@@ -40,7 +40,7 @@ export default async function friendRoutes(server: FastifyInstance) {
     const data = await res.json();
     if (!res.ok)
       return reply.code(res.status).send(data);
-    return { success: true, friends: data };
+    return data;
   });
 
   server.post('/send', {
