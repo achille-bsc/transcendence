@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 19:21:41 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 12:05:19 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ import WebSocket from '@fastify/websocket';
 import { PORT, HANDLERS, clients, games } from './utils/const';
 import { ClientState, WSMessage } from './utils/types';
 import { parseMessage } from './utils/utils';
-import fd from 'fs';
+import fs from 'fs';
 
 const fastify = Fastify({
   logger: false,
   https: {
-    key: fd.readFileSync('/app/certs/private/kong-service.key'),
-    cert: fd.readFileSync('/app/certs/public/kong-service.crt'),
+    key: fs.readFileSync('/app/certs/private/kong-service.key'),
+    cert: fs.readFileSync('/app/certs/public/kong-service.crt'),
   }
 });
 
