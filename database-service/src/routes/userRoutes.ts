@@ -35,10 +35,8 @@ export default async function userRoutes(server: FastifyInstance) {
       where: { pseudo },
       select: { pseudo : true, avatar: true }
     });
-    console.log("\n\n\n\n\nUser avatar data: super test", user)
     if (!user?.avatar)
       return reply.code(404).send({ error: 'Avatar not found' });
-    console.log("User avatar data: super test", user);
     return { avatarUrl: `/public/${user.avatar}` };
   });
 
