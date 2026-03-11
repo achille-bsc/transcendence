@@ -111,55 +111,6 @@ async function ProfilePicture() {
 		return;
 	}
 }
-
-// async function getApiKey() {
-// 	const token = localStorage.getItem("token");
-// 	if (!token)
-// 		return "";
-
-// 	try {
-// 		const res = await fetch("/api/db/apikey", {
-// 			method: "GET",
-// 			headers: {
-// 				"Authorization": `Bearer ${token}`
-// 			}
-// 		});
-
-// 		if (!res.ok)
-// 			return "";
-
-// 		const data = await res.json();
-// 		return data.apiKey ?? "";
-// 	} catch (error) {
-// 		console.error("Failed to fetch API key:", error);
-// 		return "";
-// 	}
-// }
-
-// async function generateApiKey() {
-// 	const token = localStorage.getItem("token");
-// 	if (!token)
-// 		return "";
-
-// 	try {
-// 		const res = await fetch("/api/db/apikey/generate", {
-// 			method: "POST",
-// 			headers: {
-// 				"Authorization": `Bearer ${token}`
-// 			}
-// 		});
-
-// 		if (!res.ok)
-// 			return "";
-
-// 		const data = await res.json();
-// 		return data.apiKey ?? "";
-// 	} catch (error) {
-// 		console.error("Failed to generate API key:", error);
-// 		return "";
-// 	}
-// }
-
 async function changeProfilePicture(file: File) {
 	const token = localStorage.getItem("token");
 	try
@@ -168,9 +119,16 @@ async function changeProfilePicture(file: File) {
 			alert("No file provided");
 			return;
 		}
+
+		const allowedMimeTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+		if (!allowedMimeTypes.has(file.type)) {
+			alert("Format non supporté. Utilisez PNG, JPG ou WEBP.");
+			return;
+		}
+
 		const formData = new FormData();
 		formData.append("file", file);
-		const res = await fetch("/user/update-avatar", {
+		const res = await fetch("/user/avatar", {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`
@@ -178,11 +136,43 @@ async function changeProfilePicture(file: File) {
 			body: formData
 		});
 		if (!res.ok) {
-			alert("An error occured");
+			const data = await res.json().catch(() => null);
+			alert(data?.error || "Erreur lors de l'upload de l'avatar");
 			return;
 		}
 		const data = await res.json();
 		return data.avatarUrl;
+	}
+	catch (err)
+	{
+		alert("ERROR");
+		console.log(err);
+	}
+}
+
+async function generateApiKey() {
+	const token = localStorage.getItem("token");
+	try
+	{
+		const res = await fetch("/user/apikey", {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+			}
+		});
+		if (!res.ok) {
+			const data = await res.json();
+			alert(data?.error || "An error occurred while generating API key");
+			return;
+		}
+		const data = await res.json();
+		const apiKey = data.apiKey;
+		if (apiKey) {
+			return apiKey;
+		} else {
+			alert("API key not found in response");
+		}
+		return apiKey;
 	}
 	catch (err)
 	{
@@ -208,14 +198,7 @@ export default function Settings() {
 	const [newProfilePicture, setNewProfilePicture] = useState("");
 	const [newEmail, setNewEmail] = useState("");
 	const [editedEmail, setEditedEmail] = useState("");
-	// const [apiKey, setApiKey] = useState("");
-
-	// async function handleGenerateApiKey() {
-	// 	const newKey = await generateApiKey();
-	// 	if (newKey)
-	// 		setApiKey(newKey);
-	// }
-
+	const [apiKey, setApiKey] = useState("");
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (!file) return;
@@ -226,6 +209,7 @@ export default function Settings() {
 		}
 		setIsOpen(false);
 		window.location.reload();
+		event.target.value = "";
 	};
 	const password = "********";
 	useEffect(() => {
@@ -253,14 +237,6 @@ export default function Settings() {
 		}
 		fetchEmail();
 	}, []);
-	// useEffect(() => {
-	// 	async function fetchApiKey() {
-	// 		const key = await getApiKey();
-	// 		setApiKey(key);
-	// 	}
-	// 	fetchApiKey();
-	// }, []);
-
 	async function handleSaveEmail() {
 		const trimmedEmail = editedEmail.trim();
 		if (!trimmedEmail) {
@@ -293,13 +269,12 @@ export default function Settings() {
 		setIsOpenEmail(true);
 	}
 
-	// function onInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-	// 	if (e.key === "Enter") {
-	// 		localStorage.setItem("profile_img", (e.target as HTMLInputElement).value);
-	// 		localStorage.setItem("img", (e.target as HTMLInputElement).value);
-	// 		setIsOpen(false);
-	// 	}
-	// }
+	async function handleGenerateApiKey() {
+		const newApiKey = await generateApiKey();
+		if (newApiKey) {
+			setApiKey(newApiKey);
+		}
+	}
 
 	return (
 		<Main>
@@ -323,7 +298,7 @@ export default function Settings() {
 											<input 
 												id="fileInput"
 												type="file" 
-												accept="image/*"
+												accept="image/png,image/jpeg,image/webp"
 												onChange={handleFileSelect}
 												className="hidden"
 											/>
@@ -384,19 +359,19 @@ export default function Settings() {
 									)}
 								</div>
 							</div>
-							{/* <div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
+							<div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
 									<p>{lang.Settings_page.api}</p>
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
-										{apiKey || "Aucune clé API générée"}
+										{apiKey}
 									</div>
 									<div className="flex justify-end pl-1">
-										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => { void handleGenerateApiKey(); }}>{lang.Settings_page.generate}</MyButton>
+										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => handleGenerateApiKey()}>{lang.Settings_page.generate}</MyButton>
 									</div>
 								</div>
-							</div> */}
+							</div>
 						</div>
 					</div>
 				</div>

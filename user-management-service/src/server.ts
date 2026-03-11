@@ -17,7 +17,11 @@ async function start() {
 
   try {
     await server.register(authGuardPlugin);
-    await server.register(multipart);
+    await server.register(multipart, {
+      limits: {
+        fileSize: 10 * 1024 * 1024
+      }
+    });
     await server.register(friendRoutes);
     await server.register(userRoutes);
     await server.register(setupStaticFiles);
