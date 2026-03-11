@@ -16,23 +16,23 @@ export async function checkSignin(pseudo: string, email: string, password: strin
 {
     if (!pseudo || !email || !password)
     {
-        reply.code(404).send({ error: 'All fields are required' })
+        reply.code(400).send({ error: 'All fields are required' }) // 400 au lieu de 404
         return false
     }
     else if (password.length < 8)
     {
-        reply.code(404).send({ error: 'Password needs more than 8 characters' })
+        reply.code(400).send({ error: 'Password needs more than 8 characters' }) // 400
         return false
     }
     else if (!email || email.length === 0 || email.includes(' ') ||
         email.split('@').length !== 2 || !email.includes('.'))
     {
-        reply.code(404).send({ error: 'Enter a valid email address' })
+        reply.code(400).send({ error: 'Enter a valid email address' }) // 400
         return false
     }
     else if (!pseudo || pseudo.length === 0 || pseudo.includes(' ') || pseudo.includes('@'))
     {
-        reply.code(404).send({ error: 'Bad pseudo' })
+        reply.code(400).send({ error: 'Bad pseudo' }) // 400
         return false
     }
     return true
