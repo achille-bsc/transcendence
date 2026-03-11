@@ -4,9 +4,11 @@ import friendRoutes from './routes/friendRoutes';
 import userRoutes from './routes/userRoutes';
 import chatRoutes from './routes/chatRoutes';
 import healthRoutes from './routes/health';
-import setupStaticFiles from '../plugins/static';
 import fs from 'fs';
 import backendGuardPlugin from '../plugins/backendGuard';
+import fastifyRateLimit from '@fastify/rate-limit';
+import { prisma } from '../prisma';
+import publicRoutes from './routes/publicRoutes';
 
 async function start() {
   const server = fastify({ 
@@ -20,8 +22,31 @@ async function start() {
   try {
     const apiPass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
     await server.register(backendGuardPlugin, { secret: apiPass });
-    await server.register(setupStaticFiles);
+    await server.register(fastifyRateLimit, {
+      global: false,
+      max: 3,
+      timeWindow: '1 minute',
+      errorResponseBuilder: function (request, context) {
+        return {
+          code: 429,
+          error: 'Too Many Requests',
+          message: `Rate limit reached. You can only make ${context.max} requests every ${context.after}.`
+        };
+      }
+    });
+    server.decorate('authenticateApiKey', async (request, reply) => {
+      const apiKey = request.headers['x-api-key'];
+      if (!apiKey || typeof apiKey !== 'string') {
+        return reply.code(401).send({ error: "Missing 'x-api-key' header" });
+      }
+      const user = await prisma.user.findFirst({where: { apiKey: apiKey }});
+      if (!user) {
+        return reply.code(401).send({ error: "Invalid API Key" });
+      }
+      (request as any).userPseudo = { pseudo: user.pseudo }; 
+    });
 
+    await server.register(publicRoutes);
     await server.register(chatRoutes);
     await server.register(friendRoutes);
     await server.register(healthRoutes);

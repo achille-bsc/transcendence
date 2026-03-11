@@ -27,9 +27,8 @@ async function dbCreateDmConversation(user1Pseudo: string, user2Pseudo: string) 
   });
 
   const data = await res.json();
-  console.log(`\nBidule Reeeeeeceived CREATE_CONV from`, data);
-  // if (!res.ok) return null;
-  console.log("\n\n\n\ndata:", data);
+  //if (!res.ok) 
+  //  return null;
   return data;
 }
 
@@ -43,7 +42,6 @@ async function dbNewDirectMessage(senderId: string, conversationId: number, cont
     body: JSON.stringify({ senderId, conversationId, content }),
   });
   const data = await res.json()
-  console.log(`\nBidule Reeeeeeceived SEND_DM from`, data);
   if (!res.ok) return { success: false };
   return data;
 }
@@ -153,7 +151,6 @@ async function handleClientMessage(
       const receiverPseudo = message?.data?.receiverPseudo;
       const content = message?.data?.content;
       const trimmedContent = typeof content === 'string' ? content.trim() : '';
-      console.log(`\n\n\n\n\nReeeeeeceived SEND_DM from ${pseudo} to ${receiverPseudo}: "${content}"`);
       if (
         typeof receiverPseudo !== 'string' ||
         typeof content !== 'string' ||
@@ -170,7 +167,6 @@ async function handleClientMessage(
         }));
         return;
       }
-      console.log(`\n\n\n\n\nReeeeeeceived SEND_DM from ${pseudo} to ${receiverPseudo}: "${content}"`);
       const conv = await dbCreateDmConversation(pseudo, receiverPseudo);
       console.error(`Caca2`);
       if (!(conv?.id ?? null)) {
@@ -178,9 +174,7 @@ async function handleClientMessage(
         socket.send(JSON.stringify({ type: 'error', message: 'Cannot create DM conversation' }));
         return;
       }
-      console.log("\n\n\ntest:", conv);
       const result = await dbNewDirectMessage(pseudo, conv.id, content);
-      console.log("\n\n\ntest:", conv);
       if (!result.success || !result.new_message) {
         socket.send(JSON.stringify({ type: 'error', message: 'Failed to save message' }));
         return;
