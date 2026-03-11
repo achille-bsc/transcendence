@@ -12,7 +12,7 @@ async function getUsername()
 	{
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("Token not found");
+			console.log("Token not found");
 			return false;
 		}
 		const res = await fetch('/user/profile', {
@@ -22,11 +22,13 @@ async function getUsername()
 			}
 		});
 		const data = await res.json();
+		if (data.success === false || !data.user)
+			return null;
 		return data.user.pseudo;
 	}
 	catch (error)
 	{
-		console.error("Invalid token:", error);
+		console.log("Invalid token:", error);
 		return null;
 	}
 }
@@ -36,7 +38,7 @@ async function updateEmail(email: string) {
 	{
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("Token not found");
+			console.log("Token not found");
 			return { success: false, error: "Token not found" };
 		}
 		const res = await fetch('/user/email', {
@@ -48,13 +50,13 @@ async function updateEmail(email: string) {
 			body: JSON.stringify({ email })
 		});
 		const data = await res.json();
-		if (!res.ok)
+		if (data.success === false)
 			return { success: false, error: data?.error || "Error updating email" };
 		return { success: true };
 	}
 	catch (error)
 	{
-		console.error("Email update error:", error);
+		console.log("Email update error:", error);
 		return { success: false, error: "Error updating email" };
 	}
 }
@@ -64,7 +66,7 @@ async function getEmail() {
 	{
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("Token not found");
+			console.log("Token not found");
 			return "";
 		}
 		const res = await fetch('/user/email', {
@@ -74,16 +76,14 @@ async function getEmail() {
 				"Content-Type": "application/json"
 			}
 		});
-		if (!res.ok) {
-			console.error("Failed to fetch email:", res.statusText);
-			return "";
-		}
 		const data = await res.json();
+		if (data.success === false)
+			return "";
 		return data?.user?.email ?? data?.email ?? "";
 	}
 	catch (error)
 	{
-		console.error("Error fetching email:", error);
+		console.log("Error fetching email:", error);
 		return "";
 	}
 }
@@ -100,16 +100,15 @@ async function ProfilePicture(messages: { generic_error_occurred: string; generi
 				}
 				
 			});
-		if (!res.ok)
-			alert(messages.generic_error_occurred);
 		const data = await res.json();
-		return data.avatarUrl;
+		if (data.success === false)
+			return "/default-avatar.png";
+		return data.avatarUrl || "/default-avatar.png";
 	}
 	catch (err)
 	{
-		alert(messages.generic_error);
-		console.log(err);
-		return;
+		console.log("Error fetching profile picture:", err);
+		return "/default-avatar.png";
 	}
 }
 async function changeProfilePicture(file: File, messages: {
@@ -141,12 +140,11 @@ async function changeProfilePicture(file: File, messages: {
 			},
 			body: formData
 		});
-		if (!res.ok) {
-			const data = await res.json().catch(() => null);
+		const data = await res.json();
+		if (data.success === false) {
 			alert(data?.error || messages.avatar_upload_error);
 			return;
 		}
-		const data = await res.json();
 		return data.avatarUrl;
 	}
 	catch (err)
@@ -170,12 +168,11 @@ async function generateApiKey(messages: {
 				"Authorization": `Bearer ${token}`,
 			}
 		});
-		if (!res.ok) {
-			const data = await res.json();
+		const data = await res.json();
+		if (data.success === false) {
 			alert(data?.error || messages.api_key_generation_error);
 			return;
 		}
-		const data = await res.json();
 		const apiKey = data.apiKey;
 		if (apiKey) {
 			return apiKey;

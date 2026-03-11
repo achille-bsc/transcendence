@@ -63,12 +63,8 @@ async function fetchFriends(): Promise<Friend[]> {
 		},
 	});
 
-	if (!response.ok) {
-		return [];
-	}
-
 	const data = await response.json();
-	if (!data.success || !Array.isArray(data.friends)) {
+	if (data.success === false || !Array.isArray(data.friends)) {
 		return [];
 	}
 
@@ -307,7 +303,8 @@ export default function Chat_Global() {
 				}),
 			});
 
-			if (!response.ok) {
+			const payload = await response.json();
+			if (payload.success === false || !payload.data) {
 				if (
 					requestToken !== olderRequestTokenRef.current ||
 					receiverPseudoRef.current !== requestReceiverPseudo
@@ -318,7 +315,6 @@ export default function Chat_Global() {
 				return;
 			}
 
-			const payload = await response.json();
 			if (
 				requestToken !== olderRequestTokenRef.current ||
 				receiverPseudoRef.current !== requestReceiverPseudo
@@ -373,8 +369,8 @@ export default function Chat_Global() {
 				body: JSON.stringify({ receiverPseudo, limit: PAGE_SIZE }),
 			});
 
-			if (!response.ok) {
-				const payload = await response.json().catch(() => null);
+			const payload = await response.json();
+			if (payload.success === false || payload.error) {
 				const errorMessage =
 					typeof payload?.error === "string" ? payload.error : "";
 				if (errorMessage === "Conversation not found") {
@@ -391,7 +387,6 @@ export default function Chat_Global() {
 				return;
 			}
 
-			const payload = await response.json();
 			const conversation = payload.data as DmConversation;
 			const ordered = [...conversation.messages].reverse();
 			shouldScrollToBottomRef.current = true;

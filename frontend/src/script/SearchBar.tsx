@@ -7,21 +7,24 @@ async function isUser(username: string): Promise<boolean> {
 		return false;
 	}
 
-	const res = await fetch('/user/profileother', {
-		method: "POST",
-		headers: {
-			"Authorization": `Bearer ${token}`,
-			"Content-Type": "application/json",
-		},
-		body : JSON.stringify({ pseudo: username })
-	});
+	try {
+		const res = await fetch('/user/profileother', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body : JSON.stringify({ pseudo: username })
+		});
 
-	if (!res.ok) {
+		const data = await res.json();
+		if (data.success === false)
+			return false;
+		return data?.user?.pseudo === username;
+	} catch (err) {
+		console.log("Error checking user:", err);
 		return false;
 	}
-
-	const data = await res.json();
-	return data?.user?.pseudo === username;
 }
 
 export default function SearchBar() {

@@ -13,7 +13,7 @@ export async function verifToken(token: string): Promise<boolean> {
 		}
 		return false;
 	} catch (error) {
-		console.error("Erreur lors de la vérification du token:", error);
+		console.log("Erreur lors de la vérification du token:", error);
 		return false;
 	}
 }

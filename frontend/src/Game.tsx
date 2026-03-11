@@ -60,7 +60,7 @@ async function getUsername()
 	{
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("Token not found");
+			console.log("Token not found");
 			return false;
 		}
 		const res = await fetch('/user/profile', {
@@ -70,11 +70,13 @@ async function getUsername()
 			}
 		});
 		const data = await res.json();
+		if (data.success === false || !data.user)
+			return false;
 		return data.user.pseudo;
 	}
 	catch (error)
 	{
-		console.error("Invalid token:", error);
+		console.log("Invalid token:", error);
 		return false;
 	}
 }
@@ -202,7 +204,7 @@ export default function Game() {
 						width={800}
 						height={600}
 						onConnected={() => {}}
-						onError={(err) => console.error("Erreur:", err)}
+						onError={(err) => console.log("Erreur:", err)}
 						/>
 					<div className="absolute bottom-3 left-3 z-20">
 						<button type="button" onClick={toggleFullscreen} aria-label="Mettre le jeu en plein écran" className="p-1 bg-black/20 hover:bg-black/35 transition-colors duration-150">

@@ -38,7 +38,8 @@ export default async function messageRoutes(server: FastifyInstance) {
     const senderPseudo = request.user.pseudo;
     const parsedBeforeId = parsePositiveInt(beforeId);
     const parsedLimit = parsePositiveInt(limit);
-    const res = await fetch("https://database-service:5000/find-dm", {
+    try {
+      const res = await fetch("https://database-service:5000/find-dm", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -50,9 +51,12 @@ export default async function messageRoutes(server: FastifyInstance) {
 				options: { beforeId: parsedBeforeId, limit: parsedLimit }
 			}),
 		});
-    const data = await res.json();
-    if (!res.ok)
-      return reply.code(400).send({ error: data.error }); 
-    return { status: "success", message: "Conversation found.", data: data };
+      const data = await res.json();
+      if (!res.ok)
+        return { success: false, error: data?.error || 'Error fetching conversation' }; 
+      return { status: "success", message: "Conversation found.", data: data };
+    } catch (err) {
+      return { success: false, error: 'Internal server error' };
+    }
   });
 }

@@ -21,12 +21,8 @@ async function fetchFriends(): Promise<Friend[]> {
 		},
 	});
 
-	if (!response.ok) {
-		return [];
-	}
-
 	const data = await response.json();
-	if (!data.success || !Array.isArray(data.friends)) {
+	if (data.success === false || !Array.isArray(data.friends)) {
 		return [];
 	}
 	return data.friends
@@ -54,9 +50,9 @@ async function getOtherUserAvatar(pseudo: string) {
 			},
 			body: JSON.stringify({pseudo: pseudo})
 		});
-		if (!res.ok)
-			return "/src/img/img.webp";
 		const data = await res.json();
+		if (data.success === false)
+			return "/src/img/img.webp";
 		return data.avatarUrl || "/src/img/img.webp";
 	}
 	catch (err)
@@ -70,7 +66,7 @@ async function getUserStatus(pseudo: string)
 {
 	const token = localStorage.getItem("token");
 	if (!token) {
-		console.error("Token not found");
+		console.log("Token not found");
 		return false;
 	}
 	try
@@ -83,9 +79,9 @@ async function getUserStatus(pseudo: string)
 			},
 			body: JSON.stringify({pseudo: pseudo}),
 		});
-		if (!res.ok)
-			return false;
 		const data = await res.json();
+		if (data.success === false)
+			return false;
 		return data.isOnline === true;
 	}
 	catch (err)

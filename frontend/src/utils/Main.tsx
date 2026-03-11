@@ -69,14 +69,10 @@ async function fetchPending() {
                 "Authorization": `Bearer ${token}`,
             }
         });
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 403 || res.status === 500) {
-                localStorage.removeItem("token");
-                window.location.href = "/log";
-            }
+        const data = await res.json();
+        if (data.success === false) {
             return [];
         }
-        const data = await res.json();
         if (data.friends && data.friends.length > 0) {
             const pseudos = data.friends
                 .filter((f: any) => f.requester)
@@ -104,7 +100,7 @@ async function acceptFriendRequest(pseudo: string) {
 		});
 		return res.ok;
 	} catch (error) {
-		console.error("Error accepting friend request:", error);
+		console.log("Error accepting friend request:", error);
 		return false;
 	}
 }
@@ -124,7 +120,7 @@ async function rejectFriendRequest(pseudo: string) {
 		});
 		return res.ok;
 	} catch (error) {
-		console.error("Error rejecting friend request:", error);
+		console.log("Error rejecting friend request:", error);
 		return false;
 	}
 }
@@ -148,7 +144,7 @@ async function isUser(username: string)
 	const token = localStorage.getItem("token");
 	if (!token)
 	{
-		console.error("Token not found");
+		console.log("Token not found");
 		return false;
 	}
 	if (!verifToken(token))
@@ -166,17 +162,11 @@ async function isUser(username: string)
 			},
 			body : JSON.stringify({ pseudo: username })
 		});
-		if (res.status === 404) {
-			throw new Error("ok");
-		}
-		if (!res.ok)
-		{
-			throw new Error("User not found");
-		}
-		console.log("isUser RES:", res);
 		const data = await res.json();
-		console.log("isUser data:", data);
-		if (data.user.pseudo === username)
+		if (data.success === false) {
+			return false;
+		}
+		if (data.user && data.user.pseudo === username)
 			return true;
 		return false;
 	}
