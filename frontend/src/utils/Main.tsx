@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { Friend } from "./Friend.tsx";
 import { useLang } from "../script/langProvider.tsx";
+import { verifToken } from "../script/utils.ts";
+
 // import { useNavigate } from "react-router-dom";
 
 // function DisplayMenu(){
@@ -53,27 +55,38 @@ import { useLang } from "../script/langProvider.tsx";
 	// }
 // }
 
-async function fetchPending(){
-	const token = localStorage.getItem("token");
-	if (localStorage.getItem("token")) {
-		const res = await fetch('/user/receive', {
-			method: "GET",
-			headers: {
-				"Authorization": `Bearer ${token}`,
-			}
-		});
-		const data = await res.json();
-		if (data.friends && data.friends.length > 0)
-		{
-			const pseudos = data.friends
-			.filter((f: any) => f.requester)
-			.map((f: any) => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
-			return pseudos;
-		}
-		else
-			return [];
-	}
-	return [];
+
+
+async function fetchPending() {
+    const token = localStorage.getItem("token");
+    
+    if (!token) return []; 
+
+    try {
+        const res = await fetch('/user/receive', {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        });
+        if (!res.ok) {
+            if (res.status === 401 || res.status === 403 || res.status === 500) {
+                localStorage.removeItem("token");
+                window.location.href = "/log";
+            }
+            return [];
+        }
+        const data = await res.json();
+        if (data.friends && data.friends.length > 0) {
+            const pseudos = data.friends
+                .filter((f: any) => f.requester)
+                .map((f: any) => ({ id: f.requester.id, pseudo: f.requester.pseudo }));
+            return pseudos;
+        } 
+        return [];
+    } catch (error) {
+        return [];
+    }
 }
 
 async function acceptFriendRequest(pseudo: string) {
@@ -155,19 +168,33 @@ async function isUser(username: string)
 }
 
 function Profile() {
-	if (!localStorage.getItem("token"))
+	const token = localStorage.getItem("token");
+	if (!token)
 	{
 		window.location.href = "/log";
 		return ;
+	}
+	if (!verifToken(token))
+	{
+		localStorage.removeItem("token");
+		window.location.href = "/log";
+		return null;
 	}
 	window.location.href = "/profile";
 }
 
 function Settings() {
-	if (!localStorage.getItem("token"))
+	const token = localStorage.getItem("token");
+	if (!token)
 	{
 		window.location.href = "/log";
 		return ;
+	}
+	if (!verifToken(token))
+	{
+		localStorage.removeItem("token");
+		window.location.href = "/log";
+		return null;
 	}
 	window.location.href = "/settings";
 }

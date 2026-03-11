@@ -93,6 +93,7 @@ export default async function publicRoutes(server: FastifyInstance) {
   server.delete('/api/public/user', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
     try {
+      console.log(`Attempting to delete account for pseudo: ${myPseudo}`);
       await prisma.user.delete({
         where: { pseudo: myPseudo }
       });

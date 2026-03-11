@@ -34,12 +34,11 @@ export default function Register () {
 			}),
 		});
 
-		const data = await res.json();
-
 		if (!res.ok) {
-			alert(data.error || lang.Feedback.registration_failed);
+			alert(await res.json() || lang.Feedback.registration_failed);
 			return;
 		}
+		const data = await res.json();
 
 		const token = data.token;
 		localStorage.setItem("token", token);
