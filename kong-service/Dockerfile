@@ -11,8 +11,8 @@ COPY . .
 
 EXPOSE 3000
 
-# ENTRYPOINT [ "sh", "-c", "npm run dev" ]
-ENTRYPOINT [ "sh", "-c", "sleep infinity" ]
+ENTRYPOINT [ "sh", "-c", "npm run dev" ]
+# ENTRYPOINT [ "sh", "-c", "sleep infinity" ]
 # ENTRYPOINT [ "sh", "entrypoint.sh" ]
 
 # CMD [ "npm", "run", "dev" ]
