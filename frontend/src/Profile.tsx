@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLang } from "./script/langProvider.tsx";
 import "./styles/index.css";
+import { verifToken } from "./script/utils.ts";
 
 async function getUsername()
 {
@@ -15,6 +16,11 @@ async function getUsername()
 		if (!token) {
 			console.error("Token not found");
 			return false;
+		}
+		if (!verifToken(token))
+		{
+			localStorage.removeItem("token");
+			window.location.href = "/log";
 		}
 		const res = await fetch('/user/profile', {
 			method: "GET",
@@ -145,6 +151,12 @@ export default function Profile() {
 		window.location.href = "/log";
 		return null;
 	}
+	if (!verifToken(token))
+	{
+		localStorage.removeItem("token");
+		window.location.href = "/log";
+		return null;
+	}
 	const lang = useLang().getLang();
 	const navigate = useNavigate();
 	const { username } = useParams();
@@ -161,6 +173,7 @@ export default function Profile() {
 		async function fetchUsername() {
 			const name = await getUsername();
 			if (!name) {
+				localStorage.removeItem("token");
 				window.location.href = "/log";
 				return;
 			}

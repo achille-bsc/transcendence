@@ -16,6 +16,7 @@ export default function ChatDm ({children = ""}) {
 	{
 		if (!verifToken(token))
 		{
+			localStorage.removeItem("token");
 			window.location.href = "/log";
 		}
 		else

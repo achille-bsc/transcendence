@@ -4,6 +4,7 @@ import Main from "./utils/Main.tsx"
 import { useEffect, useState } from "react";
 import { useLang } from "./script/langProvider.tsx";
 import "./styles/index.css";
+import { verifToken } from "./script/utils.ts";
 
 async function getUsername()
 {
@@ -194,6 +195,13 @@ export default function Settings() {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		window.location.href = "/log";
+		return null;
+	}
+	if (!verifToken(token))
+	{
+		localStorage.removeItem("token");
+		window.location.href = "/log";
+		console.log("Invalid token, redirecting to login.");
 		return null;
 	}
 	const [isOpen, setIsOpen] = useState(false);
