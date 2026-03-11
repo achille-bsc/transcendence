@@ -1,11 +1,26 @@
 import { FastifyInstance } from 'fastify';
 import { prisma } from '../../prisma';
+import fastifyRateLimit from '@fastify/rate-limit';
 
 export default async function publicRoutes(server: FastifyInstance) {
   
+  await server.register(fastifyRateLimit, {
+    global: true, 
+    max: 3,
+    timeWindow: '1 minute',
+    errorResponseBuilder: function (request, context) {
+      return {
+        code: 429,
+        error: 'Too Many Requests',
+        message: `Rate limit reached. You can only make ${context.max} requests every ${context.after}.`
+      };
+    }
+  });
+
   const publicConfig = {
     onRequest: [(server as any).authenticateApiKey] 
   };
+  
   server.get('/api/public/friends/receive', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
     const friendRequests = await prisma.friend.findMany({
@@ -14,6 +29,7 @@ export default async function publicRoutes(server: FastifyInstance) {
     });
     return { success: true, data: friendRequests };
   });
+
   server.get('/api/public/friends', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
     const friendships = await prisma.friend.findMany({
@@ -35,6 +51,7 @@ export default async function publicRoutes(server: FastifyInstance) {
     
     return { success: true, data: formattedFriends };
   });
+
   server.post('/api/public/user/exists', publicConfig, async (request, reply) => {
     const { pseudo } = request.body as { pseudo: string };
     if (!pseudo) {
@@ -49,6 +66,7 @@ export default async function publicRoutes(server: FastifyInstance) {
       return reply.code(404).send({ success: false, exists: false, message: "User not found" });
     }
   });
+
   server.put('/api/public/user/email', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
     const { email } = request.body as { email: string };
@@ -71,6 +89,7 @@ export default async function publicRoutes(server: FastifyInstance) {
       return reply.code(400).send({ error: "Email might already be in use" });
     }
   });
+
   server.delete('/api/public/user', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
     try {
