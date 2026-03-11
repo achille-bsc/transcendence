@@ -1,3 +1,5 @@
+import { useLang } from "./script/langProvider";
+
 interface InputProps {
 	type?: string;
 	id?:string;
@@ -15,7 +17,8 @@ interface InputProps {
 }
 
 export default function ChatInput ({type, id, name, value, className, placeholder, onChange, required, autoComplete, onKeyDown, disabled = false, ariaLabel, maxLength} : InputProps) {
-	const computedAriaLabel = ariaLabel ?? placeholder ?? name ?? id ?? "chat input";
+	const lang = useLang().getLang();
+	const computedAriaLabel = ariaLabel ?? placeholder ?? name ?? id ?? lang.Feedback.chat_input_aria;
 
 	return (
 		<div className="input-wrap-full">

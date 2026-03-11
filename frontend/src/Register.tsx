@@ -18,7 +18,7 @@ export default function Register () {
 
 		if (password != confirmPassword)
 		{
-			alert("Password doesn't match");
+			alert(lang.Feedback.password_mismatch);
 			return ;
 		}
 
@@ -37,7 +37,7 @@ export default function Register () {
 		const data = await res.json();
 
 		if (!res.ok) {
-			alert(data.error || "Registration failed");
+			alert(data.error || lang.Feedback.registration_failed);
 			return;
 		}
 

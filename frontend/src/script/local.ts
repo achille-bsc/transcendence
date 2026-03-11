@@ -29,10 +29,13 @@ export interface Translations {
 		settings: string;
 		deconnexion: string;
 		terms_of_services: string;
+		privacy_policy: string;
 		users_not_found: string;
 	};
 	Chat_page: {
 		input: string;
+		loading_older_messages: string;
+		no_messages_yet: string;
 	};
 	Game_page: {
 		creation_partie: string;
@@ -74,6 +77,34 @@ export interface Translations {
 		api: string;
 		edit: string;
 		generate: string;
+		no_email: string;
+		close: string;
+		save: string;
+	},
+	Feedback: {
+		cannot_find_user: string;
+		search_user_form_aria: string;
+		search_user_input_aria: string;
+		connecting_to_github: string;
+		chat_input_aria: string;
+		missing_github_application_id: string;
+		login_failed: string;
+		registration_failed: string;
+		password_mismatch: string;
+		generic_error_occurred: string;
+		generic_error: string;
+		no_file_provided: string;
+		unsupported_image_format: string;
+		avatar_upload_error: string;
+		api_key_generation_error: string;
+		api_key_not_found: string;
+		email_required: string;
+		invalid_email: string;
+		email_update_error: string;
+		cannot_add_yourself: string;
+		cannot_remove_yourself: string;
+		friend_removed: string;
+		sad_alt: string;
 	},
 	not_found: {
 		title: string;
@@ -143,6 +174,45 @@ export interface Translations {
 		terms_15_0: string;
 		terms_15_1: string;
 		terms_15_2: string;
+	},
+	Privacy_page: {
+		title: string;
+		last_updated: string;
+		privacy_1: string;
+		privacy_1_0: string;
+		privacy_2: string;
+		privacy_2_0: string;
+		privacy_2_1: string;
+		privacy_2_2: string;
+		privacy_2_3: string;
+		privacy_2_4: string;
+		privacy_3: string;
+		privacy_3_0: string;
+		privacy_3_1: string;
+		privacy_3_2: string;
+		privacy_3_3: string;
+		privacy_4: string;
+		privacy_4_0: string;
+		privacy_5: string;
+		privacy_5_0: string;
+		privacy_5_1: string;
+		privacy_5_2: string;
+		privacy_5_3: string;
+		privacy_6: string;
+		privacy_6_0: string;
+		privacy_6_1: string;
+		privacy_6_2: string;
+		privacy_7: string;
+		privacy_7_0: string;
+		privacy_8: string;
+		privacy_8_0: string;
+		privacy_8_1: string;
+		privacy_8_2: string;
+		privacy_9: string;
+		privacy_9_0: string;
+		privacy_10: string;
+		privacy_10_0: string;
+		privacy_10_1: string;
 	}
 }
 // Load translations based on language
