@@ -49,14 +49,14 @@ export default function Register () {
 	return (
 		<div className="quantico-regular">
 			<Main>
-				<div className="auth-layout">
-					<div className="auth-card-wrap">
+				<div className="overflow-y-auto flex flex-col items-center h-[calc(85vh-20px)] text-[var(--default)] overflow-x-hidden px-3">
+					<div className="my-auto bg-[var(--background-box-select)] w-full max-w-[560px]">
 						<form 
 							onSubmit={handleRegister}
-							className="auth-form auth-form-register">
+							className="w-full auth-form-register">
 							<div className="auth-tabs">
-								<a className="auth-tab auth-tab-unselected" href="log"><div >{lang.Log_register_page.login}</div></a>
-								<div className="auth-tab auth-tab-selected">{lang.Log_register_page.register}</div>
+								<a className="auth-tab auth-tab-unselected hover:bg-[var(--background-box)] min-w-0 break-all whitespace-normal" href="log"><div >{lang.Log_register_page.login}</div></a>
+								<div className="auth-tab auth-tab-selected min-w-0 break-all whitespace-normal">{lang.Log_register_page.register}</div>
 							</div>
 							<div className="auth-fields">
 								<label className="auth-label"><br />
@@ -111,7 +111,7 @@ export default function Register () {
 									<RegisterButton
 										label={lang.Log_register_page.register}
 										icon=""
-										className="auth-submit-btn"
+										className="auth-submit-btn break-all whitespace-normal"
 										/>
 								</div>
 							</div>

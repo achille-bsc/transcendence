@@ -155,15 +155,49 @@ export default function Profile() {
 	const [isOnline, setIsOnline] = useState<boolean>(false);
 	const profileToDisplay = username || loggedUser;
 	const isOwnProfile = !username || username === loggedUser;
-	
+	const [isUserValid, setIsUserValid] = useState(false);
+
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
+			if (!name) {
+				window.location.href = "/log";
+				return;
+			}
 			setLoggedUser(name.pseudo);
 			setCreatedAt(name.createdAt);
 		}
 		fetchUsername();
 	}, []);
+
+	useEffect(() => {
+		async function UsernameValidation() {
+			const name = await fetch("/user/profileother", {
+				method: "POST",
+				headers: {
+					"Authorization": `Bearer ${token}`,
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({pseudo: username})
+			});
+			console.log("Username validation response:", name);
+			if (!name.ok) {
+				window.location.href = "/profile";
+				return;
+			}
+			const data = await name.json();
+			console.log("Username validation data:", data);
+			if (!data.user || !data.user.pseudo) {
+				window.location.href = "/profile";
+				return;
+			}
+			setIsUserValid(true);
+		}
+		if (username)
+			UsernameValidation();
+		else
+			setIsUserValid(true);
+	});
 
 	useEffect(() => {
 		async function fetchProfilePicture() {

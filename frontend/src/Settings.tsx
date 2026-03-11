@@ -2,10 +2,8 @@ import MyButton from "./utils/Button.tsx"
 import Img from "./utils/Img.tsx"
 import Main from "./utils/Main.tsx"
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { useLang } from "./script/langProvider.tsx";
 import "./styles/index.css";
-import RegisterInput from "./RegisterInput.tsx";
 
 async function getUsername()
 {
@@ -29,6 +27,63 @@ async function getUsername()
 	{
 		console.error("Invalid token:", error);
 		return null;
+	}
+}
+
+async function updateEmail(email: string) {
+	try
+	{
+		const token = localStorage.getItem("token");
+		if (!token) {
+			console.error("Token not found");
+			return { success: false, error: "Token not found" };
+		}
+		const res = await fetch('/user/email', {
+			method: "PUT",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ email })
+		});
+		const data = await res.json();
+		if (!res.ok)
+			return { success: false, error: data?.error || "Error updating email" };
+		return { success: true };
+	}
+	catch (error)
+	{
+		console.error("Email update error:", error);
+		return { success: false, error: "Error updating email" };
+	}
+}
+
+async function getEmail() {
+	try
+	{
+		const token = localStorage.getItem("token");
+		if (!token) {
+			console.error("Token not found");
+			return "";
+		}
+		const res = await fetch('/user/email', {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
+		});
+		if (!res.ok) {
+			console.error("Failed to fetch email:", res.statusText);
+			return "";
+		}
+		const data = await res.json();
+		return data?.user?.email ?? data?.email ?? "";
+	}
+	catch (error)
+	{
+		console.error("Error fetching email:", error);
+		return "";
 	}
 }
 
@@ -57,53 +112,53 @@ async function ProfilePicture() {
 	}
 }
 
-async function getApiKey() {
-	const token = localStorage.getItem("token");
-	if (!token)
-		return "";
+// async function getApiKey() {
+// 	const token = localStorage.getItem("token");
+// 	if (!token)
+// 		return "";
 
-	try {
-		const res = await fetch("/api/db/apikey", {
-			method: "GET",
-			headers: {
-				"Authorization": `Bearer ${token}`
-			}
-		});
+// 	try {
+// 		const res = await fetch("/api/db/apikey", {
+// 			method: "GET",
+// 			headers: {
+// 				"Authorization": `Bearer ${token}`
+// 			}
+// 		});
 
-		if (!res.ok)
-			return "";
+// 		if (!res.ok)
+// 			return "";
 
-		const data = await res.json();
-		return data.apiKey ?? "";
-	} catch (error) {
-		console.error("Failed to fetch API key:", error);
-		return "";
-	}
-}
+// 		const data = await res.json();
+// 		return data.apiKey ?? "";
+// 	} catch (error) {
+// 		console.error("Failed to fetch API key:", error);
+// 		return "";
+// 	}
+// }
 
-async function generateApiKey() {
-	const token = localStorage.getItem("token");
-	if (!token)
-		return "";
+// async function generateApiKey() {
+// 	const token = localStorage.getItem("token");
+// 	if (!token)
+// 		return "";
 
-	try {
-		const res = await fetch("/api/db/apikey/generate", {
-			method: "POST",
-			headers: {
-				"Authorization": `Bearer ${token}`
-			}
-		});
+// 	try {
+// 		const res = await fetch("/api/db/apikey/generate", {
+// 			method: "POST",
+// 			headers: {
+// 				"Authorization": `Bearer ${token}`
+// 			}
+// 		});
 
-		if (!res.ok)
-			return "";
+// 		if (!res.ok)
+// 			return "";
 
-		const data = await res.json();
-		return data.apiKey ?? "";
-	} catch (error) {
-		console.error("Failed to generate API key:", error);
-		return "";
-	}
-}
+// 		const data = await res.json();
+// 		return data.apiKey ?? "";
+// 	} catch (error) {
+// 		console.error("Failed to generate API key:", error);
+// 		return "";
+// 	}
+// }
 
 async function changeProfilePicture(file: File) {
 	const token = localStorage.getItem("token");
@@ -136,10 +191,6 @@ async function changeProfilePicture(file: File) {
 	}
 }
 
-async function editProfile() {
-	alert("Editing profile...");
-}
-
 export default function Settings() {
 	const token = localStorage.getItem("token");
 	if (!token) {
@@ -147,6 +198,7 @@ export default function Settings() {
 		return null;
 	}
 	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenEmail, setIsOpenEmail] = useState(false);
 	const lang = useLang().getLang();
 	const username = window.location.pathname.startsWith("/profile/")
 		? decodeURIComponent(window.location.pathname.replace("/profile/", ""))
@@ -154,13 +206,15 @@ export default function Settings() {
 	const [loggedUser, setLoggedUser] = useState<string | null>(null);
 	const profileToDisplay = username || loggedUser;
 	const [newProfilePicture, setNewProfilePicture] = useState("");
-	const [apiKey, setApiKey] = useState("");
+	const [newEmail, setNewEmail] = useState("");
+	const [editedEmail, setEditedEmail] = useState("");
+	// const [apiKey, setApiKey] = useState("");
 
-	async function handleGenerateApiKey() {
-		const newKey = await generateApiKey();
-		if (newKey)
-			setApiKey(newKey);
-	}
+	// async function handleGenerateApiKey() {
+	// 	const newKey = await generateApiKey();
+	// 	if (newKey)
+	// 		setApiKey(newKey);
+	// }
 
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
@@ -174,7 +228,6 @@ export default function Settings() {
 		window.location.reload();
 	};
 	const password = "********";
-	const email = "SuperKiwiLaLegendDu7680salutCoucoucKiwilolfdsfsfesfd@help.help";
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
@@ -193,12 +246,52 @@ export default function Settings() {
 	}, []);
 
 	useEffect(() => {
-		async function fetchApiKey() {
-			const key = await getApiKey();
-			setApiKey(key);
+		async function fetchEmail() {
+			const email = await getEmail();
+			setNewEmail(email);
+			setEditedEmail(email);
 		}
-		fetchApiKey();
+		fetchEmail();
 	}, []);
+	// useEffect(() => {
+	// 	async function fetchApiKey() {
+	// 		const key = await getApiKey();
+	// 		setApiKey(key);
+	// 	}
+	// 	fetchApiKey();
+	// }, []);
+
+	async function handleSaveEmail() {
+		const trimmedEmail = editedEmail.trim();
+		if (!trimmedEmail) {
+			alert("Email requis");
+			return;
+		}
+
+		const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+		if (!isValidEmail) {
+			alert("Adresse email invalide");
+			return;
+		}
+
+		const result = await updateEmail(trimmedEmail);
+		if (!result.success) {
+			alert(result.error || "Erreur lors de la mise à jour de l'email");
+			return;
+		}
+
+		const refreshedEmail = await getEmail();
+		setNewEmail(refreshedEmail || trimmedEmail);
+		setEditedEmail(refreshedEmail || trimmedEmail);
+		setIsOpenEmail(false);
+	}
+
+	async function handleOpenEmailModal() {
+		const currentEmail = await getEmail();
+		setNewEmail(currentEmail);
+		setEditedEmail(currentEmail);
+		setIsOpenEmail(true);
+	}
 
 	// function onInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 	// 	if (e.key === "Enter") {
@@ -268,14 +361,30 @@ export default function Settings() {
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
-										{email}
+										{newEmail || "Aucun email"}
 									</div>
 									<div className="flex justify-end pl-1">
-										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => editProfile()}>{lang.Settings_page.edit}</MyButton>
+											<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={handleOpenEmailModal}>{lang.Settings_page.edit}</MyButton>
 									</div>
+									{isOpenEmail && (
+										<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+											<div className="bg-[var(--background-box-select)] p-6">
+												<div className="flex flex-col gap-4">
+													<input
+														type="email"
+															value={editedEmail}
+															onChange={(e) => setEditedEmail(e.target.value)}
+														className="border border-[var(--default)] bg-[var(--background-box)] p-2 text-sm text-[var(--contrast)] placeholder-[var(--props)] focus:outline-hidden sm:p-2.5 sm:text-base"
+													/>
+														<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={handleSaveEmail}>Enregistrer</MyButton>
+													<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpenEmail(false)}>Fermer</MyButton>
+												</div>
+											</div>
+										</div>
+									)}
 								</div>
 							</div>
-							<div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
+							{/* <div className="border border-t-0 border-[var(--props)] px-2 py-1 flex flex-col text-[15px]">
 								<div className="text-[10px]">
 									<p>{lang.Settings_page.api}</p>
 								</div>
@@ -287,7 +396,7 @@ export default function Settings() {
 										<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={() => { void handleGenerateApiKey(); }}>{lang.Settings_page.generate}</MyButton>
 									</div>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					</div>
 				</div>
