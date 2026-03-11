@@ -195,7 +195,7 @@ export default function Game() {
 			<div className="h-[calc(100dvh-5rem)] overflow-auto flex justify-center items-center p-4">
 				<div ref={gameContainerRef} className="my-auto max-w-full relative inline-block">
 					<KongGameComponent
-						wsUrl={`wss://${location.host}/api/kong/ws`}
+						wsUrl={`wss://${location.host}/kong/ws`}
 						userToken={token}
 						userId={loggedUser || ""}
 						width={800}

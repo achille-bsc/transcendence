@@ -236,8 +236,8 @@ services:
         networks:
             - transcendence-network
         volumes:
-            - ./certificates/private/kong-service.key:/app/certs/private/srv.key:ro
-            - ./certificates/public/kong-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/private/kong-service.key:/app/certs/private/kong-service.key:ro
+            - ./certificates/public/kong-service.crt:/app/certs/public/kong-service.crt:ro
             - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
             - ./certificates/public/frontend.crt:/app/certs/public/frontend.crt:ro
         restart: unless-stopped
