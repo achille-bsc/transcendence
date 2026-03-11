@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 12:05:19 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 16:17:39 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ fastify.register(async function (fastify) {
       lastPingAt: Date.now(),
       gameId: null
     };
-    console.log('New client connected')
 
     clients.set(socket, state);
 
     socket.on('message', (raw: string | Buffer)  => {
       const msg: WSMessage | null = parseMessage(raw);
-      console.log(msg);
+      console.log("msg?.userID: ", msg?.userID);
+      console.log("state.isAuth: ", state.isAuthenticated);
       if (!msg) {
         socket.send(JSON.stringify({ type: 'error', error: 'Invalid message format' }));
         return;
@@ -56,6 +56,7 @@ fastify.register(async function (fastify) {
       // Send acknowledgement back to client
       // socket.send(JSON.stringify({ type: 'ack', receivedType: msg.type }));
       
+      // TODO: solve the only 1 game BUG
       HANDLERS[msg.type]?.(socket, msg, state, clients);
     });
 
@@ -71,8 +72,20 @@ fastify.register(async function (fastify) {
       });
       clients.delete(socket);
     });
-    socket.on('error', (err: Error) => {
-      console.log(`Error: ${err}`)
+    socket.on('error', (_err: Error) => {
+      games.forEach((game) => {
+        if (game.players.has(state.id!)) {
+          game.players.delete(state.id!);
+        }
+        if (game.host === state.id) {
+          game.isFinish = true;
+          game.players.forEach((player) => {
+            player.socket.send(JSON.stringify({ type: 'gameEnded', reason: 'Host disconnected' }));
+          });
+          games.delete(game.id.toString());
+        }
+      });
+      clients.delete(socket);
     });
   });
 });

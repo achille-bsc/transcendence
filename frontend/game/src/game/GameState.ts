@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:28 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/03 14:43:09 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 17:33:31 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ export class GameState {
 		spawnPoint: { x: number, y: number },
 		goalPoint: { x: number, y: number },
 	} | null = null;
+	private winner: string = '';
 
 	private lerpSpeed: number;
 
@@ -57,6 +58,9 @@ export class GameState {
 	}
 
 	updateFromServer(message: KongGameState): void {
+		if (message.winner) {
+			this.winner = message.winner;
+		}
 		if (message.map)
 		{
 			this.map = {
@@ -198,9 +202,18 @@ export class GameState {
 		return this.playerOrder.length;
 	}
 
+	getWinner(): string {
+		return this.winner;
+	}
+
+	clearWinner(): void {
+		this.winner = '';
+	}
+
 	reset(): void {
 		this.players.clear();
 		this.playerOrder = [];
 		this.barils.clear();
+		this.winner = '';
 	}
 }

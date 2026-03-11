@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:34 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/09 14:10:31 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 17:39:38 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,7 @@ export class KongGame {
 				</select>
 			</div>
 			<button class="kong-btn kong-btn--create" data-action="create">Créer une partie</button>
-			<div class="kong-join-group">
-				<button class="kong-btn kong-btn--join" data-action="join">Rejoindre</button>
-			</div>
+			<button class="kong-btn kong-btn--join" data-action="join">Rejoindre</button>
 			<select class="kong-select" data-input="difficulty">
 				<option value="easy">Facile</option>
 				<option value="medium" selected>Normal</option>
@@ -175,11 +173,7 @@ export class KongGame {
 		});
 
 		this.controlsEl.querySelector('[data-action="join"]')?.addEventListener("click", () => {
-			const input = this.controlsEl.querySelector<HTMLInputElement>('[data-input="gameId"]');
-			const gameId = input?.value.trim();
-			if (gameId) {
-				this.joinGame(gameId, getDifficulty());
-			}
+			this.joinGame('', getDifficulty());
 		});
 
 		this.controlsEl.querySelector('[data-action="applyDev"]')?.addEventListener("click", () => {
@@ -221,11 +215,13 @@ export class KongGame {
 		});
 
 		this.network.on("gameCreated", (msg) => {
+			this.state.clearWinner();
 			this.setStatus(`Partie créée : ${msg.gameId}`, "success");
 			this.emit("gameCreated", msg);
 		});
 
 		this.network.on("gameJoined", (msg) => {
+			this.state.clearWinner();
 			this.setStatus(`Rejoint : ${msg.gameId}`, "success");
 			this.emit("gameJoined", msg);
 		});
@@ -303,7 +299,12 @@ export class KongGame {
 			lastTime = now;
 			this.input.update();
 
-			if (this.state.playerCount > 0) {
+			const winner = this.state.getWinner();
+			if (winner) {
+				this.state.tick(dt);
+				this.renderer.render(this.state.getRenderPlayers(), this.state.getPlatforms(), this.state.getBarils(), this.state.getGoalPoint());
+				this.renderer.renderVictory(winner);
+			} else if (this.state.playerCount > 0) {
 				this.state.tick(dt);
 				this.renderer.render(this.state.getRenderPlayers(), this.state.getPlatforms(), this.state.getBarils(), this.state.getGoalPoint());
 			} else if (this.network.isConnected) {

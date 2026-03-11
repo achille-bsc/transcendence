@@ -70,6 +70,17 @@ services:
                     - .git
                     - .dockerignore
                     - Dockerfile
+                    - game
+                - path: ./frontend/game
+                  action: sync+exec
+                  target: /app/game
+                  exec:
+                    command: "npm run build && cd .. && npm i ./game"
+                  ignore:
+                    - .git
+                    - .dockerignore
+                    - Dockerfile
+                                    
         networks:
             - transcendence-network
         restart: unless-stopped

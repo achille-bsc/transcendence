@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/10 21:17:58 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 18:22:27 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ import {
 	Game,
 	Difficults,
 	KongGameState,
-	PlayerDatas
+	PlayerDatas,
+	WSMessage
 }	from "../utils/types";
 import { MAP, getPlatformYAtX }	from "./kongMap";
 import { sleep }				from "../utils/utils";
 import { randomInt }			from "crypto";
 
+
+// TODO: make collisions more precise (currently, player can be hit by barrel when they are far away)
 export function handleGame(state: ClientState, datas:
 	[
 		"createGame"
@@ -53,7 +56,8 @@ export function handleGame(state: ClientState, datas:
 	],
 	localUser: {
 		id: string,
-	}
+	},
+	msg: WSMessage
 ): void
 {
 	// if (!state.gameId)
@@ -68,19 +72,19 @@ export function handleGame(state: ClientState, datas:
 	{
 		switch (datas[0]) {
 			case 'jump':
-				jump(game, state.id!, localUser);
+				jump(game, localUser, msg);
 				break;
 		
 			case 'goLeft':
-				goLeft(game, state.id!, localUser);
+				goLeft(game, localUser, msg);
 				break;
 			
 			case 'goRight':
-				goRight(game, state.id!, localUser);
+				goRight(game, localUser, msg);
 				break;
 				
 			case 'goDown':
-				goDown(game, state.id!, localUser);
+				goDown(game, localUser, msg);
 				break;
 	
 			default:
@@ -89,9 +93,14 @@ export function handleGame(state: ClientState, datas:
 	}
 }
 
-function jump(game: Game, playerId: string, localUser: { id: string }): void
+function jump(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
+	const playerId = msg.userID;
+	console.log(game.isLocal)
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
+	console.log(playerId)
+	console.log(player)
+	console.log('\n\n\n\n');
 	if (!player || player.isJumping || player.isGoingSpawn/*|| !player.isOnGround*/)
 			return;
 	player.isJumping = true;
@@ -99,24 +108,27 @@ function jump(game: Game, playerId: string, localUser: { id: string }): void
 	player.velocityY = JUMP_FORCE;
 }
 
-function goLeft(game: Game, playerId: string, localUser: { id: string }): void
+function goLeft(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
+	const playerId = msg.userID;
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
 	if (!player || player.isGoingSpawn)
 		return ;
 	player.isGoingLeft = true;
 }
 
-function goRight(game: Game, playerId: string, localUser: { id: string }): void
+function goRight(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
+	const playerId = msg.userID;
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
 	if (!player || player.isGoingSpawn)
 		return ;
 	player.isGoingRight = true;
 }
 
-function goDown(game: Game, playerId: string, localUser: { id: string }): void
+function goDown(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
+	const playerId = msg.userID;
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
 	if (!player || !player.isOnGround || !game.map || player.isGoingSpawn)
 		return ;
@@ -140,6 +152,7 @@ export function startGame(game: Game)
 	gameLoop(game);
 	setTimeout(() => {
 		game.isStarted = true;
+		game.startTime = Date.now();
 	}, SECONDS_BEFORE_START * 1000);
 }
 
@@ -180,7 +193,7 @@ async function gameLoop(game: Game)
 			});
 		}
 		
-		await sleep(50);
+		await sleep(100);
 		frameCount++;
 		if (frameCount >= frameBeforeBaril || randomInt(0, 1000) < 10) {
 			frameCount = 0;
@@ -189,11 +202,20 @@ async function gameLoop(game: Game)
 		}
 		handlePlayersPhysics(game);
 		if (game.isStarted) {
+			if (game.startTime - Date.now() > 1000 * 60 * 2)
+				game.isFinish = true;
 			// TODO: view if this optimization is really useful
-			// checkForBarilCollisions(game);
+			checkForBarilCollisions(game);
 			checkForWin(game);
 		}
 		sendGameState(game);
+		
+		if (game.isFinish) {
+			const playerIds = Array.from(game.players.keys());
+			playerIds.forEach(id => game.players.delete(id));
+			games.delete(game.id.toString());
+			game.players.clear();
+		}
 	}
 }
 
@@ -227,15 +249,15 @@ function checkPlayerCollisionsWithBarils(player: PlayerDatas, game: Game)
 	});
 }
 
-// function checkForBarilCollisions(game: Game)
-// {
-// 	game.barils.forEach((baril) => {
-// 		game.players.forEach((player) => {
-// 			if (isCollidingWithBaril(player, baril))
-// 				respawnPlayer(player, game);
-// 		});
-// 	});
-// }
+function checkForBarilCollisions(game: Game)
+{
+	game.barils.forEach((baril) => {
+		game.players.forEach((player) => {
+			if (isCollidingWithBaril(player, baril))
+				respawnPlayer(player, game);
+		});
+	});
+}
 
 function checkForWin(game: Game)
 {
@@ -246,15 +268,11 @@ function checkForWin(game: Game)
 		if (diffX < DIST_FOR_WIN && diffX > -DIST_FOR_WIN && diffY < 0 && diffY > -DIST_FOR_WIN)
 		{
 			game.isFinish = true;
+			game.barils.clear();
+			game.winner = player.id;
 			sendGameState(game);
 		}
 	});
-
-	if (game.isFinish) {
-		const playerIds = Array.from(game.players.keys());
-		playerIds.forEach(id => game.players.delete(id));
-		games.delete(game.id.toString());
-	}
 }
 
 function barilsGeneration(game: Game)
@@ -293,6 +311,7 @@ export function sendGameState(game: Game, includeMap: boolean = false)
 			type: 'gameState',
 			players: playersData,
 			barils: Object.fromEntries(game.barils),
+			winner: game.winner || '',
 		};
 		
 		
