@@ -42,7 +42,7 @@
   }
 
   .home-play-btn {
-    @apply w-full cursor-pointer p-2 px-9 text-[25px] text-[var(--white)] focus:outline-2 sm:w-auto hover:opacity-70;
+    @apply w-full p-2 px-9 text-[25px] text-[var(--white)] focus:outline-2 sm:w-auto hover:opacity-70;
     background: var(--button);
   }
 
@@ -53,10 +53,6 @@
 
   .game-content {
     @apply absolute top-1/2 left-1/2;
-  }
-
-  .game-counter-btn {
-    @apply border p-2 px-4 bg-[var(--background-header)] cursor-pointer;
   }
 
   .chatdm-root {
@@ -75,16 +71,8 @@
     background: var(--button);
   }
 
-  .register-btn-icon-github {
-    @apply cursor-pointer;
-  }
-
   .register-btn-icon-github:hover {
     background: var(--button);
-  }
-
-  .register-btn-icon-send {
-    @apply cursor-pointer;
   }
 
   .auth-layout {
@@ -108,7 +96,7 @@
   }
 
   .auth-tab {
-    @apply w-1/2 cursor-pointer p-4 text-center sm:p-5;
+    @apply w-1/2 p-4 text-center sm:p-5;
   }
 
   .auth-tab-selected {
@@ -196,7 +184,7 @@
   }
 
   .dm-send-btn {
-    @apply cursor-pointer p-2;
+    @apply hover:opacity-70 p-2;
   }
 
   .profile-layout {
@@ -224,7 +212,7 @@
   }
 
   .settings-avatar {
-    @apply aspect-square w-[15vw] rounded-full object-cover hover:opacity-70 duration-200 cursor-pointer;
+    @apply aspect-square w-[15vw] rounded-full object-cover hover:opacity-70;
   }
 
   .profile-actions {
@@ -455,7 +443,7 @@
   }
 
   .switch-root {
-    @apply inline-flex cursor-pointer items-center rounded-full;
+    @apply inline-flex items-center rounded-full;
   }
 
   .switch-input {
@@ -568,7 +556,7 @@
   }
 
   .conversation-sender {
-    @apply mb-1 text-xs text-[var(--contrast)] text-[var(--props)] hover:underline cursor-pointer hover:text-[var(--default)];
+    @apply mb-1 text-xs text-[var(--contrast)] text-[var(--props)] hover:underline hover:text-[var(--default)];
   }
 
   .conversation-bubble {
