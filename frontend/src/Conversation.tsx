@@ -304,11 +304,6 @@ export default function Conversation() {
 					limit: PAGE_SIZE,
 				}),
 			});
-			console.log("fetching older messages with params:", {
-				receiverPseudo,
-				beforeId: oldestMessage.id,
-				limit: PAGE_SIZE,
-			}, "response:", response);
 			if (!response.ok) {
 				if (
 					requestToken !== olderRequestTokenRef.current ||
@@ -376,8 +371,6 @@ export default function Conversation() {
 					body: JSON.stringify({ receiverPseudo, limit: PAGE_SIZE }),
 				});
 				
-				console.log("loading conversation with receiver:", receiverPseudo, "response:", response);
-				
 				if (!response.ok) {
 					const payload = await response.json().catch(() => null);
 					const errorMessage =
@@ -397,13 +390,11 @@ export default function Conversation() {
 				const payload = await response.json();
 				const conversation = payload.data as DmConversation;
 				const ordered = [...conversation.messages].reverse();
-				console.log("loaded conversation:", conversation);
 				shouldScrollToBottomRef.current = true;
 				setMessages(ordered);
 				setHasOlderMessages(conversation.messages.length === PAGE_SIZE);
 				setActiveConversationId(conversation.id ?? null);
 			} catch {
-				console.log("Failed to load conversation, resetting state and navigating away");
 				// Le catch s'occupe des erreurs réseau ou des exceptions levées dans le try
 				setMessages([]);
 				setActiveConversationId(null);
