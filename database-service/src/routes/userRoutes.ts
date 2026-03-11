@@ -74,6 +74,21 @@ export default async function userRoutes(server: FastifyInstance) {
     }
   });
 
+  server.post('/user/email', {
+    onRequest: [server.requireBackendPass]
+  }, async (request, reply) => {
+    const { pseudo } = request.body as { pseudo: string };
+    const user = await prisma.user.findUnique({
+      where: { pseudo },
+      select: { email: true }
+    });
+
+    if (!user)
+      return reply.code(404).send({ error: 'User not found' });
+
+    return { email: user.email };
+  });
+
   server.put('/user/update-apikey', {
     onRequest: [server.requireBackendPass]
   }, async (request, reply) => {
