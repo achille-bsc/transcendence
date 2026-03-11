@@ -12,37 +12,77 @@ export default function Register () {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const lang = useLang().getLang();
 
+	// Dans frontend/src/Register.tsx
 	async function handleRegister(e: React.FormEvent) {
-		console.log("P = ", pseudo, " E = ", email, " PASS = ", password, " CPASS = ", confirmPassword);
 		e.preventDefault();
 
-		if (password != confirmPassword)
-		{
+		if (password != confirmPassword) {
 			alert(lang.Feedback.password_mismatch);
 			return ;
 		}
-
-		const res = await fetch("/auth/signin", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				pseudo,
-				email,
-				password,
-			}),
-		});
-
-		if (!res.ok) {
-			alert(await res.json() || lang.Feedback.registration_failed);
-			return;
+		/*if (!pseudo || !email || !password)
+		{
+			alert(lang.Feedback.password_mismatch);
+			return false
 		}
-		const data = await res.json();
+		else if (password.length < 8)
+		{
+			alert(lang.Feedback.password_mismatch);
+			return false
+		}
+		else if (!email || email.length === 0 || email.includes(' ') ||
+			email.split('@').length !== 2 || !email.includes('.'))
+		{
+			alert(lang.Feedback.password_mismatch);
+			return false
+		}
+		else if (!pseudo || pseudo.length === 0 || pseudo.includes(' ') || pseudo.includes('@'))
+		{
+			alert(lang.Feedback.password_mismatch);
+			return false
+		}*/
+		try {
+			
+			const res = await fetch("/auth/signin", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					pseudo,
+					email,
+					password,
+				}),
+			});
 
-		const token = data.token;
-		localStorage.setItem("token", token);
-		window.location.href = "/";
+			// 1. Essayer de parser le JSON (sécurisé)
+			let data = {};
+			try {
+				data = await res.json();
+			} catch (parseError) {
+				console.error("Erreur de format de réponse :", parseError);
+			}
+
+			// 2. Vérifier le status HTTP
+			if (!res.ok) {
+				// Utiliser data.error pour bien afficher le texte de l'erreur
+				alert(data.error || lang.Feedback.registration_failed || "Erreur lors de l'inscription");
+				return;
+			}
+
+			// 3. Vérifier que le token existe
+			if (data.token) {
+				localStorage.setItem("token", data.token);
+				window.location.href = "/";
+			} else {
+				alert(lang.Feedback.registration_failed || "Token introuvable après l'inscription");
+			}
+
+		} catch (networkError) {
+			// 4. Gérer les erreurs réseau
+			console.error("Erreur réseau :", networkError);
+			alert(lang.Feedback.registration_failed || "Serveur inaccessible. Veuillez réessayer plus tard.");
+		}
 	}
 
 	return (

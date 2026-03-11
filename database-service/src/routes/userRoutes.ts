@@ -12,7 +12,7 @@ export default async function userRoutes(server: FastifyInstance) {
       select: { pseudo: true, createdAt: true, avatar: true }
     });
     if (!user)
-      return reply.code(404).send({ error: 'User not found' });
+      return null;
     return user;
   });
 
@@ -36,7 +36,7 @@ export default async function userRoutes(server: FastifyInstance) {
       select: { pseudo : true, avatar: true }
     });
     if (!user?.avatar)
-      return reply.code(404).send({ error: 'Avatar not found' });
+      return { avatarUrl: '/public/default.png' };
     return { avatarUrl: `/public/${user.avatar}` };
   });
 
@@ -49,7 +49,7 @@ export default async function userRoutes(server: FastifyInstance) {
       select: { pseudo: true }
     });
     if (!user)
-      return reply.code(404).send({ error: 'User not found' });
+      return null;
     return user;
   });
 
@@ -84,7 +84,7 @@ export default async function userRoutes(server: FastifyInstance) {
     });
 
     if (!user)
-      return reply.code(404).send({ error: 'User not found' });
+      return null;
 
     return { email: user.email };
   });
