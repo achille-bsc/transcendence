@@ -185,12 +185,12 @@ function SearchBar() {
 		e.preventDefault();
 		if (!query.trim())
 		{
-			setError("Cannot find user");
+			setError(lang.Feedback.cannot_find_user);
 			return;
 		}
 		const exists = await isUser(query);
 		if (!exists) {
-			setError("Cannot find user");
+			setError(lang.Feedback.cannot_find_user);
 			return;
 		}
 		setError("");
@@ -198,9 +198,9 @@ function SearchBar() {
 	};
 	return (
 		<div>
-			<form onSubmit={handleSubmit} aria-label="Search user form">
+			<form onSubmit={handleSubmit} aria-label={lang.Feedback.search_user_form_aria}>
 				<input
-					aria-label="Search user"
+					aria-label={lang.Feedback.search_user_input_aria}
 					type="text"
 					placeholder={lang.navbar.search}
 					value={query}
@@ -304,6 +304,7 @@ function Main({children = ""}: {children?: ReactNode}) {
 							<div className="main-menu-box">
 								<div className="main-menu-list">
 									<MyButton className="main-menu-btn main-menu-btn-bordered border-b-0" onClick={() => window.location.href = "/terms"}>{lang.navbar.terms_of_services}</MyButton>
+									<MyButton className="main-menu-btn main-menu-btn-bordered border-b-0" onClick={() => window.location.href = "/privacy"}>{lang.navbar.privacy_policy}</MyButton>
 								</div>
 							</div>
 						}

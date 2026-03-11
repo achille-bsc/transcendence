@@ -26,10 +26,13 @@
 			"settings": "⚙️ Settings",
 			"deconnexion": "➜] Logout",
 			"terms_of_services": "📃 Terms of Services",
+			"privacy_policy": "🔒 Privacy Policy",
 			"users_not_found": "No users found"
 		},
 		"Chat_page": {
-			"input": "Type your message..."
+			"input": "Type your message...",
+			"loading_older_messages": "Loading older messages...",
+			"no_messages_yet": "No messages yet"
 		},
 		"Game_page": {
 			"creation_partie": "Create Party",
@@ -70,7 +73,35 @@
 			"email": "Email :",
 			"api": "API key :",
 			"edit": "edit",
-			"generate": "generate"
+			"generate": "generate",
+			"no_email": "No email",
+			"close": "Close",
+			"save": "Save"
+		},
+		"Feedback": {
+			"cannot_find_user": "Cannot find user",
+			"search_user_form_aria": "Search user form",
+			"search_user_input_aria": "Search user",
+			"connecting_to_github": "Connecting to github...",
+			"chat_input_aria": "chat input",
+			"missing_github_application_id": "Missing github application id",
+			"login_failed": "Login failed",
+			"registration_failed": "Registration failed",
+			"password_mismatch": "Password doesn't match",
+			"generic_error_occurred": "An error occurred",
+			"generic_error": "ERROR",
+			"no_file_provided": "No file provided",
+			"unsupported_image_format": "Unsupported format. Use PNG, JPG or WEBP.",
+			"avatar_upload_error": "Error while uploading avatar",
+			"api_key_generation_error": "An error occurred while generating API key",
+			"api_key_not_found": "API key not found in response",
+			"email_required": "Email required",
+			"invalid_email": "Invalid email address",
+			"email_update_error": "Error while updating email",
+			"cannot_add_yourself": "YOU CANNOT ADD YOURSELF",
+			"cannot_remove_yourself": "YOU CANNOT REMOVE YOURSELF",
+			"friend_removed": "Friend removed!",
+			"sad_alt": "Sad"
 		},
 		"not_found": {
 			"title": "Page Not Found",
@@ -140,6 +171,45 @@
 			"terms_15_0": "If you have any questions about these Terms, please contact us at:",
 			"terms_15_1": "Email: support@transcendance.com",
 			"terms_15_2": "By using our service, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service."
+		},
+		"Privacy_page": {
+			"title": "Privacy Policy",
+			"last_updated": "Last Updated: March 11, 2026",
+			"privacy_1": "1. Introduction",
+			"privacy_1_0": "This Privacy Policy explains what personal data we collect, how we use it, and what rights you have when using Transcendence.",
+			"privacy_2": "2. Data We Collect",
+			"privacy_2_0": "Depending on how you use the service, we may collect:",
+			"privacy_2_1": "Account information: username, email address, encrypted password.",
+			"privacy_2_2": "Profile data: avatar, language preferences, and user settings.",
+			"privacy_2_3": "Game and social data: scores, match history, friend lists, and friend requests.",
+			"privacy_2_4": "Technical data: IP addresses, application logs, session and browser information.",
+			"privacy_3": "3. Why We Process Data",
+			"privacy_3_0": "We use your data to:",
+			"privacy_3_1": "Provide, secure, and improve the platform.",
+			"privacy_3_2": "Manage authentication, communication, and social features.",
+			"privacy_3_3": "Prevent fraud, abuse, and activity that violates our terms.",
+			"privacy_4": "4. Legal Basis",
+			"privacy_4_0": "Processing is based on performance of the service, your consent (when required), and our legitimate interest in ensuring platform security, reliability, and proper operation.",
+			"privacy_5": "5. Data Sharing",
+			"privacy_5_0": "We do not sell personal data. We may share it only with:",
+			"privacy_5_1": "Technical service providers required to operate the service.",
+			"privacy_5_2": "Competent authorities when required by law.",
+			"privacy_5_3": "Third parties in case of legal reorganization (merger, acquisition), with appropriate safeguards.",
+			"privacy_6": "6. Data Retention",
+			"privacy_6_0": "We keep data only for as long as necessary for the purposes described.",
+			"privacy_6_1": "Account data is retained while your account remains active.",
+			"privacy_6_2": "Some data may be retained longer to comply with legal or security obligations.",
+			"privacy_7": "7. Data Security",
+			"privacy_7_0": "We implement reasonable technical and organizational measures to protect your data against unauthorized access, loss, alteration, or disclosure.",
+			"privacy_8": "8. Your Rights",
+			"privacy_8_0": "Depending on applicable law, you may:",
+			"privacy_8_1": "Access, correct, delete, or restrict the processing of your data.",
+			"privacy_8_2": "Withdraw consent and request data portability where applicable.",
+			"privacy_9": "9. Cookies and Local Storage",
+			"privacy_9_0": "We use cookies and local storage to maintain your session, remember your preferences, and improve user experience. You can configure your browser to limit these uses.",
+			"privacy_10": "10. Contact and Changes",
+			"privacy_10_0": "For any question about this Privacy Policy, contact us at: support@transcendance.com.",
+			"privacy_10_1": "We may update this policy at any time. The latest version is always published on this page."
 		}
 	}
 }

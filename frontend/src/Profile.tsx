@@ -232,7 +232,7 @@ export default function Profile() {
 	{
 		if (isOwnProfile)
 		{
-			alert("YOU CANNOT ADD YOURSELF");
+				alert(lang.Feedback.cannot_add_yourself);
 			return;
 		}
 		const token = localStorage.getItem("token");
@@ -251,13 +251,13 @@ export default function Profile() {
 				body: JSON.stringify({friendPseudo : username}),
 			});
 			if (!res.ok)
-				alert("An error occured");
+				alert(lang.Feedback.generic_error_occurred);
 			const data = await res.json()
 			setIsFriend(true);
 		}
 		catch (err)
 		{
-			alert("ERROR");
+				alert(lang.Feedback.generic_error);
 			console.log(err);
 			return;
 		}
@@ -267,7 +267,7 @@ export default function Profile() {
 	{
 		if (isOwnProfile)
 		{
-			alert("YOU CANNOT REMOVE YOURSELF");
+				alert(lang.Feedback.cannot_remove_yourself);
 			return;
 		}
 		const token = localStorage.getItem("token");
@@ -287,15 +287,15 @@ export default function Profile() {
 			});
 			console.log("RESS", res);
 			if (!res.ok)
-				alert("An error occured");
+				alert(lang.Feedback.generic_error_occurred);
 			const data = await res.json()
 			console.log(data);
-			alert("Friend removed!");
+			alert(lang.Feedback.friend_removed);
 			setIsFriend(false);
 		}
 		catch (err)
 		{
-			alert("ERROR");
+			alert(lang.Feedback.generic_error);
 			console.log(err);
 			return;
 		}

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "./script/Sidebar_dm.tsx";
 import Main from "./utils/Main.tsx";
 import ChatInputBar, { type ChatMessage } from "./ChatInputBar";
+import { useLang } from "./script/langProvider";
 
 interface DmConversation {
 	id: number | null;
@@ -161,6 +162,7 @@ function getPseudoFromToken(): string {
 }
 
 export default function Chat_Global() {
+	const lang = useLang().getLang();
 	const navigate = useNavigate();
 	const { pseudo } = useParams();
 	const receiverPseudo = useMemo(
@@ -504,12 +506,12 @@ export default function Chat_Global() {
 							<div className="conversation-stack">
 								{isLoadingOlder && (
 									<div className="conversation-loading">
-										Chargement des anciens messages...
+											{lang.Chat_page.loading_older_messages}
 									</div>
 								)}
 								{orderedMessages.length === 0 && (
 									<div className="conversation-empty">
-										Aucun message pour le moment
+											{lang.Chat_page.no_messages_yet}
 									</div>
 								)}
 									{messageGroups.map((group, groupIndex) => {

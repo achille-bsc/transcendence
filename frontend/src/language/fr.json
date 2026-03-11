@@ -26,10 +26,13 @@
 			"settings": "⚙️ Paramètres",
 			"deconnexion": "➜] Déconnexion",
 			"terms_of_services": "📃 Conditions d'utilisation",
+			"privacy_policy": "🔒 Politique de confidentialité",
 			"users_not_found": "Aucun utilisateur trouvé"
 		},
 		"Chat_page": {
-			"input": "Tapez votre message..."
+			"input": "Tapez votre message...",
+			"loading_older_messages": "Chargement des anciens messages...",
+			"no_messages_yet": "Aucun message pour le moment"
 		},
 		"Game_page": {
 			"creation_partie": "Créer une partie",
@@ -70,7 +73,35 @@
 			"email": "Email :",
 			"api": "Clef API :",
 			"edit": "éditer",
-			"generate": "générer"
+			"generate": "générer",
+			"no_email": "Aucun email",
+			"close": "Fermer",
+			"save": "Enregistrer"
+		},
+		"Feedback": {
+			"cannot_find_user": "Impossible de trouver cet utilisateur",
+			"search_user_form_aria": "Formulaire de recherche d'utilisateur",
+			"search_user_input_aria": "Rechercher un utilisateur",
+			"connecting_to_github": "Connexion à GitHub...",
+			"chat_input_aria": "champ de saisie du chat",
+			"missing_github_application_id": "ID d'application GitHub manquant",
+			"login_failed": "Échec de la connexion",
+			"registration_failed": "Échec de l'inscription",
+			"password_mismatch": "Les mots de passe ne correspondent pas",
+			"generic_error_occurred": "Une erreur est survenue",
+			"generic_error": "ERREUR",
+			"no_file_provided": "Aucun fichier fourni",
+			"unsupported_image_format": "Format non supporté. Utilisez PNG, JPG ou WEBP.",
+			"avatar_upload_error": "Erreur lors de l'upload de l'avatar",
+			"api_key_generation_error": "Une erreur est survenue lors de la génération de la clé API",
+			"api_key_not_found": "Clé API introuvable dans la réponse",
+			"email_required": "Email requis",
+			"invalid_email": "Adresse email invalide",
+			"email_update_error": "Erreur lors de la mise à jour de l'email",
+			"cannot_add_yourself": "VOUS NE POUVEZ PAS VOUS AJOUTER",
+			"cannot_remove_yourself": "VOUS NE POUVEZ PAS VOUS SUPPRIMER",
+			"friend_removed": "Ami supprimé !",
+			"sad_alt": "Triste"
 		},
 		"not_found": {
 			"title": "Page non trouvée",
@@ -140,6 +171,45 @@
 			"terms_15_0": "Si vous avez des questions, veuillez nous contacter à :",
 			"terms_15_1": "E-mail : support@transcendance.com",
 			"terms_15_2": "En utilisant notre service, vous reconnaissez avoir lu, compris et accepté d'être lié par ces Conditions d'utilisation."
+		},
+		"Privacy_page": {
+			"title": "Politique de confidentialité",
+			"last_updated": "Dernière mise à jour : 11 mars 2026",
+			"privacy_1": "1. Introduction",
+			"privacy_1_0": "Cette Politique de confidentialité explique quelles données personnelles nous collectons, comment nous les utilisons et quels sont vos droits lorsque vous utilisez Transcendence.",
+			"privacy_2": "2. Données que nous collectons",
+			"privacy_2_0": "Selon votre utilisation du service, nous pouvons collecter :",
+			"privacy_2_1": "Informations de compte : pseudo, adresse e-mail, mot de passe chiffré.",
+			"privacy_2_2": "Données de profil : avatar, préférences de langue, paramètres utilisateur.",
+			"privacy_2_3": "Données de jeu et sociales : scores, historiques de parties, listes d'amis, demandes d'amis.",
+			"privacy_2_4": "Données techniques : adresses IP, logs applicatifs, informations de session et de navigateur.",
+			"privacy_3": "3. Finalités du traitement",
+			"privacy_3_0": "Nous utilisons vos données pour :",
+			"privacy_3_1": "Fournir, sécuriser et améliorer la plateforme.",
+			"privacy_3_2": "Gérer l'authentification, les communications et les fonctionnalités sociales.",
+			"privacy_3_3": "Prévenir la fraude, les abus et les activités contraires à nos conditions.",
+			"privacy_4": "4. Base légale",
+			"privacy_4_0": "Le traitement repose sur l'exécution du service, votre consentement (lorsque requis) et notre intérêt légitime à garantir la sécurité, la fiabilité et le bon fonctionnement de la plateforme.",
+			"privacy_5": "5. Partage des données",
+			"privacy_5_0": "Nous ne vendons pas vos données personnelles. Nous pouvons les partager uniquement avec :",
+			"privacy_5_1": "Nos prestataires techniques nécessaires à l'exploitation du service.",
+			"privacy_5_2": "Les autorités compétentes lorsque la loi l'exige.",
+			"privacy_5_3": "Des tiers en cas de réorganisation juridique (fusion, acquisition), avec garanties appropriées.",
+			"privacy_6": "6. Durée de conservation",
+			"privacy_6_0": "Nous conservons vos données uniquement pendant la durée nécessaire aux finalités décrites.",
+			"privacy_6_1": "Les données de compte sont conservées tant que votre compte est actif.",
+			"privacy_6_2": "Certaines données peuvent être conservées plus longtemps pour des obligations légales ou de sécurité.",
+			"privacy_7": "7. Sécurité des données",
+			"privacy_7_0": "Nous mettons en œuvre des mesures techniques et organisationnelles raisonnables pour protéger vos données contre l'accès non autorisé, la perte, l'altération ou la divulgation.",
+			"privacy_8": "8. Vos droits",
+			"privacy_8_0": "Selon la réglementation applicable, vous pouvez :",
+			"privacy_8_1": "Accéder à vos données, les rectifier, les supprimer ou en limiter le traitement.",
+			"privacy_8_2": "Retirer votre consentement et demander la portabilité de vos données lorsque cela s'applique.",
+			"privacy_9": "9. Cookies et stockage local",
+			"privacy_9_0": "Nous utilisons des cookies et le stockage local pour maintenir votre session, mémoriser vos préférences et améliorer l'expérience utilisateur. Vous pouvez configurer votre navigateur pour limiter ces usages.",
+			"privacy_10": "10. Contact et modifications",
+			"privacy_10_0": "Pour toute question relative à cette Politique de confidentialité, contactez-nous à : support@transcendance.com.",
+			"privacy_10_1": "Nous pouvons modifier cette politique à tout moment. La version la plus récente est toujours publiée sur cette page."
 		}
 	}
 }

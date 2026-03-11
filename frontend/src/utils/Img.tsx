@@ -1,3 +1,5 @@
+import { useLang } from "../script/langProvider";
+
 // function Img({ src, alt= "Triste", width = 50, height = 60 }) {
 //   return (
 //     <img
@@ -10,11 +12,13 @@
 // }
 
 
-function Img({ src, alt = "Triste", className = "" }: { src: string; alt?: string; className?: string }) {
+function Img({ src, alt, className = "" }: { src: string; alt?: string; className?: string }) {
+  const lang = useLang().getLang();
+  const finalAlt = alt ?? lang.Feedback.sad_alt;
   return (
     <img
       src={src}
-      alt={alt}
+      alt={finalAlt}
       className={className}
     />
   );

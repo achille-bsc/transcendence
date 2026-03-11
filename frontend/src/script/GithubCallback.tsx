@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import { useLang } from "./langProvider";
 
 export default function GithubCallback() {
+    const lang = useLang().getLang();
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
@@ -33,5 +35,5 @@ export default function GithubCallback() {
     exchange();
     }, []);
 
-    return <p>Connecting to github...</p>;
+    return <p>{lang.Feedback.connecting_to_github}</p>;
 } 
