@@ -6,7 +6,6 @@ import chatRoutes from './routes/chatRoutes';
 import healthRoutes from './routes/health';
 import fs from 'fs';
 import backendGuardPlugin from '../plugins/backendGuard';
-import fastifyRateLimit from '@fastify/rate-limit';
 import { prisma } from '../prisma';
 import publicRoutes from './routes/publicRoutes';
 
@@ -16,24 +15,14 @@ async function start() {
     https: {
       key: fs.readFileSync('/app/certs/private/db.key'),
       cert: fs.readFileSync('/app/certs/public/db.crt')
-    }
+    },
+    trustProxy: true
   });
 
   try {
     const apiPass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
     await server.register(backendGuardPlugin, { secret: apiPass });
-    await server.register(fastifyRateLimit, {
-      global: false,
-      max: 3,
-      timeWindow: '1 minute',
-      errorResponseBuilder: function (request, context) {
-        return {
-          code: 429,
-          error: 'Too Many Requests',
-          message: `Rate limit reached. You can only make ${context.max} requests every ${context.after}.`
-        };
-      }
-    });
+    
     server.decorate('authenticateApiKey', async (request, reply) => {
       const apiKey = request.headers['x-api-key'];
       if (!apiKey || typeof apiKey !== 'string') {
