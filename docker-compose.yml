@@ -1,0 +1,246 @@
+name: transcendence
+
+services:
+# ========================= CADDY ========================
+    caddy:
+        container_name: caddy
+        build:
+            context: ./caddy-service
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        ports:
+            - "8443:443"
+            - "8080:80"
+        networks:
+            - transcendence-network
+        volumes:
+            - caddy-volume:/data/caddy/
+            - ./certificates/public:/app/certs
+        depends_on:
+            frontend:
+                condition: service_started
+            database-service:
+                condition: service_healthy
+            auth-service:
+                condition: service_started
+            chat-service:
+                condition: service_started
+            kong-service:
+                condition: service_started
+            user-management-service:
+                condition: service_started
+        restart: always
+
+# ======================== FRONT ========================
+    frontend:
+        container_name: frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+            additional_contexts: 
+                shared_ressources: ./shared
+        expose:
+            - "3000"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        env_file:
+            - .env
+        volumes:
+            - ./certificates/public:/app/certs/public:ro
+            - ./certificates/private/frontend.key:/app/certs/private/frontend.key
+        networks:
+            - transcendence-network
+        restart: always
+
+# ======================== AUTHENTICATION ========================
+    auth-service:
+        build:
+            context: ./auth-service
+            dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
+        expose:
+            - "3001"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        env_file:
+            - .env
+        secrets:
+            - api_pass
+            - jwt_secret
+            - github_oauth_id
+            - github_oauth_secret
+        networks:
+            - transcendence-network
+        volumes:
+            - ./certificates/private/auth-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/database-service.crt:/app/certs/public/database-service.crt:ro
+        depends_on:
+            user-management-service:
+                condition: service_started
+                restart: true
+            database-service:
+                condition: service_healthy
+                restart: true
+        restart: always
+
+# ======================== CHAT ========================
+    chat-service:
+        build:
+            context: ./chat-service
+            dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
+        expose:
+            - "3004"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        env_file:
+            - .env
+        secrets:
+            - api_pass
+            - jwt_secret
+            - github_oauth_id
+            - github_oauth_secret
+        networks:
+            - transcendence-network
+        volumes:
+            - ./certificates/private/chat-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/chat-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/database-service.crt:/app/certs/database-service.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/auth-service.crt:ro
+        depends_on:
+            database-service:
+                condition: service_healthy
+                restart: true
+            user-management-service:
+                condition: service_started
+                restart: true
+        restart: always
+        
+# ======================== DB ========================
+    database-service:
+        container_name: database-service
+        build:
+            context: ./database-service
+            dockerfile: Dockerfile
+            additional_contexts: 
+                shared_ressources: ./shared
+        # ports:
+        #     - "5555:5555"  # ONLY TO CHECK DB FROM OUTSIDE, can be used in eval
+        expose: 
+            - "5000"
+        env_file:
+            - .env
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+            DATABASE_URL: ${DATABASE_URL}
+            DB_USER: "user"
+            DB_PASS_FILE: /run/secrets/db_password
+            LAUNCH_MODE: "dev"
+        secrets:
+            - db_password
+            - api_pass
+        networks:
+            - transcendence-network
+        volumes:
+            - db-volume:/app/data 
+            - ./certificates/private/database-service.key:/app/certs/private/db.key:ro
+            - ./certificates/public/database-service.crt:/app/certs/public/db.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
+        restart: always
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f --cacert /app/certs/public/db.crt https://localhost:5000/health || exit 1"]
+            interval: 10s
+            timeout: 30s
+            retries: 5
+            start_period: 5s
+
+# ======================== KONG ========================
+    kong-service:
+        build:
+            context: ./kong-service
+            dockerfile: Dockerfile
+            additional_contexts: 
+                shared_ressources: ./shared
+        expose:
+            - "3000"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        env_file:
+            - .env
+        networks:
+            - transcendence-network
+        volumes:
+            - ./certificates/private/kong-service.key:/app/certs/private/kong-service.key:ro
+            - ./certificates/public/kong-service.crt:/app/certs/public/kong-service.crt:ro
+            - ./certificates/public/auth-service.crt:/app/certs/public/auth-service.crt:ro
+            - ./certificates/public/frontend.crt:/app/certs/public/frontend.crt:ro
+        restart: always
+
+# ======================== AVATAR VOLUME FILLER ========================
+    avatar-copier:
+        image: alpine:3.22
+        volumes:
+            - ./user-management-service/default_avatars:/staging:ro
+            - avatars-volume:/app/avatars
+        command: >
+            sh -c "if [ -z \"$$(ls -A /app/data)\" ]; then 
+                echo 'Copying data...'; 
+                cp -a /staging/ /app/avatars/; 
+            else 
+                echo 'Data already exists.'; 
+            fi"
+
+# ======================== USER MANAGEMENT ========================
+    user-management-service:
+        build:
+            context: ./user-management-service
+            dockerfile: Dockerfile
+            additional_contexts:
+                shared_ressources: ./shared
+        expose:
+            - "3003"
+        environment:
+            NODE_EXTRA_CA_CERTS: /app/certs/ca-bundle.crt
+        env_file:
+            - .env
+        secrets:
+            - api_pass
+        networks:
+            - transcendence-network
+        volumes:
+            - avatars-volume:/app/avatars
+            - ./certificates/private/user-management-service.key:/app/certs/private/srv.key:ro
+            - ./certificates/public/user-management-service.crt:/app/certs/public/srv.crt:ro
+            - ./certificates/public/ca-bundle.crt:/app/certs/ca-bundle.crt:ro
+        depends_on:
+            avatar-copier:
+                condition: service_completed_successfully
+            database-service:
+                condition: service_healthy
+                restart: true
+        restart: always
+
+volumes:
+    caddy-volume: 
+    avatars-volume:
+    db-volume:
+
+networks:
+    transcendence-network:
+        driver: bridge
+
+secrets:
+    github_oauth_id:
+        file: secrets/github_oauth_id
+    github_oauth_secret:
+        file: secrets/github_oauth_secret
+    api_pass:
+        file: secrets/api_internal_key
+    db_password:
+        file: secrets/db_password
+    jwt_secret:
+        file: secrets/jwt_secret
