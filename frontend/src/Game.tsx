@@ -89,7 +89,7 @@ export default function Game() {
 		window.location.href = "/log";
 		return null;
 	}
-
+	
 	useEffect(() => {
 		async function fetchUsername() {
 			const name = await getUsername();
@@ -97,7 +97,8 @@ export default function Game() {
 		}
 		fetchUsername();
 	}, []);
-
+	
+	console.log("loggedUser:", loggedUser);
 	useEffect(() => {
 		const BASE_WIDTH = 800;
 		const BASE_HEIGHT = 600;

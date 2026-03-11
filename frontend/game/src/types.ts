@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 14:33:57 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/08 14:04:02 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 17:33:31 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ export type KongGameState = {
   type: 'gameState',
   players: PlayerState[],
   barils?: Record<string, Baril>,
+  winner?: string,
   map?: {
     platforms: Platform[],
     spawnPoint: { x: number, y: number },

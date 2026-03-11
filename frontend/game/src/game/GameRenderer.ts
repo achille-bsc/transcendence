@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 13:43:26 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/09 16:41:02 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 17:33:31 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ export class GameRenderer {
 		this.canvas.width = width;
 		this.canvas.height = height;
 	}
-	render(players: RenderPlayer[], platforms: mapPlatform[], barils: RenderBaril[], goalPoint?: { x: number, y: number }): void {
+	render(players: RenderPlayer[], platforms: mapPlatform[], barils: RenderBaril[], goalPoint: { x: number, y: number }): void {
 		this.clear();
 		this.drawGround();
 		this.drawPlayers(players);
 		this.drawMap(platforms);
 		this.drawBarils(barils);
-		if (goalPoint) this.drawGoalPoint(goalPoint);
+		this.drawGoalPoint(goalPoint);
 	}
 
 	renderWaiting(message: string): void {
@@ -93,6 +93,29 @@ export class GameRenderer {
 			this.width / 2,
 			this.height / 2 + 30,
 		);
+	}
+
+	renderVictory(winnerId: string): void {
+		// Overlay semi-transparent
+		this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+		this.ctx.fillRect(0, 0, this.width, this.height);
+
+		// Titre "VICTOIRE"
+		this.ctx.fillStyle = "#f1c40f";
+		this.ctx.font = "bold 48px monospace";
+		this.ctx.textAlign = "center";
+		this.ctx.textBaseline = "middle";
+		this.ctx.fillText("VICTOIRE !", this.width / 2, this.height / 2 - 40);
+
+		// Message du gagnant
+		this.ctx.fillStyle = "#ffffff";
+		this.ctx.font = "24px monospace";
+		this.ctx.fillText(`Joueur ${winnerId} a gagné !`, this.width / 2, this.height / 2 + 20);
+
+		// Sous-texte
+		this.ctx.fillStyle = "#ffffff88";
+		this.ctx.font = "16px monospace";
+		this.ctx.fillText("Créez une nouvelle partie pour rejouer", this.width / 2, this.height / 2 + 70);
 	}
 
 	private clear(): void {
@@ -158,7 +181,7 @@ export class GameRenderer {
 
 	private drawGoalPoint(point: { x: number, y: number }): void {
 		if (this.gateImage.complete && this.gateImage.naturalWidth > 0) {
-			this.ctx.drawImage(this.gateImage, point.x - 20, point.y - 40, 40, 40);
+			this.ctx.drawImage(this.gateImage, point.x - 10, point.y - 25, 40, 40);
 		} else {
 			this.ctx.beginPath();
 			this.ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);

@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:54 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 17:43:16 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 14:50:24 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,33 @@ export class WebSocketClient {
 
 	// Connection handling
 	connect(): void {
-		this.intentionalClose = false;
-		this.ws = new WebSocket(this.url);
+		try {
+			this.intentionalClose = false;
+			this.ws = new WebSocket(this.url);
 
-		this.ws.onopen = (e) => {
-			this.reconnectAttempts = 0;
-			this.emit("open", e);
-		};
+			this.ws.onopen = (e) => {
+				this.reconnectAttempts = 0;
+				this.emit("open", e);
+			};
 
-		this.ws.onmessage = (e) => {
-			this.emit("message", e);
-		};
+			this.ws.onmessage = (e) => {
+				this.emit("message", e);
+			};
 
-		this.ws.onclose = (e) => {
-			this.emit("close", e);
-			if (!this.intentionalClose) {
-				this.attemptReconnect();
-			}
-		};
+			this.ws.onclose = (e) => {
+				this.emit("close", e);
+				if (!this.intentionalClose) {
+					this.attemptReconnect();
+				}
+			};
 
-		this.ws.onerror = (e) => {
-			this.emit("error", e);
-		};
+			this.ws.onerror = (e) => {
+				this.emit("error", e);
+			};
+		} catch (error) {
+			console.log(`WebSocket connection failed: ${error}\nThis error has correctly been handled`);
+		}
+		
 	}
 
 	disconnect(): void {

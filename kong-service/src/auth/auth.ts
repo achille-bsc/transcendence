@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 18:09:29 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/10 18:22:30 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 14:38:47 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ import { ClientState, WSMessage } from "../utils/types";
 
 export function verifToken(socket: WebSocket, msg: WSMessage, state: ClientState): void
 {
-	if (msg.type !== 'auth')
-		return ;
+	console.log('Received auth message:', msg);
+	// if (msg.type !== 'auth')
+	// 	return ;
 
-	state.id = msg.userID;
+	// state.id = msg.userID;
 
 	// if (msg.payload?.token?.endsWith('42token'))
 	// {
@@ -38,13 +39,13 @@ export function verifToken(socket: WebSocket, msg: WSMessage, state: ClientState
 	// const req: ClientRequest  = http.request({
 	// 	hostname: API_IP,
 	// 	port: API_PORT,
-	// 	path: '/checkToken',
+	// 	path: 'https://auth-service:3001/validate',
 	// 	method: 'GET',
 	// 	headers: {
 	// 		'content': 'application/json',
 	// 		'content-length': body.length
 	// 	},
-	// }, (res) => {
+	// }, (res: any) => {
 	// 	if (res.statusCode === 200) {
 	// 		state.isAuthenticated = true;
 	// 		socket.send(JSON.stringify({ type: 'auth_response', status: 'authenticated' }));
