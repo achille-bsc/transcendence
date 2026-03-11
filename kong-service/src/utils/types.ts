@@ -43,6 +43,7 @@ export type KongGameState = {
     goalPoint: { x: number, y: number },
   }
   barils: Record<string, Baril>
+  winner: string,
 }
 
 export type WSMessage = 
@@ -107,6 +108,8 @@ export type Baril = {
 }
 
 export type Game = {
+  winner?:           string,
+  startTime:		    number,
   host:			    	  string,
   id:               number,
   difficulty:	  	  Difficults,

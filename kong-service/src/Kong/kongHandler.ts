@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 21:18:05 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 18:19:53 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ export function kongHandler(
 	if (msg.type != 'kong')
 		return (error('wrongType'));
 
+	console.log("msg:", msg);
 	if (msg.payload.type === 'globalAction')
 	{
 		if (msg.payload.datas[0] === 'createGame')
@@ -47,11 +48,13 @@ export function kongHandler(
 
 	}
 	else if (msg.payload.type === 'gameAction')
-		handleGame(state, msg.payload.datas, msg.payload.Localuser)
+		handleGame(state, msg.payload.datas, msg.payload.Localuser, msg)
 }
+
 
 function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): void
 {
+	console.log("try joining a game...");
 	let exit = 0;
 	games.forEach((game) => {
 		game.players.forEach((player) => {
@@ -60,6 +63,7 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 		});	
 	})
 	if (exit == 1) return ;
+	console.log("try joining a game...");
 	if (msg.type === 'kong' && msg.payload.datas[1] != undefined)
 	{
 		let gamePlayer;
@@ -73,6 +77,8 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 			webSocket.send(JSON.stringify({ type: 'gameNotJoined', gameId: msg.payload.datas[1] }));
 			return ;	
 		}
+
+		console.log("try joining the game:", gamePlayer.id);
 		const player: PlayerDatas = {
 			id: msg.userID,
 			x: gamePlayer.map!.spawnPoint.x,
@@ -94,15 +100,15 @@ function createGame(
 	msg: WSMessage,
 	state: ClientState
 ) {
-	let exit = 0;
-	games.forEach((game) => {
-		game.players.forEach((player) => {
-			if (player.id == msg.userID)
-				exit = 1;
-		});	
-	})
+	// let exit = 0;
+	// games.forEach((game) => {
+	// 	game.players.forEach((player) => {
+	// 		if (player.id == msg.userID)
+	// 			exit = 1;
+	// 	});	
+	// })
 	// console.log("try creating game with id : " + (games.size + 1).toString());
-	if (msg.type !== 'kong' || exit == 1) return ;
+	if (msg.type !== 'kong'/*  || exit == 1 */) return ;
 	// A REACTIVER QUAND LES TESTS DE GAME SERONT FINIS
 	// if (games.get(msg.userID) !== undefined)
 	// {
@@ -110,6 +116,7 @@ function createGame(
 	// 	return (error('UserAllreadyHostGame'))
 	// }
 	const game: Game = {
+		startTime: 0,
 		host: msg.userID,
 		id: games.size + 1,
 		barils: new Map<string, Baril>(),

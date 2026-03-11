@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 13:49:48 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 17:35:31 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 17:55:59 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ export class GameNetworkLayer {
 	}
 
 	joinGame(gameId: string, difficulty: Difficulty = "medium"): boolean {
+		console.log("Joining game with id:", gameId);
 		return this.wsClient.send(
 			buildJoinGame(this.config.userId, gameId, difficulty, this.gameMode),
 		);
