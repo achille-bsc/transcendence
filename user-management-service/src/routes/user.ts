@@ -4,7 +4,14 @@ import { createWriteStream } from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import fs from 'fs';
+import crypto from 'crypto';
 
+try {
+  fs.accessSync('/run/secrets/api_pass', fs.constants.R_OK);
+} catch (err) {
+  console.error("Error: Unable to read API password");
+  process.exit(1);
+}
 const api_pass = fs.readFileSync('/run/secrets/api_pass', 'utf-8').trim();
 
 export default async function userRoutes(server: FastifyInstance) {
@@ -74,7 +81,6 @@ export default async function userRoutes(server: FastifyInstance) {
       if (!res.ok)
         return reply.code(res.status).send(data);
       const user = data;
-      console.log("\n\n\n\n\nUser cool :", user);
       return {
         success: true,
         avatarUrl: user.avatarUrl

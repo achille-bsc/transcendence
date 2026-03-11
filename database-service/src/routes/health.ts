@@ -3,7 +3,6 @@ import { prisma } from '../../prisma';
 
 export default async function healthRoutes(server: FastifyInstance) {
   server.get('/health', async () => {
-    console.log("test");
     if (!prisma) {
       return { status: 'error' };
     }
