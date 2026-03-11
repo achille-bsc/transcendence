@@ -55,22 +55,18 @@ export default function Register () {
 				}),
 			});
 
-			// 1. Essayer de parser le JSON (sécurisé)
-			let data = {};
+			let data: any = {};
 			try {
 				data = await res.json();
 			} catch (parseError) {
-				console.error("Erreur de format de réponse :", parseError);
+				console.log("Erreur de format de réponse :", parseError);
 			}
 
-			// 2. Vérifier le status HTTP
-			if (!res.ok) {
-				// Utiliser data.error pour bien afficher le texte de l'erreur
+			if (data.success === false || data.error) {
 				alert(data.error || lang.Feedback.registration_failed || "Erreur lors de l'inscription");
 				return;
 			}
 
-			// 3. Vérifier que le token existe
 			if (data.token) {
 				localStorage.setItem("token", data.token);
 				window.location.href = "/";
@@ -79,8 +75,7 @@ export default function Register () {
 			}
 
 		} catch (networkError) {
-			// 4. Gérer les erreurs réseau
-			console.error("Erreur réseau :", networkError);
+			console.log("Erreur réseau :", networkError);
 			alert(lang.Feedback.registration_failed || "Serveur inaccessible. Veuillez réessayer plus tard.");
 		}
 	}

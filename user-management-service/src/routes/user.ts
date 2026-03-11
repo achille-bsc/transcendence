@@ -17,28 +17,38 @@ export default async function userRoutes(server: FastifyInstance) {
   server.get('/profile', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const res = await fetch("https://database-service:5000/user/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
-      body: JSON.stringify({ pseudo: request.user.pseudo })
-    });
-    const data = await res.json();
-    if (!res.ok) return reply.code(res.status).send(data);
-    return { user: data };
+    try {
+      const res = await fetch("https://database-service:5000/user/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ pseudo: request.user.pseudo })
+      });
+      const data = await res.json();
+      if (!res.ok) return { success: false, error: data?.error || 'User not found' };
+      return { success: true, user: data };
+    } catch (err) {
+      server.log.error(err);
+      return { success: false, error: 'Internal server error' };
+    }
   });
 
   server.post('/profileother', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    const { pseudo } = request.body as { pseudo: string };
-    const res = await fetch("https://database-service:5000/user/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
-      body: JSON.stringify({ pseudo })
-    });
-    const data = await res.json();
-    if (!res.ok) return reply.code(res.status).send(data);
-    return { user: data };
+    try {
+      const { pseudo } = request.body as { pseudo: string };
+      const res = await fetch("https://database-service:5000/user/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+        body: JSON.stringify({ pseudo })
+      });
+      const data = await res.json();
+      if (!res.ok) return { success: false, error: data?.error || 'User not found' };
+      return { success: true, user: data };
+    } catch (err) {
+      server.log.error(err);
+      return { success: false, error: 'Internal server error' };
+    }
   });
 
   server.post('/avatar', {
@@ -46,12 +56,12 @@ export default async function userRoutes(server: FastifyInstance) {
   }, async (request, reply) => {
     const data = await request.file();
     if (!data)
-      return reply.code(400).send({ error: "No image received" });
+      return { success: false, error: "No image received" };
 
     const allowedMimeTypes = new Set(['image/png', 'image/jpeg', 'image/webp']);
     if (!allowedMimeTypes.has(data.mimetype)) {
       data.file.resume();
-      return reply.code(400).send({ error: "Unsupported file type" });
+      return { success: false, error: "Unsupported file type" };
     }
 
     const fileName = `${request.user.pseudo}.png`;
@@ -81,42 +91,49 @@ export default async function userRoutes(server: FastifyInstance) {
       return { success: true, message: "Avatar uploaded", avatarUrl: `/public/${fileName}` };
     } catch (err) {
       server.log.error(err);
-      return reply.code(500).send({ error: "Error saving image" });
+      return { success: false, error: "Error saving image" };
     }
   });
   server.get('/useravatar', { onRequest: [server.authenticate] },
     async (request, reply) => {
-      const res = await fetch("https://database-service:5000/user/avatar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
-        body: JSON.stringify({ pseudo: request.user.pseudo })
-      });
-      const data = await res.json();
-      if (!res.ok)
-        return reply.code(res.status).send(data);
-      const user = data;
-      return {
-        success: true,
-        avatarUrl: user.avatarUrl
-      };
+      try {
+        const res = await fetch("https://database-service:5000/user/avatar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+          body: JSON.stringify({ pseudo: request.user.pseudo })
+        });
+        const data = await res.json();
+        if (!res.ok)
+          return { success: false, error: data?.error || 'Avatar not found' };
+        return {
+          success: true,
+          avatarUrl: data.avatarUrl
+        };
+      } catch (err) {
+        server.log.error(err);
+        return { success: false, error: 'Internal server error' };
+      }
     });
 
   server.post('/avatarother', { onRequest: [server.authenticate] },
     async (request, reply) => {
-      const { pseudo } = request.body as { pseudo: string };
-      const res = await fetch("https://database-service:5000/user/avatar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
-        body: JSON.stringify({ pseudo : pseudo})
-      });
-      const data = await res.json();
-      if (!res.ok)
-        return reply.code(res.status).send(data);
-      const user = data;
-      if (!user?.avatarUrl)
-        return reply.code(404).send({ error: 'Aucun avatar trouvé' });
-
-      return { success: true, avatarUrl: user.avatarUrl};
+      try {
+        const { pseudo } = request.body as { pseudo: string };
+        const res = await fetch("https://database-service:5000/user/avatar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
+          body: JSON.stringify({ pseudo : pseudo})
+        });
+        const data = await res.json();
+        if (!res.ok)
+          return { success: false, error: data?.error || 'Avatar not found' };
+        if (!data?.avatarUrl)
+          return { success: false, error: 'Avatar not found' };
+        return { success: true, avatarUrl: data.avatarUrl};
+      } catch (err) {
+        server.log.error(err);
+        return { success: false, error: 'Internal server error' };
+      }
     });
 
   server.post('/userstatus', { onRequest: [server.authenticate] },
@@ -124,7 +141,7 @@ export default async function userRoutes(server: FastifyInstance) {
     const { pseudo } = request.body as { pseudo?: string };
     const targetPseudo = pseudo ?? (request.user as any).pseudo;
     if (!targetPseudo || targetPseudo.trim() === '') {
-      return reply.code(400).send({ error: 'Pseudo is required' });
+      return { success: false, error: 'Pseudo is required', isOnline: false };
     }
     try {
       const res = await fetch("https://chat-service:3004/online-users", {
@@ -133,7 +150,7 @@ export default async function userRoutes(server: FastifyInstance) {
       });
       const data = await res.json();
       if (!res.ok) {
-        return reply.code(res.status).send(data);
+        return { success: false, error: data?.error || 'Service unavailable', isOnline: false };
       }
       const onlinePseudos: string[] = data.users || [];
       return {
@@ -143,7 +160,7 @@ export default async function userRoutes(server: FastifyInstance) {
       };
     } catch (err) {
       server.log.error(err);
-      return reply.code(500).send({ error: "Erreur de communication avec le chat-service" });
+      return { success: false, error: 'Internal server error', isOnline: false };
     }
   });
   server.put('/email', {
@@ -152,12 +169,12 @@ export default async function userRoutes(server: FastifyInstance) {
     const { email } = request.body as { email?: string };
 
     if (!email || email.trim() === '') {
-      return reply.code(408).send({ error: "The new email is required" });
+      return { success: false, error: "The new email is required" };
     }
     else if (!email || email.length === 0 || email.includes(' ') ||
         email.split('@').length !== 2 || !email.includes('.'))
     {
-        return reply.code(408).send({ error: "Enter a valid email address" })
+        return { success: false, error: "Enter a valid email address" };
     }
     try {
       const res = await fetch("https://database-service:5000/user/update-email", {
@@ -170,11 +187,11 @@ export default async function userRoutes(server: FastifyInstance) {
       });
       const data = await res.json();
       if (!res.ok) 
-        return reply.code(res.status).send(data);
+        return { success: false, error: data?.error || 'Error updating email' };
       return { success: true, message: "Email updated successfully" };
     } catch (err) {
       server.log.error(err);
-      return reply.code(500).send({ error: "Error updating email" });
+      return { success: false, error: "Error updating email" };
     }
   });
 
@@ -189,19 +206,17 @@ export default async function userRoutes(server: FastifyInstance) {
       });
       const data = await res.json();
       if (!res.ok)
-        return reply.code(res.status).send(data);
-      return { user: data };
+        return { success: false, error: data?.error || 'Error fetching email' };
+      return { success: true, user: data };
     } catch (err) {
       server.log.error(err);
-      return reply.code(500).send({ error: "Error fetching email" });
+      return { success: false, error: "Error fetching email" };
     }
   });
   
   server.get('/apikey', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
-    
-    
     const newApiKey = 'sk_' + crypto.randomBytes(24).toString('hex');
 
     try {
@@ -214,7 +229,7 @@ export default async function userRoutes(server: FastifyInstance) {
         })
       });
       const data = await res.json();
-      if (!res.ok) return reply.code(res.status).send(data);
+      if (!res.ok) return { success: false, error: data?.error || 'Error generating API key' };
       return { 
         success: true, 
         message: "New key generated successfully",
@@ -222,7 +237,7 @@ export default async function userRoutes(server: FastifyInstance) {
       };
     } catch (err) {
       server.log.error(err);
-      return reply.code(500).send({ error: "Error generating API key" });
+      return { success: false, error: "Error generating API key" };
     }
   });
 

@@ -18,9 +18,9 @@ async function localAuthPlugin(server: FastifyInstance) {
   server.get('/validate', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const decodedToken = await request.jwtVerify(); 
-      return reply.code(200).send(decodedToken);
+      return reply.code(200).send({ success: true, ...decodedToken });
     } catch (err) {
-      return reply.code(401).send({ error: 'Token invalide ou expiré' });
+      return reply.code(200).send({ success: false, error: 'Token invalide ou expiré' });
     }
   });
 
@@ -28,7 +28,7 @@ async function localAuthPlugin(server: FastifyInstance) {
     try {
       await request.jwtVerify();
     } catch (err) {
-      reply.code(401).send({ error: 'Invalid Token' });
+      reply.code(200).send({ success: false, error: 'Invalid Token' });
     }
   });
 }

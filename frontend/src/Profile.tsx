@@ -14,7 +14,7 @@ async function getUsername()
 	{
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("Token not found");
+			console.log("Token not found");
 			return false;
 		}
 		if (!verifToken(token))
@@ -29,11 +29,13 @@ async function getUsername()
 			}
 		});
 		const data = await res.json();
+		if (data.success === false || !data.user)
+			return false;
 		return { pseudo: data.user.pseudo, createdAt: data.user.createdAt };
 	}
 	catch (error)
 	{
-		console.error("Invalid token:", error);
+		console.log("Invalid token:", error);
 		return false;
 	}
 }
@@ -49,16 +51,14 @@ async function ProfilePicture() {
 			}
 		});
 		const data = await res.json();
-		console.log("Profile picture response:", data.avatarUrl);
-		if (!res.ok)
-			alert("An error occured");
-		return data.avatarUrl;
+		if (data.success === false)
+			return "/default-avatar.png";
+		return data.avatarUrl || "/default-avatar.png";
 	}
 	catch (err)
 	{
-		alert("ERROR");
-		console.log(err);
-		return;
+		console.log("Error fetching profile picture:", err);
+		return "/default-avatar.png";
 	}
 }
 
@@ -74,9 +74,9 @@ async function getOtherUserAvatar(pseudo: string) {
 			},
 			body: JSON.stringify({pseudo: pseudo})
 		});
-		if (!res.ok)
-			return "/default-avatar.png";
 		const data = await res.json();
+		if (data.success === false)
+			return "/default-avatar.png";
 		return data.avatarUrl || "/default-avatar.png";
 	}
 	catch (err)
@@ -90,7 +90,7 @@ async function checkIfFriend(friendPseudo: string)
 {
 	const token = localStorage.getItem("token");
 	if (!token) {
- 		console.error("Token not found");
+ 		console.log("Token not found");
  		return false;
 	}
 	try
@@ -101,11 +101,8 @@ async function checkIfFriend(friendPseudo: string)
 				"Authorization": `Bearer ${token}`,
 			},
 		});
-		if (!res.ok)
-			return false;
-		const data = await res.json()
-		console.log("Friend list data:", data);
-		if (!data.friends || !Array.isArray(data.friends))
+		const data = await res.json();
+		if (data.success === false || !data.friends || !Array.isArray(data.friends))
 			return false;
 		return data.friends.some((friend: any) => friend.pseudo === friendPseudo);
 	}
@@ -120,7 +117,7 @@ async function getUserStatus(pseudo: string)
 {
 	const token = localStorage.getItem("token");
 	if (!token) {
- 		console.error("Token not found");
+ 		console.log("Token not found");
  		return false;
 	}
 	try
@@ -133,9 +130,9 @@ async function getUserStatus(pseudo: string)
 			},
 			body: JSON.stringify({pseudo: pseudo}),
 		});
-		if (!res.ok)
+		const data = await res.json();
+		if (data.success === false)
 			return false;
-		const data = await res.json()
 		return data.isOnline === true;
 	}
 	catch (err)
@@ -185,26 +182,25 @@ export default function Profile() {
 
 	useEffect(() => {
 		async function UsernameValidation() {
-			const name = await fetch("/user/profileother", {
-				method: "POST",
-				headers: {
-					"Authorization": `Bearer ${token}`,
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({pseudo: username})
-			});
-			console.log("Username validation response:", name);
-			if (!name.ok) {
+			try {
+				const name = await fetch("/user/profileother", {
+					method: "POST",
+					headers: {
+						"Authorization": `Bearer ${token}`,
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({pseudo: username})
+				});
+				const data = await name.json();
+				if (data.success === false || !data.user || !data.user.pseudo) {
+					window.location.href = "/profile";
+					return;
+				}
+				setIsUserValid(true);
+			} catch (err) {
+				console.log("Username validation error:", err);
 				window.location.href = "/profile";
-				return;
 			}
-			const data = await name.json();
-			console.log("Username validation data:", data);
-			if (!data.user || !data.user.pseudo) {
-				window.location.href = "/profile";
-				return;
-			}
-			setIsUserValid(true);
 		}
 		if (username)
 			UsernameValidation();
@@ -250,7 +246,7 @@ export default function Profile() {
 		}
 		const token = localStorage.getItem("token");
 		if (!token) {
-	 		console.error("Token not found");
+	 		console.log("Token not found");
 	 		return ;
 		}
 		try
@@ -263,9 +259,11 @@ export default function Profile() {
 				},
 				body: JSON.stringify({friendPseudo : username}),
 			});
-			if (!res.ok)
-				alert(lang.Feedback.generic_error_occurred);
-			const data = await res.json()
+			const data = await res.json();
+			if (data.success === false) {
+				alert(data.error || lang.Feedback.generic_error_occurred);
+				return;
+			}
 			setIsFriend(true);
 		}
 		catch (err)
@@ -285,7 +283,7 @@ export default function Profile() {
 		}
 		const token = localStorage.getItem("token");
 		if (!token) {
-	 		console.error("Token not found");
+	 		console.log("Token not found");
 	 		return ;
 		}
 		try
@@ -298,11 +296,11 @@ export default function Profile() {
 				},
 				body: JSON.stringify({friendPseudo : username}),
 			});
-			console.log("RESS", res);
-			if (!res.ok)
-				alert(lang.Feedback.generic_error_occurred);
-			const data = await res.json()
-			console.log(data);
+			const data = await res.json();
+			if (data.success === false) {
+				alert(data.error || lang.Feedback.generic_error_occurred);
+				return;
+			}
 			alert(lang.Feedback.friend_removed);
 			setIsFriend(false);
 		}

@@ -16,8 +16,9 @@ async function authRoutes(server: FastifyInstance) {
 		pseudo: string,
 		email: string,
 		password: string };
-    if (!await checkSignin(pseudo, email, password, reply))
-      return;
+    const validationError = checkSignin(pseudo, email, password);
+    if (validationError)
+      return { success: false, error: validationError };
     const hashedPassword = await hashPassword(password);
     const res = await fetch("https://database-service:5000/createuser", {
 			method: "POST",
@@ -33,7 +34,7 @@ async function authRoutes(server: FastifyInstance) {
 		});
     const data = await res.json();
     if (!res.ok)
-      return reply.code(400).send({ error: data.error }); 
+      return { success: false, error: data.error }; 
     const token = server.jwt.sign({ pseudo: pseudo });
     return { success: true, pseudo: data.pseudo, token };
   });
@@ -56,12 +57,12 @@ async function authRoutes(server: FastifyInstance) {
 		});
     if (!res.ok) {
       const data = await res.json();
-      return reply.code(400).send({ error: data.error });
+      return { success: false, error: data.error };
     }
     const user = await res.json();
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      return reply.code(400).send({ error: 'Invalid Password' });
+      return { success: false, error: 'Invalid Password' };
     }
     const token = server.jwt.sign({ pseudo: user.pseudo });
     return {

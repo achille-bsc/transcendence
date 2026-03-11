@@ -41,21 +41,18 @@ export default function Log () {
 				}),
 			});
 			
-			// 1. Essayer de parser le JSON (le serveur pourrait renvoyer du HTML s'il crash)
-			let data = {};
+			let data: any = {};
 			try {
 				data = await res.json();
 			} catch (parseError) {
-				console.error("Erreur de format de réponse :", parseError);
+				console.log("Erreur de format de réponse :", parseError);
 			}
 
-			// 2. Vérifier le status HTTP
-			if (!res.ok) {
+			if (data.success === false || data.error) {
 				alert(data.error || lang.Feedback.login_failed || "Erreur de connexion");
 				return;
 			}
 
-			// 3. Vérifier que le token est bien présent avant de le stocker
 			if (data.token) {
 				localStorage.setItem("token", data.token);
 				window.location.href = "/";
@@ -64,8 +61,7 @@ export default function Log () {
 			}
 
 		} catch (networkError) {
-			// 4. Gérer les erreurs de réseau (Serveur éteint, pas d'internet, etc.)
-			console.error("Erreur réseau :", networkError);
+			console.log("Erreur réseau :", networkError);
 			alert(lang.Feedback.login_failed || "Serveur inaccessible. Veuillez réessayer plus tard.");
 		}
 	}

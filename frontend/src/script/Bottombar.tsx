@@ -21,12 +21,8 @@ async function fetchFriends(): Promise<Friend[]> {
 		},
 	});
 
-	if (!response.ok) {
-		return [];
-	}
-
 	const data = await response.json();
-	if (!data.success || !Array.isArray(data.friends)) {
+	if (data.success === false || !Array.isArray(data.friends)) {
 		return [];
 	}
 	return data.friends

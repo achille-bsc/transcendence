@@ -20,7 +20,7 @@ async function fetchFriends(): Promise<FriendsResponse | undefined>
 {
 	const token = localStorage.getItem("token");
 	if (!token) {
- 		console.error("Token not found");
+ 		console.log("Token not found");
  		return ;
 	}
 	try
@@ -31,9 +31,9 @@ async function fetchFriends(): Promise<FriendsResponse | undefined>
 				"Authorization": `Bearer ${token}`,
 			},
 		});
-		if (!res.ok)
-			alert("An error occured");
 		const data = await res.json()
+		if (data.success === false)
+			return;
 		return data;
 	}
 	catch (err)
@@ -55,9 +55,9 @@ async function getOtherUserAvatar(pseudo: string) {
 			},
 			body: JSON.stringify({pseudo: pseudo})
 		});
-		if (!res.ok)
-			return "/src/img/img.webp";
 		const data = await res.json();
+		if (data.success === false)
+			return "/src/img/img.webp";
 		return data.avatarUrl || "/src/img/img.webp";
 	}
 	catch (err)
@@ -78,9 +78,9 @@ async function getUserAvatar() {
 				"Content-Type": "application/json"
 			}
 		});
-		if (!res.ok)
-			return "/src/img/img.webp";
 		const data = await res.json();
+		if (data.success === false)
+			return "/src/img/img.webp";
 		return data.avatarUrl || "/src/img/img.webp";
 	}
 	catch (err)
@@ -94,7 +94,7 @@ async function getUserStatus(pseudo: string)
 {
 	const token = localStorage.getItem("token");
 	if (!token) {
- 		console.error("Token not found");
+ 		console.log("Token not found");
  		return false;
 	}
 	try
@@ -107,9 +107,9 @@ async function getUserStatus(pseudo: string)
 			},
 			body: JSON.stringify({pseudo: pseudo}),
 		});
-		if (!res.ok)
-			return false;
 		const data = await res.json()
+		if (data.success === false)
+			return false;
 		return data.isOnline === true;
 	}
 	catch (err)

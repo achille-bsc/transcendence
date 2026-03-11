@@ -22,14 +22,14 @@ export default function GithubCallback() {
             console.log(data);
             //call register here
             if (!data.access_token) {
-                console.error("No token returned from backend");
+                console.log("No token returned from backend");
                 return;
             }
             window.location.href = "/";
         }
         catch (err)
         {
-            console.error("OAuth error", err);
+            console.log("OAuth error", err);
         }
     }
     exchange();
