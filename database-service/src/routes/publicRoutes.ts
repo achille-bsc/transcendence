@@ -53,8 +53,13 @@ export default async function publicRoutes(server: FastifyInstance) {
     const myPseudo = (request as any).userPseudo.pseudo;
     const { email } = request.body as { email: string };
     
-    if (!email || !email.includes('@') || !email.includes('.')) {
-      return reply.code(400).send({ error: "Invalid email format" });
+    if (!email || email.trim() === '') {
+      return reply.code(408).send({ error: "The new email is required" });
+    }
+    else if (!email || email.length === 0 || email.includes(' ') ||
+        email.split('@').length !== 2 || !email.includes('.'))
+    {
+        return reply.code(408).send({ error: "Enter a valid email address" })
     }
     try {
       await prisma.user.update({
