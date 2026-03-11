@@ -14,7 +14,7 @@ export default function Log () {
 		const githubId = process.env.GITHUB_CLIENT_ID; //temporary
 		if (!githubId)
 		{
-			alert("Missing github application id");
+			alert(lang.Feedback.missing_github_application_id);
 			return;
 		}
 		const redirectUri = encodeURIComponent("https://localhost:8443/oauth/callback");
@@ -42,7 +42,7 @@ export default function Log () {
 		const data = await res.json();
 
 		if (!res.ok) {
-			alert(data.error || "Registration failed");
+			alert(data.error || lang.Feedback.login_failed);
 			return;
 		}
 		const token = data.token;

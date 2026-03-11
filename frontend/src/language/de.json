@@ -26,10 +26,13 @@
 			"settings": "⚙️ Einstellungen",
 			"deconnexion": "➜] Abmelden",
 			"terms_of_services": "📃 Nutzungsbedingungen",
+			"privacy_policy": "🔒 Datenschutzrichtlinie",
 			"users_not_found": "Keine Benutzer gefunden"
 		},
 		"Chat_page": {
-			"input": "Geben Sie Ihre Nachricht ein..."
+			"input": "Geben Sie Ihre Nachricht ein...",
+			"loading_older_messages": "Ältere Nachrichten werden geladen...",
+			"no_messages_yet": "Noch keine Nachrichten"
 		},
 		"Game_page": {
 			"creation_partie": "Party erstellen",
@@ -70,7 +73,35 @@
 			"email": "E-Mail :",
 			"api": "API-Schlüssel :",
 			"edit": "bearbeiten",
-			"generate": "generieren"
+			"generate": "generieren",
+			"no_email": "Keine E-Mail",
+			"close": "Schließen",
+			"save": "Speichern"
+		},
+		"Feedback": {
+			"cannot_find_user": "Benutzer nicht gefunden",
+			"search_user_form_aria": "Formular zur Benutzersuche",
+			"search_user_input_aria": "Benutzer suchen",
+			"connecting_to_github": "Verbindung zu GitHub...",
+			"chat_input_aria": "Chat-Eingabefeld",
+			"missing_github_application_id": "GitHub-Anwendungs-ID fehlt",
+			"login_failed": "Anmeldung fehlgeschlagen",
+			"registration_failed": "Registrierung fehlgeschlagen",
+			"password_mismatch": "Passwörter stimmen nicht überein",
+			"generic_error_occurred": "Ein Fehler ist aufgetreten",
+			"generic_error": "FEHLER",
+			"no_file_provided": "Keine Datei angegeben",
+			"unsupported_image_format": "Nicht unterstütztes Format. Verwenden Sie PNG, JPG oder WEBP.",
+			"avatar_upload_error": "Fehler beim Hochladen des Avatars",
+			"api_key_generation_error": "Beim Erstellen des API-Schlüssels ist ein Fehler aufgetreten",
+			"api_key_not_found": "API-Schlüssel in der Antwort nicht gefunden",
+			"email_required": "E-Mail erforderlich",
+			"invalid_email": "Ungültige E-Mail-Adresse",
+			"email_update_error": "Fehler beim Aktualisieren der E-Mail",
+			"cannot_add_yourself": "SIE KÖNNEN SICH NICHT SELBST HINZUFÜGEN",
+			"cannot_remove_yourself": "SIE KÖNNEN SICH NICHT SELBST ENTFERNEN",
+			"friend_removed": "Freund entfernt!",
+			"sad_alt": "Traurig"
 		},
 		"not_found": {
 			"title": "Seite nicht gefunden",
@@ -129,6 +160,45 @@
 			"terms_15": "15. Kontaktinformationen",
 			"terms_15_1": "E-Mail: support@transcendance.com",
 			"terms_15_2": "Durch die Nutzung unseres Dienstes bestätigen Sie, dass Sie diese Nutzungsbedingungen gelesen und verstanden haben."
+		},
+		"Privacy_page": {
+			"title": "Datenschutzrichtlinie",
+			"last_updated": "Zuletzt aktualisiert: 11. März 2026",
+			"privacy_1": "1. Einleitung",
+			"privacy_1_0": "Diese Datenschutzrichtlinie erklärt, welche personenbezogenen Daten wir erheben, wie wir sie verwenden und welche Rechte Sie bei der Nutzung von Transcendence haben.",
+			"privacy_2": "2. Welche Daten wir erheben",
+			"privacy_2_0": "Abhängig von Ihrer Nutzung des Dienstes können wir Folgendes erheben:",
+			"privacy_2_1": "Kontoinformationen: Benutzername, E-Mail-Adresse, verschlüsseltes Passwort.",
+			"privacy_2_2": "Profildaten: Avatar, Spracheinstellungen und Benutzereinstellungen.",
+			"privacy_2_3": "Spiel- und Sozialdaten: Punktzahlen, Spielverlauf, Freundeslisten und Freundschaftsanfragen.",
+			"privacy_2_4": "Technische Daten: IP-Adressen, Anwendungsprotokolle, Sitzungs- und Browserinformationen.",
+			"privacy_3": "3. Warum wir Daten verarbeiten",
+			"privacy_3_0": "Wir verwenden Ihre Daten, um:",
+			"privacy_3_1": "Die Plattform bereitzustellen, zu sichern und zu verbessern.",
+			"privacy_3_2": "Authentifizierung, Kommunikation und soziale Funktionen zu verwalten.",
+			"privacy_3_3": "Betrug, Missbrauch und Verstöße gegen unsere Bedingungen zu verhindern.",
+			"privacy_4": "4. Rechtsgrundlage",
+			"privacy_4_0": "Die Verarbeitung beruht auf der Erfüllung des Dienstes, Ihrer Einwilligung (wenn erforderlich) und unserem berechtigten Interesse an Sicherheit, Zuverlässigkeit und ordnungsgemäßem Betrieb der Plattform.",
+			"privacy_5": "5. Weitergabe von Daten",
+			"privacy_5_0": "Wir verkaufen keine personenbezogenen Daten. Eine Weitergabe erfolgt nur an:",
+			"privacy_5_1": "Technische Dienstleister, die für den Betrieb des Dienstes erforderlich sind.",
+			"privacy_5_2": "Zuständige Behörden, wenn dies gesetzlich erforderlich ist.",
+			"privacy_5_3": "Dritte im Fall einer rechtlichen Umstrukturierung (Fusion, Übernahme) mit geeigneten Schutzmaßnahmen.",
+			"privacy_6": "6. Speicherdauer",
+			"privacy_6_0": "Wir speichern Daten nur so lange, wie es für die beschriebenen Zwecke erforderlich ist.",
+			"privacy_6_1": "Kontodaten werden gespeichert, solange Ihr Konto aktiv ist.",
+			"privacy_6_2": "Einige Daten können länger gespeichert werden, um gesetzliche oder sicherheitsrelevante Pflichten zu erfüllen.",
+			"privacy_7": "7. Datensicherheit",
+			"privacy_7_0": "Wir setzen angemessene technische und organisatorische Maßnahmen ein, um Ihre Daten vor unbefugtem Zugriff, Verlust, Veränderung oder Offenlegung zu schützen.",
+			"privacy_8": "8. Ihre Rechte",
+			"privacy_8_0": "Je nach anwendbarem Recht können Sie:",
+			"privacy_8_1": "Auf Ihre Daten zugreifen, sie berichtigen, löschen oder die Verarbeitung einschränken.",
+			"privacy_8_2": "Ihre Einwilligung widerrufen und, soweit anwendbar, Datenübertragbarkeit verlangen.",
+			"privacy_9": "9. Cookies und lokaler Speicher",
+			"privacy_9_0": "Wir verwenden Cookies und lokalen Speicher, um Ihre Sitzung aufrechtzuerhalten, Präferenzen zu speichern und die Nutzererfahrung zu verbessern. Sie können Ihren Browser so einstellen, dass diese Nutzung eingeschränkt wird.",
+			"privacy_10": "10. Kontakt und Änderungen",
+			"privacy_10_0": "Bei Fragen zu dieser Datenschutzrichtlinie kontaktieren Sie uns unter: support@transcendance.com.",
+			"privacy_10_1": "Wir können diese Richtlinie jederzeit aktualisieren. Die aktuelle Version wird stets auf dieser Seite veröffentlicht."
 		}
 	}
 }

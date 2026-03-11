@@ -87,7 +87,7 @@ async function getEmail() {
 	}
 }
 
-async function ProfilePicture() {
+async function ProfilePicture(messages: { generic_error_occurred: string; generic_error: string }) {
 	const token = localStorage.getItem("token");
 	try
 	{
@@ -100,29 +100,34 @@ async function ProfilePicture() {
 				
 			});
 		if (!res.ok)
-			alert("An error occured");
+			alert(messages.generic_error_occurred);
 		const data = await res.json();
 		return data.avatarUrl;
 	}
 	catch (err)
 	{
-		alert("ERROR");
+		alert(messages.generic_error);
 		console.log(err);
 		return;
 	}
 }
-async function changeProfilePicture(file: File) {
+async function changeProfilePicture(file: File, messages: {
+	no_file_provided: string;
+	unsupported_image_format: string;
+	avatar_upload_error: string;
+	generic_error: string;
+}) {
 	const token = localStorage.getItem("token");
 	try
 	{
 		if (!file) {
-			alert("No file provided");
+			alert(messages.no_file_provided);
 			return;
 		}
 
 		const allowedMimeTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
 		if (!allowedMimeTypes.has(file.type)) {
-			alert("Format non supporté. Utilisez PNG, JPG ou WEBP.");
+			alert(messages.unsupported_image_format);
 			return;
 		}
 
@@ -137,7 +142,7 @@ async function changeProfilePicture(file: File) {
 		});
 		if (!res.ok) {
 			const data = await res.json().catch(() => null);
-			alert(data?.error || "Erreur lors de l'upload de l'avatar");
+			alert(data?.error || messages.avatar_upload_error);
 			return;
 		}
 		const data = await res.json();
@@ -145,12 +150,16 @@ async function changeProfilePicture(file: File) {
 	}
 	catch (err)
 	{
-		alert("ERROR");
+		alert(messages.generic_error);
 		console.log(err);
 	}
 }
 
-async function generateApiKey() {
+async function generateApiKey(messages: {
+	api_key_generation_error: string;
+	api_key_not_found: string;
+	generic_error: string;
+}) {
 	const token = localStorage.getItem("token");
 	try
 	{
@@ -162,7 +171,7 @@ async function generateApiKey() {
 		});
 		if (!res.ok) {
 			const data = await res.json();
-			alert(data?.error || "An error occurred while generating API key");
+			alert(data?.error || messages.api_key_generation_error);
 			return;
 		}
 		const data = await res.json();
@@ -170,13 +179,13 @@ async function generateApiKey() {
 		if (apiKey) {
 			return apiKey;
 		} else {
-			alert("API key not found in response");
+			alert(messages.api_key_not_found);
 		}
 		return apiKey;
 	}
 	catch (err)
 	{
-		alert("ERROR");
+		alert(messages.generic_error);
 		console.log(err);
 	}
 }
@@ -203,7 +212,12 @@ export default function Settings() {
 		const file = event.target.files?.[0];
 		if (!file) return;
 
-		const avatarUrl = await changeProfilePicture(file);
+		const avatarUrl = await changeProfilePicture(file, {
+			no_file_provided: lang.Feedback.no_file_provided,
+			unsupported_image_format: lang.Feedback.unsupported_image_format,
+			avatar_upload_error: lang.Feedback.avatar_upload_error,
+			generic_error: lang.Feedback.generic_error,
+		});
 		if (avatarUrl) {
 			setNewProfilePicture(avatarUrl);
 		}
@@ -223,7 +237,10 @@ export default function Settings() {
 
 	useEffect(() => {
 		async function fetchProfilePicture() {
-			const avatarUrl = await ProfilePicture();
+			const avatarUrl = await ProfilePicture({
+				generic_error_occurred: lang.Feedback.generic_error_occurred,
+				generic_error: lang.Feedback.generic_error,
+			});
 			setNewProfilePicture(avatarUrl);
 		}
 		fetchProfilePicture();
@@ -240,19 +257,19 @@ export default function Settings() {
 	async function handleSaveEmail() {
 		const trimmedEmail = editedEmail.trim();
 		if (!trimmedEmail) {
-			alert("Email requis");
+				alert(lang.Feedback.email_required);
 			return;
 		}
 
 		const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 		if (!isValidEmail) {
-			alert("Adresse email invalide");
+			alert(lang.Feedback.invalid_email);
 			return;
 		}
 
 		const result = await updateEmail(trimmedEmail);
 		if (!result.success) {
-			alert(result.error || "Erreur lors de la mise à jour de l'email");
+			alert(result.error || lang.Feedback.email_update_error);
 			return;
 		}
 
@@ -270,7 +287,11 @@ export default function Settings() {
 	}
 
 	async function handleGenerateApiKey() {
-		const newApiKey = await generateApiKey();
+		const newApiKey = await generateApiKey({
+			api_key_generation_error: lang.Feedback.api_key_generation_error,
+			api_key_not_found: lang.Feedback.api_key_not_found,
+			generic_error: lang.Feedback.generic_error,
+		});
 		if (newApiKey) {
 			setApiKey(newApiKey);
 		}
@@ -303,7 +324,7 @@ export default function Settings() {
 												className="hidden"
 											/>
 										</div>
-										<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpen(false)}>Fermer</MyButton>
+										<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpen(false)}>{lang.Settings_page.close}</MyButton>
 									</div>
 								</div>
 							</div>
@@ -336,7 +357,7 @@ export default function Settings() {
 								</div>
 								<div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 min-w-0">
 									<div className="break-all min-w-0">
-										{newEmail || "Aucun email"}
+										{newEmail || lang.Settings_page.no_email}
 									</div>
 									<div className="flex justify-end pl-1">
 											<MyButton className="hover:text-[var(--props)] text-right whitespace-nowrap" onClick={handleOpenEmailModal}>{lang.Settings_page.edit}</MyButton>
@@ -351,8 +372,8 @@ export default function Settings() {
 															onChange={(e) => setEditedEmail(e.target.value)}
 														className="border border-[var(--default)] bg-[var(--background-box)] p-2 text-sm text-[var(--contrast)] placeholder-[var(--props)] focus:outline-hidden sm:p-2.5 sm:text-base"
 													/>
-														<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={handleSaveEmail}>Enregistrer</MyButton>
-													<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpenEmail(false)}>Fermer</MyButton>
+														<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={handleSaveEmail}>{lang.Settings_page.save}</MyButton>
+													<MyButton className="bg-[var(--background-box)] hover:[background:var(--button)] p-2" onClick={() => setIsOpenEmail(false)}>{lang.Settings_page.close}</MyButton>
 												</div>
 											</div>
 										</div>
