@@ -151,20 +151,40 @@ async function isUser(username: string)
 		console.error("Token not found");
 		return false;
 	}
-	const res = await fetch('/user/profileother', {
-		method: "POST",
-		headers: {
-			"Authorization": `Bearer ${token}`,
-			"Content-Type": "application/json",
-		},
-		body : JSON.stringify({ pseudo: username })
-	});
-	console.log("isUser RES:", res);
-	const data = await res.json();
-	console.log("isUser data:", data);
-	if (data.user.pseudo === username)
-		return true;
-	return false;
+	if (!verifToken(token))
+	{
+		localStorage.removeItem("token");
+		window.location.href = "/log";
+		return false;
+	}
+	try	{
+		const res = await fetch('/user/profileother', {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+			body : JSON.stringify({ pseudo: username })
+		});
+		if (res.status === 404) {
+			throw new Error("ok");
+		}
+		if (!res.ok)
+		{
+			throw new Error("User not found");
+		}
+		console.log("isUser RES:", res);
+		const data = await res.json();
+		console.log("isUser data:", data);
+		if (data.user.pseudo === username)
+			return true;
+		return false;
+	}
+	catch (err)
+	{
+		console.log("Error checking user existence:", err);
+		return false;
+	}
 }
 
 function Profile() {
@@ -269,8 +289,12 @@ function Main({children = ""}: {children?: ReactNode}) {
 		}, 30000);
 
 		return () => {
-			window.clearInterval(intervalId);
-			ws.close();
+            window.clearInterval(intervalId);
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            } else if (ws.readyState === WebSocket.CONNECTING) {
+                ws.onopen = () => ws.close();
+            }
 		};
 	}, []);
 	const [LanguagesClicked, setLanguages] = useState(false);
