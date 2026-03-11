@@ -249,9 +249,9 @@ services:
             - ./user-management-service/default_avatars:/staging:ro
             - avatars-volume:/app/avatars
         command: >
-            sh -c "if [ -z \"$$(ls -A /app/data)\" ]; then 
+            sh -c "if [ ! -f /app/avatars/default.png ]; then 
                 echo 'Copying data...'; 
-                cp -a /staging/ /app/avatars/; 
+                cp -a /staging/. /app/avatars/; 
             else 
                 echo 'Data already exists.'; 
             fi"

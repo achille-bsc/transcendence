@@ -1,6 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { pipeline } from 'stream/promises';
-import { createWriteStream } from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import fs from 'fs';
@@ -50,15 +48,31 @@ export default async function userRoutes(server: FastifyInstance) {
     if (!data)
       return reply.code(400).send({ error: "No image received" });
 
-    const resizer = sharp()
-      .resize(512, 512, { fit: 'cover', position: 'center' })
-      .png();
-    const extension = path.extname(data.filename);
-    const fileName = `${request.user.pseudo}${extension}`;
+    const allowedMimeTypes = new Set(['image/png', 'image/jpeg', 'image/webp']);
+    if (!allowedMimeTypes.has(data.mimetype)) {
+      data.file.resume();
+      return reply.code(400).send({ error: "Unsupported file type" });
+    }
+
+    const fileName = `${request.user.pseudo}.png`;
     const uploadPath = path.join('/app/avatars', fileName);
 
     try {
-      await pipeline(data.file, resizer, createWriteStream(uploadPath));
+      const fileBuffer = await data.toBuffer();
+
+      try {
+        await sharp(fileBuffer, { animated: true })
+          .resize(512, 512, { fit: 'cover', position: 'center' })
+          .png()
+          .toFile(uploadPath);
+      } catch (sharpError) {
+        if (data.mimetype === 'image/png') {
+          await fs.promises.writeFile(uploadPath, fileBuffer);
+        } else {
+          throw sharpError;
+        }
+      }
+
       await fetch("https://database-service:5000/user/update-avatar", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-backend-pass': api_pass },
@@ -183,7 +197,7 @@ export default async function userRoutes(server: FastifyInstance) {
     }
   });
   
-  server.put('/apikey', {
+  server.get('/apikey', {
     onRequest: [server.authenticate]
   }, async (request, reply) => {
     
