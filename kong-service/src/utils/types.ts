@@ -59,9 +59,11 @@ export type WSMessage =
           (
             | 'createGame'
             | 'joinGame'
+            | 'leaveGame'
             | 'jump'
             | 'goLeft'
             | 'goRight'
+            | 'goDown'
             | 'startGame'
           ),
           string,

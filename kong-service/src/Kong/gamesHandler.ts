@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 16:27:36 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:02:56 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:14:23 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ export function handleGame(state: ClientState, datas:
 	[
 		"createGame"
 		| "joinGame"
+		| "leaveGame"
 		| "jump"
 		| "goLeft"
 		| "goRight"
@@ -319,7 +320,9 @@ export function sendGameState(game: Game, includeMap: boolean = false)
 			message.map = mapData;
 		}
 		
-		player.socket.send(JSON.stringify(message));
+		try {
+			player.socket.send(JSON.stringify(message));
+		} catch (_) { /* socket may be dead during reconnect */ }
 	});
 }
 

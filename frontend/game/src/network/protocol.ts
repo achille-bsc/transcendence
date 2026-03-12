@@ -84,6 +84,10 @@ export function buildGoDown(userId: string, mode: "local" | "online" = "online",
 	return buildKongAction(userId, "gameAction", "goDown", undefined, undefined, mode, localUserId);
 }
 
+export function buildLeaveGame(userId: string): ClientMessage {
+	return buildKongAction(userId, "globalAction", "leaveGame");
+}
+
 // Parsing back -> front
 
 export function parseServerMessage(raw: string): ServerMessage | null {

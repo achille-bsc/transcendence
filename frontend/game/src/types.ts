@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 14:33:57 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 11:53:14 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:30:42 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,17 @@ export interface ErrorMessage {
 	message: string;
 }
 
+export interface GameReconnectedMessage {
+	type: "gameReconnected";
+	gameId: string;
+}
+
 export type ServerMessage =
 	| KongGameState
 	| AuthResponseMessage
 	| GameCreatedMessage
 	| GameJoinedMessage
+	| GameReconnectedMessage
 	| ErrorMessage;
 
 export type Difficulty = "easy" | "medium" | "hard";
@@ -88,6 +94,7 @@ export type Difficulty = "easy" | "medium" | "hard";
 export type KongAction =
 	| "createGame"
 	| "joinGame"
+	| "leaveGame"
 	| "jump"
 	| "goLeft"
 	| "goRight"
@@ -116,6 +123,7 @@ export type ClientMessage = KongGameActionMessage | AuthMessage;
 export interface KongGameTranslations {
 	createButton: string;
 	joinButton: string;
+	disconnectButton: string;
 	connecting: string;
 	connectedAuthenticating: string;
 	authenticated: string;
@@ -140,13 +148,6 @@ export interface KongGameConfig {
 	canvasHeight?: number;
 	maxReconnectAttempts?: number;
 	reconnectDelay?: number;
-	/**
-	 * Interpolation speed (0 to 1). Controls movement smoothness.
-	 * - 0.15 = very smooth / slow
-	 * - 0.25 = good balance (default)
-	 * - 0.5  = responsive
-	 * - 1.0  = no smoothing (raw server positions)
-	 */
 	interpolationDelay?: number;
 	gameMode?: "local" | "online";
 	localPlayer2Id?: string;
@@ -162,5 +163,6 @@ export type KongGameEventMap = {
 	gameState: KongGameState;
 	gameCreated: GameCreatedMessage;
 	gameJoined: GameJoinedMessage;
+	gameReconnected: GameReconnectedMessage;
 	error: string;
 };
