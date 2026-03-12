@@ -90,17 +90,50 @@ export default async function publicRoutes(server: FastifyInstance) {
     }
   });
 
-  server.delete('/api/public/user', publicConfig, async (request, reply) => {
+  server.post('/api/public/friends/send', publicConfig, async (request, reply) => {
     const myPseudo = (request as any).userPseudo.pseudo;
-    try {
-      console.log(`Attempting to delete account for pseudo: ${myPseudo}`);
-      await prisma.user.delete({
-        where: { pseudo: myPseudo }
-      });
-      return { success: true, message: "Account deleted successfully" };
-    } catch (error) {
-      server.log.error(error);
-      return reply.code(500).send({ error: "Could not delete account" });
+    const { friendPseudo } = request.body as { friendPseudo?: string };
+    if (!friendPseudo) {
+      return reply.code(400).send({ error: "friendPseudo is required in the body" });
     }
+    if (myPseudo === friendPseudo) {
+      return reply.code(400).send({ error: "You can't add yourself" });
+    }
+    const targetUser = await prisma.user.findUnique({
+      where: { pseudo: friendPseudo }
+    });
+    if (!targetUser) {
+      return reply.code(404).send({ error: "This account doesn't exist" });
+    }
+    const reverseRequest = await prisma.friend.findFirst({
+      where: { requesterId: friendPseudo, addresseeId: myPseudo }
+    });
+    if (reverseRequest) {
+      if (reverseRequest.status === 'PENDING') {
+        await prisma.friend.updateMany({
+          where: { OR: [
+            { requesterId: friendPseudo, addresseeId: myPseudo },
+            { requesterId: myPseudo, addresseeId: friendPseudo }
+          ]},
+          data: { status: 'ACCEPTED' }
+        });
+        return { success: true, action: 'auto_accepted', message: "Friend request auto-accepted" };
+      }
+      if (reverseRequest.status === 'ACCEPTED') {
+        return reply.code(400).send({ error: 'Already friends' });
+      }
+    }
+    const existing = await prisma.friend.findFirst({
+      where: { requesterId: myPseudo, addresseeId: friendPseudo }
+    });
+
+    if (existing) {
+      return reply.code(400).send({ error: 'Friend request already sent' });
+    }
+    const newRequest = await prisma.friend.create({
+      data: { requesterId: myPseudo, addresseeId: friendPseudo }
+    });
+
+    return { success: true, action: 'sent', message: "Friend request sent successfully" };
   });
 }
