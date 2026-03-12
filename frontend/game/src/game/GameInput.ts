@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:41 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/08 14:05:52 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 13:23:16 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ const KEY_MAP_ALL: Record<string, InputAction> = {
 	ArrowUp: "jump",
 	ArrowLeft: "goLeft",
 	ArrowRight: "goRight",
-	ArrowDown: "goDown",
+	// ArrowDown: "goDown",
 	w: "jump",
 	z: "jump",
 	a: "goLeft",
 	q: "goLeft",
 	d: "goRight",
-	s: "goDown",
+	// s: "goDown",
 	" ": "jump",
 };
 
@@ -38,7 +38,7 @@ const KEY_MAP_P1: Record<string, InputAction> = {
 	a: "goLeft",
 	q: "goLeft",
 	d: "goRight",
-	s: "goDown",
+	// s: "goDown",
 };
 
 // Local P2: Arrow keys
@@ -46,7 +46,7 @@ const KEY_MAP_P2: Record<string, InputAction> = {
 	ArrowUp: "jump",
 	ArrowLeft: "goLeft",
 	ArrowRight: "goRight",
-	ArrowDown: "goDown",
+	// ArrowDown: "goDown",
 };
 
 interface LocalPlayer {
