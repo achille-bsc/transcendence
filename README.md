@@ -447,8 +447,8 @@ Encountered some coordination difficulties related to product ownership.
 
 ### jguelen (Project Manager / Developer)
 
-<!-- TODO: Detail specific contributions, features implemented, challenges faced and overcome. -->
-
+I took care of the planning regarding microservices and the splitting of a monolith code into microservices. I planned ahead for future problems I saw as likely to appear, such problems included: restoring or creating new package.json and package-lock.json from a docker container based on existing code to avoid having to work on a VM, the hot-reload of work done outside containers inside them. I realised the architecture of said microservices and their network connection including HTTPS for all transmissions. I also took care of the coordination of rebase and merges and resolving of git mishaps. 
+I faced difficulties mainly regarding certain aspects of the use of a reverse-proxy and designing the general architecture and with the caddy documentation not been very clear and everything being buried or not up to date. I resolved such difficulties either by reading more documentation or sometimes peer learning or by using AI as a documentary aid.
 ---
 
 ## Resources
@@ -465,6 +465,9 @@ Encountered some coordination difficulties related to product ownership.
 - [WebSocket API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 - [GitHub OAuth Documentation](https://docs.github.com/en/apps/oauth-apps)
 - [SQLite Documentation](https://www.sqlite.org/docs.html)
+- [shell scripting](https://abs.traduc.org/abs-5.3-fr/ch07.html)
+- [Node](https://nodejs.org/dist/latest-v20.x/docs/)
+- [Docker images](https://hub.docker.com/)
 
 ### AI Usage
 
