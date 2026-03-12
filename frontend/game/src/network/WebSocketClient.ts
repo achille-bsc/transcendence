@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:54 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:02:45 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:49:35 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ export class WebSocketClient {
 				}
 			};
 
-			this.ws.onerror = (e) => {
-				this.emit("error", e);
+			this.ws.onerror = () => {
+				if (!this.intentionalClose) {
+					this.emit("error", new Event("error"));
+				}
 			};
 		} catch (error) {
 			console.log(`WebSocket connection failed: ${error}\nThis error has correctly been handled`);
@@ -73,13 +75,20 @@ export class WebSocketClient {
 	}
 
 	disconnect(): void {
-		this.intentionalClose = true;
-		this.reconnectAttempts = 0;
-		if (this.ws) {
-			this.ws.close();
-			this.ws = null;
-		}
-	}
+        this.intentionalClose = true;
+        this.reconnectAttempts = 0;
+        if (this.ws) {
+            if (this.ws.readyState === WebSocket.OPEN) {
+                this.ws.close();
+            } 
+            else if (this.ws.readyState === WebSocket.CONNECTING) {
+                this.ws.onopen = () => {
+                    this.ws?.close();
+                };
+            }
+            this.ws = null;
+        }
+    }
 
 	send(data: object | string): boolean {
 		if (this.ws?.readyState === WebSocket.OPEN) {

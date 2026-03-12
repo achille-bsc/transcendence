@@ -225,7 +225,7 @@ export default function Game() {
 						width={800}
 						height={600}
 						onConnected={() => {}}
-						onError={(err) => console.log("Erreur:", err)}
+						onError={() => {}}
 						/>
 					<div className="absolute bottom-3 left-3 z-20">
 						<button type="button" onClick={toggleFullscreen} aria-label="Mettre le jeu en plein écran" className="p-1 bg-black/20 hover:bg-black/35 transition-colors duration-150">
