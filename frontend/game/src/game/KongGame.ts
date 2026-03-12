@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:34 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 17:39:38 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 00:35:40 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ export class KongGame {
 
 		const mode = config.gameMode ?? "online";
 		const playerIds = mode === "local"
-			? [config.userId, config.localPlayer2Id ?? config.userId + "_local"]
+			? ["1", "2"]
 			: [config.userId];
 		this.input = new GameInput(
 			{ onAction: (action: InputAction, localPlayerId: string) => this.handleInput(action, localPlayerId) },
@@ -128,18 +128,9 @@ export class KongGame {
 		this.controlsEl.classList.add("kong-controls");
 		this.controlsEl.innerHTML = `
 			<div class="kong-mode-group">
-				<select class="kong-select" data-input="gameMode">
-					<option value="online"${(this.config.gameMode ?? "online") === "online" ? " selected" : ""}>Online</option>
-					<option value="local"${this.config.gameMode === "local" ? " selected" : ""}>Local (2 joueurs)</option>
-				</select>
 			</div>
 			<button class="kong-btn kong-btn--create" data-action="create">Créer une partie</button>
 			<button class="kong-btn kong-btn--join" data-action="join">Rejoindre</button>
-			<select class="kong-select" data-input="difficulty">
-				<option value="easy">Facile</option>
-				<option value="medium" selected>Normal</option>
-				<option value="hard">Difficile</option>
-			</select>
 		`;
 		this.container.appendChild(this.controlsEl);
 		this.setupControlEvents();
@@ -215,13 +206,13 @@ export class KongGame {
 		});
 
 		this.network.on("gameCreated", (msg) => {
-			this.state.clearWinner();
+			this.state.reset();
 			this.setStatus(`Partie créée : ${msg.gameId}`, "success");
 			this.emit("gameCreated", msg);
 		});
 
 		this.network.on("gameJoined", (msg) => {
-			this.state.clearWinner();
+			this.state.reset();
 			this.setStatus(`Rejoint : ${msg.gameId}`, "success");
 			this.emit("gameJoined", msg);
 		});
@@ -255,7 +246,7 @@ export class KongGame {
 
 		this.input.destroy();
 		const playerIds = mode === "local"
-			? [this.config.userId, this.config.localPlayer2Id ?? this.config.userId + "_local"]
+			? ["1", "2"]
 			: [this.config.userId];
 		this.input = new GameInput(
 			{ onAction: (action: InputAction, localPlayerId: string) => this.handleInput(action, localPlayerId) },

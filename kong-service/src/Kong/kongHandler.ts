@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 18:19:53 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 00:07:10 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,21 +100,21 @@ function createGame(
 	msg: WSMessage,
 	state: ClientState
 ) {
-	// let exit = 0;
-	// games.forEach((game) => {
-	// 	game.players.forEach((player) => {
-	// 		if (player.id == msg.userID)
-	// 			exit = 1;
-	// 	});	
-	// })
+	let exit = 0;
+	games.forEach((game) => {
+		game.players.forEach((player) => {
+			if (player.id == msg.userID)
+				exit = 1;
+		});	
+	})
 	// console.log("try creating game with id : " + (games.size + 1).toString());
-	if (msg.type !== 'kong'/*  || exit == 1 */) return ;
+	if (msg.type !== 'kong' || exit == 1) return ;
 	// A REACTIVER QUAND LES TESTS DE GAME SERONT FINIS
-	// if (games.get(msg.userID) !== undefined)
-	// {
-	// 	webSocket.send(JSON.stringify({ type: 'gameNotCreated', gameId: msg.userID }));
-	// 	return (error('UserAllreadyHostGame'))
-	// }
+	if (games.get(msg.userID) !== undefined)
+	{
+		webSocket.send(JSON.stringify({ type: 'gameNotCreated', gameId: msg.userID }));
+		return (error('UserAllreadyHostGame'))
+	}
 	const game: Game = {
 		startTime: 0,
 		host: msg.userID,

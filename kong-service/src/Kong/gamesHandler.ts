@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/29 16:27:36 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/11 18:22:27 by abosc            ###   ########.fr       */
+/*   Created: 2025/12/29 16:27:36 by abosc             #+#    #+#             */
+/*   Updated: 2026/03/12 01:04:52 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ import {
 	IMMOBILIZED_TIME,
 	JUMP_FORCE,
 	kongMaxHeight,
-	kongMaxLength,
 	MOVE_SPEED,
 	persoKongHeight,
-	persoKongWidth,
 	SECONDS_BEFORE_START
 }								from "../utils/const";
 import {
@@ -96,21 +94,22 @@ export function handleGame(state: ClientState, datas:
 function jump(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
 	const playerId = msg.userID;
-	console.log(game.isLocal)
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
-	console.log(playerId)
-	console.log(player)
-	console.log('\n\n\n\n');
-	if (!player || player.isJumping || player.isGoingSpawn/*|| !player.isOnGround*/)
+	if (!player || player.isJumping || player.isGoingSpawn || !player.isOnGround)
 			return;
-	player.isJumping = true;
-	player.isOnGround = false;
-	player.velocityY = JUMP_FORCE;
+	else
+	{
+		player.isJumping = true;
+		player.isOnGround = false;
+		player.velocityY = JUMP_FORCE;
+	}
 }
 
 function goLeft(game: Game, localUser: { id: string }, msg: WSMessage): void
 {
 	const playerId = msg.userID;
+	console.log(`[goLeft] isLocal=${game.isLocal}, localUser.id=${localUser.id}, playerId=${playerId}`);
+	console.log(`[goLeft] players in game:`, Array.from(game.players.keys()));
 	const player = game.players.get(game.isLocal ? localUser.id : playerId);
 	if (!player || player.isGoingSpawn)
 		return ;
@@ -139,7 +138,6 @@ function goDown(game: Game, localUser: { id: string }, msg: WSMessage): void
 
 export function startGame(game: Game)
 {
-	// map de 5 etages
 	game.map = MAP;
 	game.players.forEach((player) => {
 		player.x = game.map?.spawnPoint.x || 1000;
@@ -174,25 +172,27 @@ async function gameLoop(game: Game)
 					while (i < 6)
 					{
 						player.x -= MOVE_SPEED;
-						player.isGoingLeft = false;
 						checkPlayerCollisionsWithBarils(player, game);
+						sendGameState(game);
 						i++;
 					}
+					player.isGoingLeft = false;
 				}
 				if (player.isGoingRight) {
 					let i = 0;
 					while (i < 6)
 					{
 						player.x += MOVE_SPEED;
-						player.isGoingRight = false;
 						checkPlayerCollisionsWithBarils(player, game);
+						sendGameState(game);
 						i++;
 					}
+					player.isGoingRight = false;
 				}
-				player.x = Math.max(persoKongWidth / 2, Math.min(player.x, kongMaxLength - persoKongWidth / 2));
+				// player.x = Math.max(persoKongWidth / 2, Math.min(player.x, kongMaxLength - (persoKongWidth / 2)));
 			});
 		}
-		
+
 		await sleep(100);
 		frameCount++;
 		if (frameCount >= frameBeforeBaril || randomInt(0, 1000) < 10) {
@@ -204,11 +204,10 @@ async function gameLoop(game: Game)
 		if (game.isStarted) {
 			if (game.startTime - Date.now() > 1000 * 60 * 2)
 				game.isFinish = true;
-			// TODO: view if this optimization is really useful
-			checkForBarilCollisions(game);
 			checkForWin(game);
 		}
 		sendGameState(game);
+		checkForBarilCollisions(game);
 		
 		if (game.isFinish) {
 			const playerIds = Array.from(game.players.keys());
@@ -458,8 +457,6 @@ function handlePlayersPhysics(game: Game)
 				player.isJumping = false;
 			}
 		}
-
-		
 
 		if (player.y > kongMaxHeight + 50) {
 			player.x = game.map!.spawnPoint.x;

@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 16:17:39 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 22:05:45 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import { parseMessage } from './utils/utils';
 import fs from 'fs';
 
 const fastify = Fastify({
-  logger: false,
+  logger: { level: 'silent'}, 
   https: {
     key: fs.readFileSync('/app/certs/private/kong-service.key'),
     cert: fs.readFileSync('/app/certs/public/kong-service.crt'),

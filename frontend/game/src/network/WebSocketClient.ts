@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:54 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 14:50:24 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 22:19:27 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,28 +66,37 @@ export class WebSocketClient {
 			this.ws.onerror = (e) => {
 				this.emit("error", e);
 			};
-		} catch (error) {
-			console.log(`WebSocket connection failed: ${error}\nThis error has correctly been handled`);
-		}
+		} catch (error) {}
 		
 	}
 
 	disconnect(): void {
-		this.intentionalClose = true;
-		this.reconnectAttempts = 0;
-		if (this.ws) {
-			this.ws.close();
-			this.ws = null;
-		}
+        this.intentionalClose = true;
+        this.reconnectAttempts = 0;
+        if (this.ws) {
+            const socket = this.ws;
+            
+            if (socket.readyState === WebSocket.CONNECTING) {
+                socket.onopen = () => socket.close();
+            } else {
+                socket.close();
+            }
+            
+            this.ws = null;
+        }
 	}
 
 	send(data: object | string): boolean {
-		if (this.ws?.readyState === WebSocket.OPEN) {
-			const message = typeof data === "string" ? data : JSON.stringify(data);
-			this.ws.send(message);
-			return true;
+		try {
+			if (this.ws?.readyState === WebSocket.OPEN) {
+				const message = typeof data === "string" ? data : JSON.stringify(data);
+				this.ws.send(message);
+				return true;
+			}
+			return false;
+		} catch (error) {
+			return false;
 		}
-		return false;
 	}
 
 	get isConnected(): boolean {

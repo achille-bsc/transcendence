@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   const.ts                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jguelen <jguelen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:46:01 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/10 10:27:56 by jguelen          ###   ########.fr       */
+/*   Updated: 2026/03/11 22:35:13 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ export const JUMP_FORCE			= -80;
 export const MOVE_SPEED			= 3;
 export const BARREL_FALL_SPEED  = 15;
 export const IMMOBILIZED_TIME   = 1000;
-export const PLAYER_HALF_W		= 3;
+export const PLAYER_HALF_W		= 4;
 export const PLAYER_HALF_H		= 4;
 export const BARREL_HALF_SIZE	= 3;
 export const DIST_FOR_WIN       = 30;

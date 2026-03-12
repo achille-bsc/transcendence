@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:28 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 17:33:31 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 23:57:25 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,9 +211,11 @@ export class GameState {
 	}
 
 	reset(): void {
+		this.clearWinner();
 		this.players.clear();
 		this.playerOrder = [];
 		this.barils.clear();
+		this.map = null;
 		this.winner = '';
 	}
 }

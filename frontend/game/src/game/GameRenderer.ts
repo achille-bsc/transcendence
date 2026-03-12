@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 13:43:26 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/11 17:33:31 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/11 22:30:09 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ export class GameRenderer {
 
 	private drawPlayers(players: RenderPlayer[]): void {
 		players.forEach((player, index) => {
-			this.drawPlayer(player, index % 4, );
+			this.drawPlayer(player, index, );
 		});
 	}
 
