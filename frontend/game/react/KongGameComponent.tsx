@@ -56,6 +56,7 @@ export function KongGameComponent({
 	maxReconnectAttempts,
 	reconnectDelay,
 	interpolationDelay,
+	translations,
 	className,
 	autoStart = true,
 	onConnected,
@@ -85,6 +86,7 @@ export function KongGameComponent({
 			maxReconnectAttempts,
 			reconnectDelay,
 			interpolationDelay,
+			translations,
 		};
 
 		const game = new KongGame(container, config);
@@ -113,17 +115,21 @@ export function KongGameComponent({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [wsUrl, userToken, userId, width, height]);
 
+	useEffect(() => {
+		gameRef.current?.updateTranslations(translations);
+	}, [translations]);
+
 	/* Méthodes impératives exposées via ref (optionnel) */
 	const createGame = useCallback(
-		(gameId: string, difficulty?: "easy" | "medium" | "hard") => {
-			gameRef.current?.createGame(gameId, difficulty);
+		(gameId: string) => {
+			gameRef.current?.createGame(gameId);
 		},
 		[],
 	);
 
 	const joinGame = useCallback(
-		(gameId: string, difficulty?: "easy" | "medium" | "hard") => {
-			gameRef.current?.joinGame(gameId, difficulty);
+		(gameId: string) => {
+			gameRef.current?.joinGame(gameId);
 		},
 		[],
 	);

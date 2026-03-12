@@ -44,7 +44,21 @@
 			"local": "Local (2 joueurs)",
 			"disconnect": "Déconnecter",
 			"tentative": "Tentative de reconnexion...",
-			"reconnect": "Reconnecter"
+			"reconnect": "Reconnecter",
+			"connecting": "Connexion…",
+			"connected_authenticating": "Connecté — Authentification…",
+			"authenticated": "Authentifié ✓",
+			"game_created": "Partie créée : {gameId}",
+			"joined": "Rejoint : {gameId}",
+			"disconnected_status": "Déconnecté",
+			"reconnecting_status": "Reconnexion {attempt}/{maxAttempts}…",
+			"reconnect_failed": "Reconnexion impossible",
+			"waiting_players": "En attente de joueurs…",
+			"disconnected_server": "Déconnecté du serveur",
+			"attempting_reconnect": "Tentative de reconnexion...",
+			"victory_title": "VICTOIRE !",
+			"player_won": "Joueur {winnerId} a gagné !",
+			"play_again": "Créez une nouvelle partie pour rejouer"
 		},
 		"Alt_text": {
 			"menu_icon": "Icone de menu",
