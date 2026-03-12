@@ -59,24 +59,24 @@ export default function Register () {
 			try {
 				data = await res.json();
 			} catch (parseError) {
-				console.log("Erreur de format de réponse :", parseError);
+				console.log("Response parse error:", parseError);
 			}
 
 			if (data.success === false || data.error) {
-				alert(data.error || lang.Feedback.registration_failed || "Erreur lors de l'inscription");
+				alert(lang.Feedback.registration_failed);
 				return;
 			}
-
+			
 			if (data.token) {
 				localStorage.setItem("token", data.token);
 				window.location.href = "/";
 			} else {
-				alert(lang.Feedback.registration_failed || "Token introuvable après l'inscription");
+				alert(lang.Feedback.registration_failed);
 			}
-
+			
 		} catch (networkError) {
-			console.log("Erreur réseau :", networkError);
-			alert(lang.Feedback.registration_failed || "Serveur inaccessible. Veuillez réessayer plus tard.");
+			console.log("Network error:", networkError);
+			alert(lang.Feedback.generic_error_occurred);
 		}
 	}
 

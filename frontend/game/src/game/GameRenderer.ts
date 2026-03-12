@@ -79,43 +79,65 @@ export class GameRenderer {
 		this.ctx.fillText(message, this.width / 2, this.height / 2);
 	}
 
-	renderDisconnected(): void {
+	renderDisconnected(texts?: {
+		disconnectedFromServer: string;
+		attemptingReconnect: string;
+	}): void {
 		this.clear();
 		this.ctx.fillStyle = "#e74c3c";
 		this.ctx.font = "18px monospace";
 		this.ctx.textAlign = "center";
 		this.ctx.textBaseline = "middle";
-		this.ctx.fillText("Déconnecté du serveur", this.width / 2, this.height / 2);
+		this.ctx.fillText(
+			texts?.disconnectedFromServer ?? "Disconnected from server",
+			this.width / 2,
+			this.height / 2,
+		);
 		this.ctx.fillStyle = "#ffffff88";
 		this.ctx.font = "14px monospace";
 		this.ctx.fillText(
-			"Tentative de reconnexion...",
+			texts?.attemptingReconnect ?? "Attempting to reconnect...",
 			this.width / 2,
 			this.height / 2 + 30,
 		);
 	}
 
-	renderVictory(winnerId: string): void {
-		// Overlay semi-transparent
+	renderVictory(
+		winnerId: string,
+		texts?: { victoryTitle: string; playerWon: string; playAgain: string },
+	): void {
+		// Semi-transparent overlay
 		this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
-		// Titre "VICTOIRE"
+		// "VICTORY" title
 		this.ctx.fillStyle = "#f1c40f";
 		this.ctx.font = "bold 48px monospace";
 		this.ctx.textAlign = "center";
 		this.ctx.textBaseline = "middle";
-		this.ctx.fillText("VICTOIRE !", this.width / 2, this.height / 2 - 40);
+		this.ctx.fillText(
+			texts?.victoryTitle ?? "VICTORY!",
+			this.width / 2,
+			this.height / 2 - 40,
+		);
 
-		// Message du gagnant
+		// Winner message
 		this.ctx.fillStyle = "#ffffff";
 		this.ctx.font = "24px monospace";
-		this.ctx.fillText(`Joueur ${winnerId} a gagné !`, this.width / 2, this.height / 2 + 20);
+		this.ctx.fillText(
+			(texts?.playerWon ?? "Player {winnerId} won!").replace("{winnerId}", winnerId),
+			this.width / 2,
+			this.height / 2 + 20,
+		);
 
-		// Sous-texte
+		// Sub-text
 		this.ctx.fillStyle = "#ffffff88";
 		this.ctx.font = "16px monospace";
-		this.ctx.fillText("Créez une nouvelle partie pour rejouer", this.width / 2, this.height / 2 + 70);
+		this.ctx.fillText(
+			texts?.playAgain ?? "Create a new game to play again",
+			this.width / 2,
+			this.height / 2 + 70,
+		);
 	}
 
 	private clear(): void {
@@ -144,10 +166,10 @@ export class GameRenderer {
             );
 
             this.ctx.save();
-            // Translate vers le point de départ, puis rotate autour de ce point
+            // Translate to the start point, then rotate around it
             this.ctx.translate(platform.startX, platform.startY);
             this.ctx.rotate(angle);
-            // Dessiner le rectangle à partir de l'origine locale (0, 0)
+            // Draw the rectangle from the local origin (0, 0)
             this.ctx.fillRect(30, 35, width, GROUND_HEIGHT);
             this.ctx.restore();
         });

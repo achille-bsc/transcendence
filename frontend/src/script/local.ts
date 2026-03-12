@@ -47,7 +47,21 @@ export interface Translations {
 		local: string;
 		disconnect: string;
 		tentative: string;
-		reconnect: string
+		reconnect: string;
+		connecting: string;
+		connected_authenticating: string;
+		authenticated: string;
+		game_created: string;
+		joined: string;
+		disconnected_status: string;
+		reconnecting_status: string;
+		reconnect_failed: string;
+		waiting_players: string;
+		disconnected_server: string;
+		attempting_reconnect: string;
+		victory_title: string;
+		player_won: string;
+		play_again: string;
 	};
 	Alt_text: {
 		menu_icon: string;

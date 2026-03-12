@@ -19,13 +19,13 @@ export interface PlayerState {
 }
 
 export type Platform = {
-  id:        number,    // Numéro de l'étage (0 = bas)
-  startX:    number,    // X gauche
-  endX:      number,    // X droite  
-  startY:    number,    // Y à gauche
-  endY:      number,    // Y à droite (différent = diagonale)
-  hasLadder: boolean,   // Échelle vers l'étage suivant
-  ladderX:   number,    // Position X de l'échelle
+  id:        number,    // Floor number (0 = bottom)
+  startX:    number,    // X left
+  endX:      number,    // X right  
+  startY:    number,    // Y on the left
+  endY:      number,    // Y on the right (different = diagonal)
+  hasLadder: boolean,   // Ladder to the next floor
+  ladderX:   number,    // X position of the ladder
 }
 
 export type Baril = {
@@ -113,6 +113,25 @@ export interface AuthMessage {
 
 export type ClientMessage = KongGameActionMessage | AuthMessage;
 
+export interface KongGameTranslations {
+	createButton: string;
+	joinButton: string;
+	connecting: string;
+	connectedAuthenticating: string;
+	authenticated: string;
+	gameCreated: string;
+	gameJoined: string;
+	disconnected: string;
+	reconnecting: string;
+	reconnectFailed: string;
+	waitingPlayers: string;
+	disconnectedFromServer: string;
+	attemptingReconnect: string;
+	victoryTitle: string;
+	playerWon: string;
+	playAgain: string;
+}
+
 export interface KongGameConfig {
 	wsUrl: string;
 	userToken: string;
@@ -122,15 +141,16 @@ export interface KongGameConfig {
 	maxReconnectAttempts?: number;
 	reconnectDelay?: number;
 	/**
-	 * Vitesse d'interpolation (0 à 1). Contrôle la fluidité des déplacements.
-	 * - 0.15 = très doux / lent
-	 * - 0.25 = bon équilibre (défaut)
-	 * - 0.5  = réactif
-	 * - 1.0  = pas de lissage (positions brutes du serveur)
+	 * Interpolation speed (0 to 1). Controls movement smoothness.
+	 * - 0.15 = very smooth / slow
+	 * - 0.25 = good balance (default)
+	 * - 0.5  = responsive
+	 * - 1.0  = no smoothing (raw server positions)
 	 */
 	interpolationDelay?: number;
 	gameMode?: "local" | "online";
 	localPlayer2Id?: string;
+	translations?: Partial<KongGameTranslations>;
 }
 
 export type KongGameEventMap = {

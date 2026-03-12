@@ -44,7 +44,21 @@
 			"local": "Lokal (2 Spieler)",
 			"disconnect": "Trennen",
 			"tentative": "Versuch, erneut zu verbinden...",
-			"reconnect": "Erneut verbinden"
+			"reconnect": "Erneut verbinden",
+			"connecting": "Verbindung…",
+			"connected_authenticating": "Verbunden — Authentifizierung…",
+			"authenticated": "Authentifiziert ✓",
+			"game_created": "Spiel erstellt: {gameId}",
+			"joined": "Beigetreten: {gameId}",
+			"disconnected_status": "Getrennt",
+			"reconnecting_status": "Erneut verbinden {attempt}/{maxAttempts}…",
+			"reconnect_failed": "Wiederverbindung fehlgeschlagen",
+			"waiting_players": "Warten auf Spieler…",
+			"disconnected_server": "Vom Server getrennt",
+			"attempting_reconnect": "Wiederverbindung wird versucht...",
+			"victory_title": "SIEG!",
+			"player_won": "Spieler {winnerId} hat gewonnen!",
+			"play_again": "Erstelle ein neues Spiel, um erneut zu spielen"
 		},
 		"Alt_text": {
 			"menu_icon": "Menü-Symbol",

@@ -50,7 +50,8 @@
 import { verifToken } from './script/utils';
 import Main from './utils/Main.tsx';
 import { KongGameComponent } from './utils/gameWrapper.tsx';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLang } from './script/langProvider';
 import Img from './utils/Img.tsx';
 import full from '../icons/full.png';
 
@@ -84,6 +85,25 @@ async function getUsername()
 
 export default function Game() {
 	const token = localStorage.getItem('token');
+	const lang = useLang().getLang();
+	const gameTranslations = useMemo(() => ({
+		createButton: lang.Game_page.creation_partie,
+		joinButton: lang.Game_page.rejoindre_partie,
+		connecting: lang.Game_page.connecting,
+		connectedAuthenticating: lang.Game_page.connected_authenticating,
+		authenticated: lang.Game_page.authenticated,
+		gameCreated: lang.Game_page.game_created,
+		gameJoined: lang.Game_page.joined,
+		disconnected: lang.Game_page.disconnected_status,
+		reconnecting: lang.Game_page.reconnecting_status,
+		reconnectFailed: lang.Game_page.reconnect_failed,
+		waitingPlayers: lang.Game_page.waiting_players,
+		disconnectedFromServer: lang.Game_page.disconnected_server,
+		attemptingReconnect: lang.Game_page.attempting_reconnect,
+		victoryTitle: lang.Game_page.victory_title,
+		playerWon: lang.Game_page.player_won,
+		playAgain: lang.Game_page.play_again,
+	}), [lang]);
 	const [loggedUser, setLoggedUser] = useState<string | null>(null);
 	const gameContainerRef = useRef<HTMLDivElement>(null);
 	
@@ -201,6 +221,7 @@ export default function Game() {
 						wsUrl={`wss://${location.host}/kong/ws`}
 						userToken={token}
 						userId={loggedUser || ""}
+						translations={gameTranslations}
 						width={800}
 						height={600}
 						onConnected={() => {}}

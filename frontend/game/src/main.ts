@@ -26,15 +26,15 @@ const game = new KongGame(container, {
 });
 
 // TODO: remove for production and final version
-game.on("connected", () => console.log("[Kong] Connecté"));
-game.on("disconnected", (d) => console.log("[Kong] Déconnecté:", d.code, d.reason));
+game.on("connected", () => console.log("[Kong] Connected"));
+game.on("disconnected", (d) => console.log("[Kong] Disconnected:", d.code, d.reason));
 game.on("authenticated", (m) => console.log("[Kong] Auth:", m));
 game.on("gameState", () => {});
-game.on("error", (e) => console.error("[Kong] Erreur:", e));
+game.on("error", (e) => console.error("[Kong] Error:", e));
 
 game.start();
 
-// Cleanup au reload (HMR Vite)
+// Cleanup on reload (HMR Vite)
 declare global {
 	interface ImportMeta {
 		readonly hot?: {
