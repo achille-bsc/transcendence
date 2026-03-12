@@ -106,7 +106,7 @@ curl -kX PUT "https://localhost:8443/api/public/user/email" \
      -H "Content-Type: application/json" \
      -d '{"email": "newEmail"}'
 ```
-### 5. Update Email Address
+### 5. Send friend request
 Send a friend request to an another account.
 
 * **Method**: `POST`
