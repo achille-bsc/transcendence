@@ -261,7 +261,7 @@ export default function Profile() {
 			});
 			const data = await res.json();
 			if (data.success === false) {
-				alert(data.error || lang.Feedback.generic_error_occurred);
+				alert(lang.Feedback.generic_error_occurred);
 				return;
 			}
 			setIsFriend(true);
@@ -298,7 +298,7 @@ export default function Profile() {
 			});
 			const data = await res.json();
 			if (data.success === false) {
-				alert(data.error || lang.Feedback.generic_error_occurred);
+				alert(lang.Feedback.generic_error_occurred);
 				return;
 			}
 			alert(lang.Feedback.friend_removed);

@@ -382,7 +382,7 @@ export default function Conversation() {
 						return;
 					}
 					// Si c'est une autre erreur, on peut lever une exception pour aller dans le catch
-					throw new Error("Erreur lors de la récupération des messages");
+					throw new Error(lang.Feedback.conversation_fetch_error);
 				}
 
 				// On a une réponse OK, on peut mettre à jour le state ici !

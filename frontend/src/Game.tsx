@@ -225,11 +225,11 @@ export default function Game() {
 						width={800}
 						height={600}
 						onConnected={() => {}}
-						onError={(err) => console.log("Erreur:", err)}
+						onError={(err) => console.log(lang.Feedback.game_error + ":", err)}
 						/>
 					<div className="absolute bottom-3 left-3 z-20">
-						<button type="button" onClick={toggleFullscreen} aria-label="Mettre le jeu en plein écran" className="p-1 bg-black/20 hover:bg-black/35 transition-colors duration-150">
-							<Img src={full} alt="Full" className="w-8 h-8 cursor-pointer drop-shadow-md hover:scale-110 transition-transform duration-150" />
+							<button type="button" onClick={toggleFullscreen} aria-label={lang.Game_page.fullscreen_button} className="p-1 bg-black/20 hover:bg-black/35 transition-colors duration-150">
+								<Img src={full} alt={lang.Alt_text.fullscreen_icon} className="w-8 h-8 cursor-pointer drop-shadow-md hover:scale-110 transition-transform duration-150" />
 						</button>
 					</div>
 				</div>

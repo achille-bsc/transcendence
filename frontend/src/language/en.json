@@ -58,7 +58,8 @@
 			"attempting_reconnect": "Attempting to reconnect...",
 			"victory_title": "VICTORY!",
 			"player_won": "Player {winnerId} won!",
-			"play_again": "Create a new game to play again"
+			"play_again": "Create a new game to play again",
+			"fullscreen_button": "Toggle fullscreen mode"
 		},
 		"Alt_text": {
 			"menu_icon": "Menu icon",
@@ -71,7 +72,8 @@
 			"friend_request_accept": "Accept friend request",
 			"friend_request_reject": "Reject friend request",
 			"github_logo": "github logo for login",
-			"send_logo": "logo send for sending a message"
+			"send_logo": "logo send for sending a message",
+			"fullscreen_icon": "Fullscreen icon"
 		},
 		"Profile_page": {
 			"edit_profile": "Edit Profile",
@@ -115,7 +117,11 @@
 			"cannot_add_yourself": "YOU CANNOT ADD YOURSELF",
 			"cannot_remove_yourself": "YOU CANNOT REMOVE YOURSELF",
 			"friend_removed": "Friend removed!",
-			"sad_alt": "Sad"
+			"sad_alt": "Sad",
+			"login_no_token": "Token not found",
+			"login_server_unreachable": "Server unavailable. Please try again later.",
+			"conversation_fetch_error": "Failed to load messages",
+			"game_error": "An error occurred during the game"
 		},
 		"not_found": {
 			"title": "Page Not Found",

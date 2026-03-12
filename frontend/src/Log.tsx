@@ -49,7 +49,7 @@ export default function Log () {
 			}
 
 			if (data.success === false || data.error) {
-				alert(data.error || lang.Feedback.login_failed || "Erreur de connexion");
+				alert(lang.Feedback.login_failed);
 				return;
 			}
 
@@ -57,12 +57,12 @@ export default function Log () {
 				localStorage.setItem("token", data.token);
 				window.location.href = "/";
 			} else {
-				alert(lang.Feedback.login_failed || "Token introuvable");
+				alert(lang.Feedback.login_no_token);
 			}
 
 		} catch (networkError) {
 			console.log("Erreur réseau :", networkError);
-			alert(lang.Feedback.login_failed || "Serveur inaccessible. Veuillez réessayer plus tard.");
+			alert(lang.Feedback.login_server_unreachable);
 		}
 	}
 

@@ -58,7 +58,8 @@
 			"attempting_reconnect": "Wiederverbindung wird versucht...",
 			"victory_title": "SIEG!",
 			"player_won": "Spieler {winnerId} hat gewonnen!",
-			"play_again": "Erstelle ein neues Spiel, um erneut zu spielen"
+			"play_again": "Erstelle ein neues Spiel, um erneut zu spielen",
+			"fullscreen_button": "Vollbildmodus umschalten"
 		},
 		"Alt_text": {
 			"menu_icon": "Menü-Symbol",
@@ -71,7 +72,8 @@
 			"friend_request_accept": "Freundesanfrage akzeptieren",
 			"friend_request_reject": "Freundesanfrage ablehnen",
 			"github_logo": "github-Logo für die Anmeldung",
-			"send_logo": "Logo zum Senden einer Nachricht"
+			"send_logo": "Logo zum Senden einer Nachricht",
+			"fullscreen_icon": "Vollbildsymbol"
 		},
 		"Profile_page": {
 			"edit_profile": "Profil bearbeiten",
@@ -115,7 +117,11 @@
 			"cannot_add_yourself": "SIE KÖNNEN SICH NICHT SELBST HINZUFÜGEN",
 			"cannot_remove_yourself": "SIE KÖNNEN SICH NICHT SELBST ENTFERNEN",
 			"friend_removed": "Freund entfernt!",
-			"sad_alt": "Traurig"
+			"sad_alt": "Traurig",
+			"login_no_token": "Token nicht gefunden",
+			"login_server_unreachable": "Server nicht erreichbar. Bitte versuchen Sie es später erneut.",
+			"conversation_fetch_error": "Fehler beim Laden der Nachrichten",
+			"game_error": "Während des Spiels ist ein Fehler aufgetreten"
 		},
 		"not_found": {
 			"title": "Seite nicht gefunden",

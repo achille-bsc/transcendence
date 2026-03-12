@@ -142,7 +142,7 @@ async function changeProfilePicture(file: File, messages: {
 		});
 		const data = await res.json();
 		if (data.success === false) {
-			alert(data?.error || messages.avatar_upload_error);
+			alert(messages.avatar_upload_error);
 			return;
 		}
 		return data.avatarUrl;
@@ -170,7 +170,7 @@ async function generateApiKey(messages: {
 		});
 		const data = await res.json();
 		if (data.success === false) {
-			alert(data?.error || messages.api_key_generation_error);
+			alert(messages.api_key_generation_error);
 			return;
 		}
 		const apiKey = data.apiKey;
@@ -274,7 +274,7 @@ export default function Settings() {
 
 		const result = await updateEmail(trimmedEmail);
 		if (!result.success) {
-			alert(result.error || lang.Feedback.email_update_error);
+			alert(lang.Feedback.email_update_error);
 			return;
 		}
 

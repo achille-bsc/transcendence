@@ -58,7 +58,8 @@
 			"attempting_reconnect": "Tentative de reconnexion...",
 			"victory_title": "VICTOIRE !",
 			"player_won": "Joueur {winnerId} a gagné !",
-			"play_again": "Créez une nouvelle partie pour rejouer"
+			"play_again": "Créez une nouvelle partie pour rejouer",
+			"fullscreen_button": "Mettre le jeu en plein écran"
 		},
 		"Alt_text": {
 			"menu_icon": "Icone de menu",
@@ -71,7 +72,8 @@
 			"friend_request_accept": "Accepter la demande d'ami",
 			"friend_request_reject": "Rejeter la demande d'ami",
 			"github_logo": "logo github pour connexion",
-			"send_logo": "logo envoyer pour envoyer un message"
+			"send_logo": "logo envoyer pour envoyer un message",
+			"fullscreen_icon": "Icône plein écran"
 		},
 		"Profile_page": {
 			"edit_profile": "Modifier le profil",
@@ -115,7 +117,11 @@
 			"cannot_add_yourself": "VOUS NE POUVEZ PAS VOUS AJOUTER",
 			"cannot_remove_yourself": "VOUS NE POUVEZ PAS VOUS SUPPRIMER",
 			"friend_removed": "Ami supprimé !",
-			"sad_alt": "Triste"
+			"sad_alt": "Triste",
+			"login_no_token": "Token introuvable",
+			"login_server_unreachable": "Serveur inaccessible. Veuillez réessayer plus tard.",
+			"conversation_fetch_error": "Erreur lors de la récupération des messages",
+			"game_error": "Une erreur est survenue pendant la partie"
 		},
 		"not_found": {
 			"title": "Page non trouvée",

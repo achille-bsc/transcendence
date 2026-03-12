@@ -62,6 +62,7 @@ export interface Translations {
 		victory_title: string;
 		player_won: string;
 		play_again: string;
+		fullscreen_button: string;
 	};
 	Alt_text: {
 		menu_icon: string;
@@ -75,6 +76,7 @@ export interface Translations {
 		friend_request_reject: string;
 		github_logo: string;
 		send_logo: string;
+		fullscreen_icon: string;
 	};
 	Profile_page: {
 		edit_profile: string;
@@ -119,6 +121,10 @@ export interface Translations {
 		cannot_remove_yourself: string;
 		friend_removed: string;
 		sad_alt: string;
+		login_no_token: string;
+		login_server_unreachable: string;
+		conversation_fetch_error: string;
+		game_error: string;
 	},
 	not_found: {
 		title: string;
