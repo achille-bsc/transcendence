@@ -1,6 +1,6 @@
 *This project has been created as part of the 42 curriculum by abosc, alegrix, ameduboi, bfiquet, jguelen.*
 
-# ft_transcendence
+# Transcendence
 
 A full-stack, real-time multiplayer web application built with a microservices architecture. The project features a browser-based multiplayer game, a real-time chat system, user management with profiles and friends, and a public API — all containerized with Docker and served over HTTPS.
 
@@ -33,7 +33,7 @@ A full-stack, real-time multiplayer web application built with a microservices a
 
 ## Description
 
-**ft_transcendence** is the final project of the 42 common core curriculum. It is a single-page web application that allows users to register, log in, play a real-time multiplayer game against other users (locally or remotely), chat in real time, manage their profile and friends list, and interact with a public API.
+**Transcendence** is the final project of the 42 common core curriculum. It is a single-page web application that allows users to register, log in, play a real-time multiplayer game against other users (locally or remotely), chat in real time, manage their profile and friends list, and interact with a public API.
 
 ### Key Features
 
@@ -130,7 +130,7 @@ A full-stack, real-time multiplayer web application built with a microservices a
 
 #### 6. Game (Major) — *abosc*
 
-**Justification:** The game is the central feature of ft_transcendence.
+**Justification:** The game is the central feature of Transcendence.
 
 **Implementation:** A complete browser-based game ("Kong") rendered on an HTML5 Canvas, integrated into React via a wrapper component (`KongGameComponent`). The game supports real-time multiplayer with clear rules, win/loss conditions, and distinct player colors. It can be played in fullscreen mode.
 
@@ -347,7 +347,7 @@ The team communicated primarily through **Discord** for day-to-day discussions a
 | Software | Minimum Version |
 |:---|:---|
 | **Docker** | 24.0+ |
-| **Docker Compose** | v2.20+ |
+| **Docker Compose** | v2.20+ (v2.32.0+ for dev mode) |
 | **Make** | Any recent version |
 | **OpenSSL** | Any recent version (for certificate generation) |
 
@@ -449,6 +449,7 @@ Encountered some coordination difficulties related to product ownership.
 
 I took care of the planning regarding microservices and the splitting of a monolith code into microservices. I planned ahead for future problems I saw as likely to appear, such problems included: restoring or creating new package.json and package-lock.json from a docker container based on existing code to avoid having to work on a VM, the hot-reload of work done outside containers inside them. I realised the architecture of said microservices and their network connection including HTTPS for all transmissions. I also took care of the coordination of rebase and merges and resolving of git mishaps. 
 I faced difficulties mainly regarding certain aspects of the use of a reverse-proxy and designing the general architecture and with the caddy documentation not been very clear and everything being buried or not up to date. I resolved such difficulties either by reading more documentation or sometimes peer learning or by using AI as a documentary aid.
+
 ---
 
 ## Resources

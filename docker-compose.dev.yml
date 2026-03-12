@@ -222,7 +222,7 @@ services:
     kong-service:
         build:
             context: ./kong-service
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
             additional_contexts: 
                 shared_ressources: ./shared
         expose:

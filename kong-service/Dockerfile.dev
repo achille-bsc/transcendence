@@ -15,4 +15,4 @@ EXPOSE 3000
 # ENTRYPOINT [ "sh", "-c", "sleep infinity" ]
 ENTRYPOINT [ "sh", "entrypoint.sh" ]
 
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "dev" ]
