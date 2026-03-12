@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 14:31:34 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:02:35 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:14:08 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ const DEFAULT_TRANSLATIONS: KongGameTranslations = {
 	victoryTitle: "VICTORY!",
 	playerWon: "Player {winnerId} won!",
 	playAgain: "Create a new game to play again",
+	disconnectButton: "Disconnect",
 };
 
 export class KongGame {
@@ -74,6 +75,9 @@ export class KongGame {
 		this.controlsEl
 			.querySelector<HTMLButtonElement>('[data-action="join"]')
 			?.replaceChildren(this.tr("joinButton"));
+		this.controlsEl
+			.querySelector<HTMLButtonElement>('[data-action="disconnect"]')
+			?.replaceChildren(this.tr("disconnectButton"));
 	}
 
 	private tr(key: keyof KongGameTranslations): string {
@@ -202,6 +206,7 @@ export class KongGame {
 		this.controlsEl.innerHTML = `
 			<button class="kong-btn kong-btn--create" data-action="create">${this.tr("createButton")}</button>
 			<button class="kong-btn kong-btn--join" data-action="join">${this.tr("joinButton")}</button>
+			<button class="kong-btn kong-btn--disconnect" data-action="disconnect">${this.tr("disconnectButton")}</button>
 		`;
 		this.updateControlLabels();
 		this.container.appendChild(this.controlsEl);
@@ -231,6 +236,13 @@ export class KongGame {
 
 		this.controlsEl.querySelector('[data-action="join"]')?.addEventListener("click", () => {
 			this.joinGame('');
+		});
+
+		this.controlsEl.querySelector('[data-action="disconnect"]')?.addEventListener("click", () => {
+			this.isRunning = false;
+			this.stopRenderLoop();
+			this.input.detach();
+			this.network.leaveGameAndDisconnect();
 		});
 	}
 
@@ -264,6 +276,14 @@ export class KongGame {
 				gameId: msg.gameId,
 			});
 			this.emit("gameJoined", msg);
+		});
+
+		this.network.on("gameReconnected", (msg) => {
+			this.state.clearWinner();
+			this.setTranslatedStatus("gameJoined", "success", {
+				gameId: msg.gameId,
+			});
+			this.emit("gameReconnected", msg);
 		});
 
 		this.network.on("disconnected", (data) => {

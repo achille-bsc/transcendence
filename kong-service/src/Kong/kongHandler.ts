@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:03:09 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:32:09 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ export function kongHandler(
 			createGame(clients, webSocket, msg, state);
 		if (msg.payload.datas[0] === 'joinGame')
 			joinGame(msg, webSocket, state);
+		if (msg.payload.datas[0] === 'leaveGame')
+			leaveGame(webSocket, state);
 		if (msg.payload.datas[0] === 'startGame')
 		{
 			const game = games.get(state.gameId!);
@@ -51,6 +53,31 @@ export function kongHandler(
 		handleGame(state, msg.payload.datas, msg.payload.Localuser, msg)
 }
 
+
+function leaveGame(webSocket: WebSocket, state: ClientState): void
+{
+	if (!state.id) return;
+
+	games.forEach((game, gameId) => {
+		if (!game.players.has(state.id!)) return;
+		game.players.delete(state.id!);
+
+		if (game.host === state.id) {
+			game.isFinish = true;
+			game.players.forEach((player) => {
+				try { player.socket.send(JSON.stringify({ type: 'gameEnded', reason: 'Host disconnected' })); } catch (_) {}
+			});
+			games.delete(gameId);
+		} else {
+			game.players.forEach((player) => {
+				try { player.socket.send(JSON.stringify({ type: 'playerLeft', playerId: state.id })); } catch (_) {}
+			});
+		}
+	});
+
+	state.gameId = null;
+	webSocket.send(JSON.stringify({ type: 'gameLeft' }));
+}
 
 function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): void
 {
@@ -100,21 +127,8 @@ function createGame(
 	msg: WSMessage,
 	state: ClientState
 ) {
-	// let exit = 0;
-	// games.forEach((game) => {
-	// 	game.players.forEach((player) => {
-	// 		if (player.id == msg.userID)
-	// 			exit = 1;
-	// 	});	
-	// })
-	// console.log("try creating game with id : " + (games.size + 1).toString());
 	if (msg.type !== 'kong'/*  || exit == 1 */) return ;
-	// A REACTIVER QUAND LES TESTS DE GAME SERONT FINIS
-	// if (games.get(msg.userID) !== undefined)
-	// {
-	// 	webSocket.send(JSON.stringify({ type: 'gameNotCreated', gameId: msg.userID }));
-	// 	return (error('UserAllreadyHostGame'))
-	// }
+
 	const game: Game = {
 		startTime: 0,
 		host: msg.userID,

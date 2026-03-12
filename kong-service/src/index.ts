@@ -6,14 +6,14 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 15:01:25 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:02:30 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 12:14:19 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import Fastify from 'fastify';
 import WebSocket from '@fastify/websocket';
 
-import { PORT, HANDLERS, clients, games } from './utils/const';
+import { PORT, HANDLERS, clients } from './utils/const';
 import { ClientState, WSMessage } from './utils/types';
 import { parseMessage } from './utils/utils';
 import fs from 'fs';
@@ -61,30 +61,9 @@ fastify.register(async function (fastify) {
     });
 
     socket.on('close', () => {
-      games.forEach((game) => {
-        if (game.players.has(state.id!)) {
-          game.players.delete(state.id!);
-        }
-        if (game.host === state.id) {
-          game.isFinish = true;
-          games.delete(game.id.toString());
-        }
-      });
       clients.delete(socket);
     });
-    socket.on('error', (_err: Error) => {
-      games.forEach((game) => {
-        if (game.players.has(state.id!)) {
-          game.players.delete(state.id!);
-        }
-        if (game.host === state.id) {
-          game.isFinish = true;
-          game.players.forEach((player) => {
-            player.socket.send(JSON.stringify({ type: 'gameEnded', reason: 'Host disconnected' }));
-          });
-          games.delete(game.id.toString());
-        }
-      });
+    socket.on('error', () => {
       clients.delete(socket);
     });
   });

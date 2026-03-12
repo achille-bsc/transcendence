@@ -19,6 +19,7 @@ import {
 	buildGoRight,
 	buildJoinGame,
 	buildJump,
+	buildLeaveGame,
 	parseServerMessage,
 } from "./protocol";
 import type {
@@ -100,6 +101,34 @@ export class GameNetworkLayer {
 
 	sendGoDown(localUserId?: string): boolean {
 		return this.wsClient.send(buildGoDown(this.config.userId, this.gameMode, localUserId));
+	}
+
+	sendLeaveGame(): boolean {
+		return this.wsClient.send(buildLeaveGame(this.config.userId));
+	}
+
+	leaveGameAndDisconnect(): void {
+		const onMessage = (e: MessageEvent) => {
+			try {
+				const msg = JSON.parse(e.data);
+				if (msg.type === 'gameLeft') {
+					this.wsClient.off('message', onMessage);
+					this.wsClient.disconnect();
+					window.location.reload();
+				}
+			} catch (_) {}
+		};
+		this.wsClient.on('message', onMessage);
+		const sent = this.sendLeaveGame();
+		if (!sent) {
+			this.wsClient.off('message', onMessage);
+			this.wsClient.disconnect();
+			window.location.reload();
+		}
+		setTimeout(() => {
+			this.wsClient.disconnect();
+			window.location.reload();
+		}, 500);
 	}
 
 	on<K extends keyof KongGameEventMap>(
@@ -184,6 +213,9 @@ export class GameNetworkLayer {
 				break;
 			case "gameJoined":
 				this.emit("gameJoined", message);
+				break;
+			case "gameReconnected":
+				this.emit("gameReconnected", message);
 				break;
 			case "error":
 				this.emit("error", message.message);

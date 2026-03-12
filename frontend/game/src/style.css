@@ -135,6 +135,15 @@
 	background: #2980b9;
 }
 
+.kong-btn--disconnect {
+	background: #e74c3c;
+	color: #fff;
+}
+
+.kong-btn--disconnect:hover {
+	background: #c0392b;
+}
+
 .kong-input {
 	padding: 5px 8px;
 	border: 1px solid #2a3a5e;
