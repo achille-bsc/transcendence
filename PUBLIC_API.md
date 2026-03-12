@@ -106,3 +106,27 @@ curl -kX PUT "https://localhost:8443/api/public/user/email" \
      -H "Content-Type: application/json" \
      -d '{"email": "newEmail"}'
 ```
+### 5. Update Email Address
+Send a friend request to an another account.
+
+* **Method**: `POST`
+* **Path**: `/friends/send`
+* **Body**:
+    ```json
+    {
+      "friendPseudo": "TargetUsername"
+    }
+    ```
+* **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "action": "sent",
+      "message": "Friend request sent successfully"
+    }
+    ```
+```bash
+curl -kX POST "https://localhost:8443/api/public/friends/send" \
+     -H "x-api-key: sk_test" \
+     -H "Content-Type: application/json" \
+     -d '{"friendPseudo": "UserName"}'
