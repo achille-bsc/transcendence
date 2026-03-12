@@ -34,7 +34,7 @@ export interface RenderBaril {
 }
 
 /**
- * Interpolation linéaire.
+ * Linear interpolation.
  */
 function linear_interpolation(current: number, target: number, t: number): number {
 	return current + (target - current) * t;

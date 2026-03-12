@@ -52,6 +52,7 @@ export function KongGameComponent({
 	maxReconnectAttempts,
 	reconnectDelay,
 	interpolationDelay,
+	translations,
 	className,
 	autoStart = true,
 	onConnected,
@@ -80,6 +81,7 @@ export function KongGameComponent({
 			maxReconnectAttempts,
 			reconnectDelay,
 			interpolationDelay,
+			translations,
 		};
 
 		const game = new KongGame(container, config);
@@ -105,6 +107,10 @@ export function KongGameComponent({
 		};
 
 	}, [wsUrl, userToken, userId, width, height]);
+
+	useEffect(() => {
+		gameRef.current?.updateTranslations(translations);
+	}, [translations]);
 
 	return (
 		<div

@@ -1,8 +1,8 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*   index.ts - Point d'entrée de la librairie (export public)                */
+/*   index.ts - Library entry point (public exports)                          */
 /*                                                                            */
-/*   C'est ce fichier que React importera :                                   */
+/*   This is the file React will import:                                      */
 /*     import { KongGame } from 'ft_transcendence_front';                     */
 /*                                                                            */
 /* ************************************************************************** */
@@ -14,6 +14,7 @@ export { WebSocketClient } from "./network/WebSocketClient";
 export type {
 	KongGameConfig,
 	KongGameEventMap,
+	KongGameTranslations,
 	PlayerState,
 	Difficulty,
 	KongAction,

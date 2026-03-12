@@ -41,7 +41,7 @@ const KEY_MAP_P1: Record<string, InputAction> = {
 	s: "goDown",
 };
 
-// Local P2 : Flèches
+// Local P2: Arrow keys
 const KEY_MAP_P2: Record<string, InputAction> = {
 	ArrowUp: "jump",
 	ArrowLeft: "goLeft",
@@ -99,7 +99,7 @@ export class GameInput {
 				e.preventDefault();
 				if (!player.keysPressed.has(e.key)) {
 					player.keysPressed.add(e.key);
-					// Envoie immédiatement la première action (pour le saut notamment)
+					// Immediately send the first action (especially for jump)
 					this.callbacks.onAction(action, player.id);
 				}
 				return;

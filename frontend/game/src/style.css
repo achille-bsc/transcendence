@@ -58,18 +58,44 @@
 	color: #e74c3c;
 }
 
-/* ── Panneau de contrôle ──────────────────────────────────────────────────── */
+/* ── Control panel ───────────────────────────────────────────────────────── */
 
 .kong-controls {
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
 	padding: 8px 12px;
 	background: #16213e;
 	border: 2px solid #16213e;
 	border-radius: 4px 4px 0 0;
+}
+
+@media (max-width: 480px) {
+	.kong-controls {
+		justify-content: center;
+	}
+
+	.kong-btn {
+		flex: 1 1 auto;
+		min-width: 120px;
+		text-align: center;
+	}
+
+	.kong-select {
+		flex: 1 1 100%;
+		margin-left: 0;
+	}
+
+	.kong-mode-group {
+		flex: 1 1 100%;
+	}
+
+	.kong-mode-group .kong-select {
+		width: 100%;
+	}
 }
 
 .kong-controls + .kong-canvas {
