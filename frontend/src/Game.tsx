@@ -103,6 +103,7 @@ export default function Game() {
 		victoryTitle: lang.Game_page.victory_title,
 		playerWon: lang.Game_page.player_won,
 		playAgain: lang.Game_page.play_again,
+		disconnectButton: lang.Game_page.disconnect,
 	}), [lang]);
 	const [loggedUser, setLoggedUser] = useState<string | null>(null);
 	const gameContainerRef = useRef<HTMLDivElement>(null);
