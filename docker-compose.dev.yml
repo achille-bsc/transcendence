@@ -101,8 +101,6 @@ services:
         secrets:
             - api_pass
             - jwt_secret
-            - github_oauth_id
-            - github_oauth_secret
         develop:
             watch:
                 - path: ./auth-service
@@ -145,8 +143,6 @@ services:
         secrets:
             - api_pass
             - jwt_secret
-            - github_oauth_id
-            - github_oauth_secret
         develop:
             watch:
                 - path: ./chat-service
@@ -314,10 +310,6 @@ networks:
         driver: bridge
 
 secrets:
-    github_oauth_id:
-        file: secrets/github_oauth_id
-    github_oauth_secret:
-        file: secrets/github_oauth_secret
     api_pass:
         file: secrets/api_internal_key
     db_password:
