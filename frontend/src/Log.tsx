@@ -10,22 +10,6 @@ export default function Log () {
 	const [password, setPassword] = useState("");
 	const lang = useLang().getLang();
 
-	async function handleGithubLogin() {
-		const githubId = process.env.GITHUB_CLIENT_ID; //temporary
-		if (!githubId)
-		{
-			alert(lang.Feedback.missing_github_application_id);
-			return;
-		}
-		const redirectUri = encodeURIComponent("https://localhost:8443/oauth/callback");
-		const githubAuthUrl = "https://github.com/login/oauth/authorize" +
-			"?client_id=" + githubId +
-			"&redirect_uri=" + redirectUri +
-			"&scope=user:email";
-		window.location.href = githubAuthUrl;
-	} 
-
-	// Dans frontend/src/Log.tsx
 	async function handleLogin(e :React.FormEvent) {
 		e.preventDefault();
 
