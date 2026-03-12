@@ -6,7 +6,7 @@
 /*   By: abosc <abosc@student.42lehavre.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 20:07:52 by abosc             #+#    #+#             */
-/*   Updated: 2026/03/12 12:32:09 by abosc            ###   ########.fr       */
+/*   Updated: 2026/03/12 13:13:43 by abosc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ function joinGame(msg: WSMessage, webSocket: WebSocket, state: ClientState): voi
 		let gamePlayer;
 		for (const game of games) {
 			if (game[1].players_count < 4 && !game[1].isFinish && !game[1].isLocal && !game[1].isStarted)
+			{
 				gamePlayer = game[1];
+				break ;
+			}
 		}
 
 		if (!gamePlayer)
@@ -127,7 +130,14 @@ function createGame(
 	msg: WSMessage,
 	state: ClientState
 ) {
-	if (msg.type !== 'kong'/*  || exit == 1 */) return ;
+	let exit = 0;
+	games.forEach((game) => {
+		game.players.forEach((player) => {
+			if (player.id == msg.userID)
+				exit = 1;
+		});	
+	});
+	if (msg.type !== 'kong' || exit == 1) return ;
 
 	const game: Game = {
 		startTime: 0,
