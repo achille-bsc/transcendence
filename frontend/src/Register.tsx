@@ -61,9 +61,29 @@ export default function Register () {
 			} catch (parseError) {
 				console.log("Erreur de format de réponse :", parseError);
 			}
-
+			console.log(data);
 			if (data.success === false || data.error) {
-				alert(data.error || lang.Feedback.registration_failed || "Erreur lors de l'inscription");
+				if (data.error == "password error")
+				{
+					alert(lang.Log_register_page.password_error);
+					return;
+				}
+				if (data.error == "Enter a valid email address")
+				{
+					alert(lang.Log_register_page.invalid_email);
+					return;
+				}
+				if (data.error == "All fields are required")
+				{
+					alert(lang.Log_register_page.all_fields_required);
+					return;
+				}
+				if (data.error == "Bad pseudo")
+				{
+					alert(lang.Log_register_page.bad_pseudo);
+					return;
+				}
+				alert(lang.Feedback.registration_failed);
 				return;
 			}
 

@@ -10,7 +10,11 @@
 			"confirm_password": "Confirm password",
 			"submit": "Submit",
 			"email": "Email",
-			"pseudo_email": "Pseudo or Email"
+			"pseudo_email": "Pseudo or Email",
+			"password_error": "Password must be at least 8 characters",
+			"all_fields_required": "All fields are required",
+			"invalid_email": "Invalid email address",
+			"bad_pseudo": "Invalid pseudo"
 		},
 		"Home_page": {
 			"game_name": "Kong's game",

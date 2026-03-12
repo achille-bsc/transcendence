@@ -20,7 +20,7 @@ export function checkSignin(pseudo: string, email: string, password: string): st
     }
     else if (password.length < 8)
     {
-        return 'Password needs more than 8 characters';
+        return 'Password error';
     }
     else if (!email || email.length === 0 || email.includes(' ') ||
         email.split('@').length !== 2 || !email.includes('.'))
